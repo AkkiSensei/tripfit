@@ -1,0 +1,409 @@
+:root {
+    --primary: #2dd4bf; /* Vibrant Mint */
+    --accent: #14b8a6;  /* Deeper Teal Accent */
+    --dark: #0f373b;    /* Dark Juniper */
+    --light: #f8f9fa;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--light);
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background: var(--dark);
+    color: white;
+    padding: 1.25rem 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+}
+
+.logo {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 2rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--primary);
+}
+
+.hero {
+    min-height: 100vh;
+    background: linear-gradient(rgba(38, 51, 74, 0.6), rgba(38, 51, 74, 0.6)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-content {
+    max-width: 720px;
+    padding: 0 2rem;
+}
+
+.hero h1 {
+    font-size: 3.8rem;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+}
+
+.hero p {
+    font-size: 1.35rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.95;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--primary);
+    color: var(--dark); /* Dark text for perfect readability on mint */
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700; /* Slightly bolder text to stand out */
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(45, 212, 191, 0.3); /* Subtle mint glow */
+}
+
+.btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    background: var(--accent); /* Shifts to the deeper teal on hover */
+    color: white; /* Text turns white when the background gets darker! */
+    box-shadow: 0 12px 30px rgba(45, 212, 191, 0.5); /* Stronger mint glow */
+}
+
+.featured, .why-us {
+    padding: 5rem 5%;
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.featured h2, .why-us h2 {
+    font-size: 2.4rem;
+    margin-bottom: 3rem;
+    color: var(--dark);
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.4s ease;
+    position: relative; 
+}
+
+.card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 1.75rem;
+}
+
+.card-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.feature {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.feature h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.quiz {
+    padding: 6rem 5% 8rem;
+    background: var(--light);
+}
+
+.quiz-container {
+    max-width: 680px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.07);
+}
+
+.progress {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    width: 20%;
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+.question {
+    margin-bottom: 4rem;
+}
+
+.question h3 {
+    font-size: 1.65rem;
+    margin-bottom: 2rem;
+    color: var(--dark);
+    text-align: center;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.5rem;
+}
+
+.option-item input:checked + .option-card {
+    border-color: var(--primary);
+    background: #f0fdfa; /* Ultra-light mint background */
+    transform: scale(1.04);
+    box-shadow: 0 0 0 6px rgba(45, 212, 191, 0.15); /* Soft mint outer ring */
+}
+.option-item input {
+    display: none;
+}
+
+.option-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    background: white;
+    border: 3px solid #e5e7eb;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 80px;
+}
+
+.option-card span {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #444;
+}
+
+.option-item input:checked + .option-card {
+    border-color: var(--primary);
+    background: #f0f9ff;
+    transform: scale(1.04);
+    box-shadow: 0 0 0 6px rgba(0, 170, 255, 0.12);
+}
+
+.results {
+    padding: 5rem 5% 7rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.summary {
+    margin-bottom: 3rem;
+}
+
+.summary h2 {
+    font-size: 2.8rem;
+    margin-bottom: 0.8rem;
+    color: var(--dark);
+}
+
+.summary p {
+    font-size: 1.25rem;
+    color: #555;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.filter-tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.tag {
+    padding: 0.5rem 1.5rem;
+    background: #e5e7eb;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tag.active {
+    background: var(--primary);
+    color: white;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 4rem;
+}
+
+.card .btn {
+    margin-top: 1.5rem;
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+}
+
+.btn.small {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+}
+
+.btn.secondary {
+    background: transparent;
+    color: var(--dark);
+    border: 2px solid var(--dark);
+    margin-top: 2rem;
+    display: inline-block;
+}
+
+.btn.secondary:hover {
+    background: var(--dark);
+    color: white;
+}
+
+footer {
+    background: var(--dark);
+    color: #aaa;
+    text-align: center;
+    padding: 2.5rem 5%;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+    .quiz-container {
+        padding: 2rem 1.5rem;
+    }
+    .options {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .features {
+        grid-template-columns: 1fr;
+    }
+    .filter-tags {
+        flex-direction: column;
+        align-items: center;
+    }
+
+.card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.4s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+}
+
+
+.card-content {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+}
+.card-content .btn {
+    margin-top: auto !important; 
+    align-self: center; 
+}
+
+.rank-badge {
+    position: absolute;
+    top: 15px;    /* Moved down into the image */
+    left: 15px;   /* Shifted right into the image */
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+    z-index: 10;
+    border: 3px solid white;
+}
+.rank-1 { background: #FFD700; color: #333; } /* Gold */
+.rank-2 { background: #C0C0C0; color: #333; } /* Silver */
+.rank-3 { background: #CD7F32; color: #fff; } /* Bronze */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .cards {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}

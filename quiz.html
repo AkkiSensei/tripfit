@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Quiz • TripFit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">TripFit</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="quiz.html">Take Quiz</a>
+        </nav>
+    </header>
+
+    <section class="quiz">
+        <div class="quiz-container">
+            <div class="progress">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p>Step 1 of 5</p>
+            </div>
+            <form action="recommendation.html" method="get">
+                <div class="question">
+                    <h3>1. What climate do you prefer?</h3>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="beach" name="climate" value="beach">
+                            <label for="beach" class="option-card">
+                                <span>Beach</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="mountains" name="climate" value="mountains">
+                            <label for="mountains" class="option-card">
+                                <span>Mountains</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="city" name="climate" value="city">
+                            <label for="city" class="option-card">
+                                <span>Urban</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="tropical" name="climate" value="tropical">
+                            <label for="tropical" class="option-card">
+                                <span>Tropical</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>2. What type of trip do you enjoy?</h3>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="adventure" name="trip" value="adventure">
+                            <label for="adventure" class="option-card">
+                                <span>Adventure</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="relaxation" name="trip" value="relaxation">
+                            <label for="relaxation" class="option-card">
+                                <span>Relaxation</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="cultural" name="trip" value="cultural">
+                            <label for="cultural" class="option-card">
+                                <span>Cultural</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="culinary" name="trip" value="culinary">
+                            <label for="culinary" class="option-card">
+                                <span>Culinary</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>3. What's your budget level?</h3>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="budget" name="budget" value="budget">
+                            <label for="budget" class="option-card">
+                                <span>Budget-friendly</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="midrange" name="budget" value="midrange">
+                            <label for="midrange" class="option-card">
+                                <span>Mid-range</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="luxury" name="budget" value="luxury">
+                            <label for="luxury" class="option-card">
+                                <span>Luxury</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>4. Who are you traveling with?</h3>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="solo" name="companions" value="solo">
+                            <label for="solo" class="option-card">
+                                <span>Solo</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="couple" name="companions" value="couple">
+                            <label for="couple" class="option-card">
+                                <span>Couple</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="family" name="companions" value="family">
+                            <label for="family" class="option-card">
+                                <span>Family</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="friends" name="companions" value="friends">
+                            <label for="friends" class="option-card">
+                                <span>Friends</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>5. What activities excite you most?</h3>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" id="nature" name="activities" value="nature">
+                            <label for="nature" class="option-card">
+                                <span>Nature</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="history" name="activities" value="history">
+                            <label for="history" class="option-card">
+                                <span>History</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="food" name="activities" value="food">
+                            <label for="food" class="option-card">
+                                <span>Food</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="nightlife" name="activities" value="nightlife">
+                            <label for="nightlife" class="option-card">
+                                <span>Nightlife</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Reveal My Destinations</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; Fueling wanderlust for dreamers and explorers worldwide.</p>
+    </footer>
+</body>
+</html>
