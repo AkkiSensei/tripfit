@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destination Details • TripFit</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS Variables used exclusively on this page */
+        :root {
+            --text-main: #444;
+            --text-muted: #666;
+            --border-light: #e5e7eb;
+        }
+
+        /* Cinema Hero Section */
+        .dest-hero {
+            height: 70vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+        }
+        
+        .dest-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15, 55, 59, 1) 0%, rgba(15, 55, 59, 0.5) 50%, transparent 100%);
+        }
+        
+        .dest-title-container {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 5%;
+            color: white;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        
+        .dest-title-container h1 { font-size: 4.5rem; margin-bottom: 0.25rem; line-height: 1.1; letter-spacing: -2px;}
+        .dest-title-container h3 { color: var(--primary); font-weight: 600; font-size: 1.6rem; letter-spacing: 1px; text-transform: uppercase; }
+        
+        /* Main Info Section Layout */
+        .dest-info-section {
+            padding: 5rem 5%;
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 5rem;
+        }
+        
+        /* Typography & Content styling */
+        .section-header { color: var(--dark); margin-bottom: 1.5rem; font-size: 2.2rem; }
+        .sub-header { color: var(--dark); font-size: 1.6rem; margin: 2.5rem 0 1rem; }
+        
+        .dest-description { font-size: 1.3rem; color: var(--text-main); margin-bottom: 2rem; line-height: 1.8; font-weight: 400;}
+        
+        /* Sticky Sidebar Breakdown */
+        .dest-attributes {
+            background: white; padding: 2.5rem; border-radius: 24px; box-shadow: var(--shadow);
+            height: fit-content; position: sticky; top: 120px; 
+        }
+        
+        .attr-group { margin-bottom: 1.8rem; }
+        .attr-group h4 { color: var(--dark); margin-bottom: 0.8rem; font-size: 1.15rem; font-weight: 700;}
+        .attr-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        .attr-tag {
+            background: #f0fdfa; color: var(--accent); padding: 0.5rem 1.4rem;
+            border-radius: 30px; font-size: 0.95rem; font-weight: 600; border: 1px solid rgba(45, 212, 191, 0.2);
+        }
+
+        /* 1. Itinerary Section */
+        .itinerary-box {
+            margin-top: 4rem;
+            border-top: 1px solid var(--border-light);
+            padding-top: 4rem;
+        }
+
+        .day-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+
+        .day-card h4 { color: var(--accent); font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .day-card ul { margin-left: 1.5rem; color: var(--text-main); line-height: 1.8; }
+
+        /* 2. Photo Gallery Section */
+        .gallery-section {
+            padding: 5rem 5%;
+            background: #fdfdfd;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            margin: 4rem 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            height: 250px;
+            border-radius: 12px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover { transform: scale(1.03); }
+
+        /* 3. Insider Tips */
+        .tips-box {
+            background: #0f373b; 
+            color: #ccc;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-top: 4rem;
+        }
+
+        .tips-box h3 { color: var(--primary); font-size: 1.8rem; margin-bottom: 1.5rem; }
+        .tips-box ul { margin-left: 1.5rem; line-height: 1.8; }
+        .tips-box strong { color: white; }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .dest-info-section { grid-template-columns: 1fr; gap: 3rem;}
+            .dest-attributes { position: static; width: 100%; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .dest-hero { height: 50vh; }
+            .dest-title-container h1 { font-size: 2.8rem; }
+            .section-header { font-size: 1.8rem; }
+            .gallery-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">TripFit</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="quiz.html">Take Quiz</a>
+            <a href="all-destinations.html">Destinations</a>
+        </nav>
+    </header>
+
+    <main id="destination-content">
+        <h2 style="text-align: center; padding: 10rem; color: var(--text-muted);">Loading destination profile...</h2>
+    </main>
+
+    <footer>
+        <p>&copy; Fueling wanderlust for dreamers and explorers worldwide.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <script>
+        // Dictionary mapping destination names to your local 'images1' folder
+        const localHeroImages = {
+            "Bali, Indonesia": "images1/BALI.jpg",
+            "Tokyo, Japan": "images1/TOKYO.jpg",
+            "Bangkok, Thailand": "images1/BANGKOK.jpg",
+            "Taj Mahal, India": "images1/TAJ MAHAL.jpg",
+            "Swiss Alps, Switzerland": "images1/SWISS ALPS.jpg",
+            "Paris, France": "images/paris.jpg", // Fallback (not in images1 list)
+            "Santorini, Greece": "images1/SANTORINI.jpg",
+            "Reykjavik, Iceland": "images1/ICELAND.png",
+            "New York City, USA": "images1/NEW YORK.jpg",
+            "Grand Canyon, USA": "images1/GRAND CANYON.jpg",
+            "Vancouver, Canada": "images1/VANCOUVER.jpg",
+            "Rio de Janeiro, Brazil": "images1/RIO DE JANEIRO.jpg",
+            "Machu Picchu, Peru": "images1/MACHU PICCHU.jpg",
+            "Galapagos Islands, Ecuador": "images1/ECUADOR.jpg",
+            "Cape Town, South Africa": "images1/CAPE TOWN.jpg",
+            "Serengeti, Tanzania": "images1/SERENGETI.jpg",
+            "Marrakech, Morocco": "images1/MARAKECH.jpg",
+            "Sydney, Australia": "images1/SYDNEY.jpg",
+            "Great Barrier Reef, Australia": "images1/GREAT BARRIER REEF.jpg",
+            "Queenstown, New Zealand": "images/Queenstown.jpg" // Fallback (not in images1 list)
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const destId = params.get('id');
+            const contentDiv = document.getElementById('destination-content');
+            const destination = destinations.find(d => d.name === destId);
+
+            if (destination) {
+                const nameParts = destination.name.split(',');
+                const city = nameParts[0];
+                const country = nameParts[1] ? nameParts[1].trim() : '';
+                
+                // Fetch the mapped local image, or fallback to the standard thumbnail if it's missing
+                const heroImageUrl = localHeroImages[destination.name] || destination.image;
+
+                const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+                const generateTags = (arr) => arr.map(item => `<span class="attr-tag">${capitalize(item)}</span>`).join('');
+
+                contentDiv.innerHTML = `
+                    <div class="dest-hero" style="background-image: url('${heroImageUrl}');">
+                        <div class="dest-title-container">
+                            <h1>${city}</h1>
+                            <h3>${destination.region} ${country ? `&bull; ${country}` : ''}</h3>
+                        </div>
+                    </div>
+
+                    <section class="dest-info-section">
+                        <div class="main-details">
+                            <h2 class="section-header">Overview</h2>
+                            <p class="dest-description">${destination.desc}. This location offers a unique blend of experiences that perfectly capture the essence of ${destination.region}. Known for its distinct character, it has become a must-visit spot for global travelers seeking authenticity.</p>
+                            
+                            <p style="color: var(--text-muted); font-size: 1.15rem; line-height: 1.8;">
+                                Our TripFit analysis shows that this destination excels at providing a <strong>${destination.trip.join(' and ')}</strong> experience. 
+                                It is particularly well-suited for <strong>${destination.companions[0]}</strong> travelers. The local <strong>${destination.climate[0]}</strong> environment 
+                                creates the perfect setting for popular activities like <strong>${destination.activities.join(', ')}</strong>.
+                            </p>
+                            
+                            <div style="margin-top: 3.5rem;">
+                                <button class="btn" onclick="alert('Mock booking portal initialized...')">Check Availability</button>
+                                <a href="javascript:history.back()" class="btn secondary" style="margin-left: 1rem;">Back to Matches</a>
+                            </div>
+
+                            <div class="itinerary-box">
+                                <h3 class="section-header">Sample 3-Day Itinerary</h3>
+                                <div class="day-card">
+                                    <h4>Day 1: Cultural Immersion & Iconic Landmarks</h4>
+                                    <ul>
+                                        <li>Morning: Visit the central historic district and major monuments.</li>
+                                        <li>Lunch: Try local street food specialties in the market.</li>
+                                        <li>Afternoon: Explore a prominent museum or art gallery.</li>
+                                        <li>Evening: Welcome dinner at a traditional restaurant.</li>
+                                    </ul>
+                                </div>
+                                <div class="day-card">
+                                    <h4>Day 2: Nature & Adventure</h4>
+                                    <ul>
+                                        <li>Morning: Guided hike or scenic nature tour.</li>
+                                        <li>Lunch: Picnic lunch with panoramic views.</li>
+                                        <li>Afternoon: Relaxing boat trip or outdoor activity.</li>
+                                        <li>Evening: Optional local entertainment or show.</li>
+                                    </ul>
+                                </div>
+                                <div class="day-card">
+                                    <h4>Day 3: Local Vibes & Leisure</h4>
+                                    <ul>
+                                        <li>Morning: Wander through boutique shops and local artisan workshops.</li>
+                                        <li>Lunch: Relaxed café lunch in a trendy neighborhood.</li>
+                                        <li>Afternoon: Visit a hidden gem location off the main tourist path.</li>
+                                        <li>Evening: Farewell drinks at a rooftop bar with sunset views.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="tips-box">
+                                <h3>TripFit Insider Tips</h3>
+                                <ul>
+                                    <li><strong>Best Time to Visit:</strong> The shoulder season (spring/fall) offers the best balance of weather and smaller crowds.</li>
+                                    <li><strong>Getting Around:</strong> The local transport system is efficient and cost-effective. Consider a multi-day pass.</li>
+                                    <li><strong>Pack Accordingly:</strong> Layering is key due to changing temperatures throughout the day.</li>
+                                    <li><strong>Local Etiquette:</strong> Learning a few basic phrases goes a long way. Always ask before taking photos of people.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <aside class="dest-attributes">
+                            <h3 style="color: var(--dark); margin-bottom: 1.8rem; border-bottom: 2px solid var(--border-light); padding-bottom: 1rem; font-size: 1.5rem;">Why It Fits Your Vibe</h3>
+                            <div class="attr-group"><h4>Vibe & Pace</h4><div class="attr-tags">${generateTags(destination.trip)}</div></div>
+                            <div class="attr-group"><h4>Best For</h4><div class="attr-tags">${generateTags(destination.companions)}</div></div>
+                            <div class="attr-group"><h4>Top Activities</h4><div class="attr-tags">${generateTags(destination.activities)}</div></div>
+                            <div class="attr-group"><h4>Environment</h4><div class="attr-tags">${generateTags(destination.climate)}</div></div>
+                            <div class="attr-group"><h4>Budget Level</h4><div class="attr-tags">${generateTags(destination.budget)}</div></div>
+                        </aside>
+                    </section>
+                `;
+            } else {
+                contentDiv.innerHTML = `
+                    <div style="text-align: center; padding: 15rem 2rem;">
+                        <h1 style="color: var(--dark); font-size: 3.5rem; margin-bottom: 1rem;">Destination Not Found</h1>
+                        <p style="color: var(--text-muted); font-size: 1.3rem; margin-bottom: 3rem;">We couldn't locate that specific profile in our catalog.</p>
+                        <a href="all-destinations.html" class="btn">View All Destinations</a>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
