@@ -3,73 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TripFit</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Login • TripFit</title>
+    
+    <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mint: '#2dd4bf',
+                        juniper: '#0f373b',
+                        pearl: '#f8f9fa',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Inter', system-ui, sans-serif; 
+            background-image: linear-gradient(rgba(15, 55, 59, 0.8), rgba(15, 55, 59, 0.8)), url('images1/SWISS ALPS.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <div class="logo">TripFit</div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="quiz.html">Take Quiz</a>
-        </nav>
-    </header>
+<body class="min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Discover Your Ideal Adventure</h1>
-            <p>Answer a few quick questions to unlock personalized travel recommendations from around the globe</p>
-            <a href="quiz.html" class="btn">Start Your Journey</a>
+    <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-10 transform transition-all hover:scale-105 duration-500 border border-gray-100 dark:border-gray-700 relative">
+        
+        <button id="theme-toggle" class="absolute top-6 right-6 p-2 rounded-full text-gray-400 hover:text-juniper dark:hover:text-mint transition-colors">
+            <i class="fas fa-moon text-xl" id="theme-icon"></i>
+        </button>
+
+        <div class="text-center mb-8 mt-4">
+            <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" class="h-20 mx-auto mb-4 object-contain">
+            <h2 class="text-3xl font-extrabold text-juniper dark:text-white tracking-tight">Welcome Back</h2>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">Sign in to plan your next adventure.</p>
         </div>
-    </section>
 
-    <section class="featured">
-        <h2>Featured Destinations</h2>
-        <div class="cards">
-            <div class="card">
-                <img src="images/bali.png" alt="Bali beaches">
-                <div class="card-content">
-                    <h3>Bali, Indonesia</h3>
-                    <p>Tropical paradise with stunning beaches and cultural temples</p>
+        <form action="home.html" method="get" class="space-y-6">
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-envelope text-gray-400"></i>
+                    </div>
+                    <input type="email" required class="block w-full pl-11 pr-4 py-3 bg-transparent border-2 border-gray-200 dark:border-gray-600 rounded-xl text-sm dark:text-white focus:border-mint dark:focus:border-mint focus:ring-0 outline-none transition-colors" placeholder="explorer@tripfit.com">
                 </div>
             </div>
-            <div class="card">
-                <img src="images/swiss.png" alt="Swiss Alps">
-                <div class="card-content">
-                    <h3>Swiss Alps, Switzerland</h3>
-                    <p>Majestic mountains, crystal lakes, and thrilling outdoor pursuits</p>
+
+            <div>
+                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-lock text-gray-400"></i>
+                    </div>
+                    <input type="password" required class="block w-full pl-11 pr-4 py-3 bg-transparent border-2 border-gray-200 dark:border-gray-600 rounded-xl text-sm dark:text-white focus:border-mint dark:focus:border-mint focus:ring-0 outline-none transition-colors" placeholder="••••••••">
                 </div>
             </div>
-            <div class="card">
-                <img src="images/tokyo.jpg" alt="Tokyo streets">
-                <div class="card-content">
-                    <h3>Tokyo, Japan</h3>
-                    <p>Dynamic urban energy, historic sites, and exquisite cuisine</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="why-us">
-        <h2>Why Choose TripFit?</h2>
-        <div class="features">
-            <div class="feature">
-                <h3>Personalized Matches</h3>
-                <p>Our quiz tailors suggestions to your unique preferences for an unforgettable trip.</p>
+            <div class="flex items-center justify-between">
+                <label class="flex items-center cursor-pointer">
+                    <input type="checkbox" class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-mint focus:ring-mint h-4 w-4 cursor-pointer">
+                    <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
+                </label>
+                <a href="verify.html" class="text-sm font-bold text-mint hover:text-juniper dark:hover:text-white transition-colors">Forgot password?</a>
             </div>
-            <div class="feature">
-                <h3>Global Coverage</h3>
-                <p>Explore 20+ handpicked destinations across every continent.</p>
-            </div>
-            <div class="feature">
-                <h3>Easy Planning</h3>
-                <p>Start with insights that inspire—effortless inspiration at your fingertips.</p>
-            </div>
-        </div>
-    </section>
 
-    <footer>
-        <p>&copy;Fueling wanderlust for dreamers and explorers worldwide.</p>
-    </footer>
+            <button type="submit" class="w-full py-4 bg-juniper dark:bg-mint hover:bg-gray-800 dark:hover:bg-teal text-white dark:text-juniper font-bold text-lg rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center gap-2">
+                Sign In <i class="fas fa-sign-in-alt"></i>
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
+            Don't have an account? <a href="#" class="font-bold text-mint hover:underline">Sign up for free</a>
+        </p>
+    </div>
+
+    <script>
+        // Global Theme Toggle Logic with Memory
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        // Check memory on load
+        if (localStorage.getItem('tripfit-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Handle toggle click
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('tripfit-theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    localStorage.setItem('tripfit-theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
