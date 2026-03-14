@@ -4,293 +4,236 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destination Details • TripFit</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mint: '#2dd4bf',
+                        teal: '#14b8a6',
+                        juniper: '#0f373b',
+                        pearl: '#f8f9fa',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* CSS Variables used exclusively on this page */
-        :root {
-            --text-main: #444;
-            --text-muted: #666;
-            --border-light: #e5e7eb;
-        }
-
-        /* Cinema Hero Section */
-        .dest-hero {
-            height: 70vh;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: flex-end;
-            position: relative;
-        }
-        
-        .dest-hero::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(15, 55, 59, 1) 0%, rgba(15, 55, 59, 0.5) 50%, transparent 100%);
-        }
-        
-        .dest-title-container {
-            position: relative;
-            z-index: 10;
-            padding: 4rem 5%;
-            color: white;
-            width: 100%;
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-        
-        .dest-title-container h1 { font-size: 4.5rem; margin-bottom: 0.25rem; line-height: 1.1; letter-spacing: -2px;}
-        .dest-title-container h3 { color: var(--primary); font-weight: 600; font-size: 1.6rem; letter-spacing: 1px; text-transform: uppercase; }
-        
-        /* Main Info Section Layout */
-        .dest-info-section {
-            padding: 5rem 5%;
-            max-width: 1280px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 5rem;
-        }
-        
-        /* Typography & Content styling */
-        .section-header { color: var(--dark); margin-bottom: 1.5rem; font-size: 2.2rem; }
-        .sub-header { color: var(--dark); font-size: 1.6rem; margin: 2.5rem 0 1rem; }
-        
-        .dest-description { font-size: 1.3rem; color: var(--text-main); margin-bottom: 2rem; line-height: 1.8; font-weight: 400;}
-        
-        /* Sticky Sidebar Breakdown */
-        .dest-attributes {
-            background: white; padding: 2.5rem; border-radius: 24px; box-shadow: var(--shadow);
-            height: fit-content; position: sticky; top: 120px; 
-        }
-        
-        .attr-group { margin-bottom: 1.8rem; }
-        .attr-group h4 { color: var(--dark); margin-bottom: 0.8rem; font-size: 1.15rem; font-weight: 700;}
-        .attr-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-        .attr-tag {
-            background: #f0fdfa; color: var(--accent); padding: 0.5rem 1.4rem;
-            border-radius: 30px; font-size: 0.95rem; font-weight: 600; border: 1px solid rgba(45, 212, 191, 0.2);
-        }
-
-        /* 1. Itinerary Section */
-        .itinerary-box {
-            margin-top: 4rem;
-            border-top: 1px solid var(--border-light);
-            padding-top: 4rem;
-        }
-
-        .day-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 1.5rem;
-            border-left: 5px solid var(--primary);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-        }
-
-        .day-card h4 { color: var(--accent); font-size: 1.3rem; margin-bottom: 0.5rem; }
-        .day-card ul { margin-left: 1.5rem; color: var(--text-main); line-height: 1.8; }
-
-        /* 2. Photo Gallery Section */
-        .gallery-section {
-            padding: 5rem 5%;
-            background: #fdfdfd;
-            border-top: 1px solid var(--border-light);
-            border-bottom: 1px solid var(--border-light);
-            margin: 4rem 0;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-
-        .gallery-item {
-            height: 250px;
-            border-radius: 12px;
-            background-size: cover;
-            background-position: center;
-            transition: transform 0.3s;
-        }
-
-        .gallery-item:hover { transform: scale(1.03); }
-
-        /* 3. Insider Tips */
-        .tips-box {
-            background: #0f373b; 
-            color: #ccc;
-            padding: 3rem;
-            border-radius: 20px;
-            margin-top: 4rem;
-        }
-
-        .tips-box h3 { color: var(--primary); font-size: 1.8rem; margin-bottom: 1.5rem; }
-        .tips-box ul { margin-left: 1.5rem; line-height: 1.8; }
-        .tips-box strong { color: white; }
-
-        /* Responsive design */
-        @media (max-width: 1024px) {
-            .dest-info-section { grid-template-columns: 1fr; gap: 3rem;}
-            .dest-attributes { position: static; width: 100%; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 768px) {
-            .dest-hero { height: 50vh; }
-            .dest-title-container h1 { font-size: 2.8rem; }
-            .section-header { font-size: 1.8rem; }
-            .gallery-grid { grid-template-columns: 1fr; }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        html { scroll-behavior: smooth; }
     </style>
 </head>
-<body>
-    <header>
-        <div class="logo">TripFit</div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="quiz.html">Take Quiz</a>
-            <a href="all-destinations.html">Destinations</a>
-        </nav>
+<body class="bg-pearl dark:bg-gray-900 min-h-screen flex flex-col text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <header class="bg-juniper text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="home.html" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" style="height: 60px; margin-right: 5px; object-fit: contain;">
+                <div class="text-3xl font-bold tracking-tight">TripFit</div>
+            </a>
+            <nav class="hidden md:flex items-center gap-x-6 font-medium">
+                <a href="home.html" class="hover:text-mint transition-colors">Home</a>
+                <a href="all-destinations.html" class="hover:text-mint transition-colors">Destinations</a>
+                
+                <a href="#" class="hover:text-mint transition-colors flex items-center gap-2">
+                    <i class="fas fa-history text-lg"></i>
+                    <span>History</span>
+                </a>
+
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+
+                <a href="quiz.html" class="px-6 py-2.5 bg-mint hover:bg-teal text-juniper rounded-full font-bold transition-all shadow-lg">
+                    Take Quiz
+                </a>
+            </nav>
+        </div>
     </header>
 
-    <main id="destination-content">
-        <h2 style="text-align: center; padding: 10rem; color: var(--text-muted);">Loading destination profile...</h2>
+    <main id="destination-content" class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col items-center justify-center py-32 text-gray-500">
+            <i class="fas fa-circle-notch fa-spin text-5xl text-mint mb-6"></i>
+            <h2 class="text-3xl font-bold text-juniper dark:text-white">Loading Destination Profile...</h2>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; Fueling wanderlust for dreamers and explorers worldwide.</p>
+    <footer class="bg-juniper text-center py-8 border-t border-teal/20 mt-auto">
+        <p class="text-gray-400 text-sm">&copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.</p>
     </footer>
 
     <script src="script.js"></script>
     
     <script>
-        // Dictionary mapping destination names to your local 'images1' folder
-        const localHeroImages = {
-            "Bali, Indonesia": "images1/BALI.jpg",
-            "Tokyo, Japan": "images1/TOKYO.jpg",
-            "Bangkok, Thailand": "images1/BANGKOK.jpg",
-            "Taj Mahal, India": "images1/TAJ MAHAL.jpg",
-            "Swiss Alps, Switzerland": "images1/SWISS ALPS.jpg",
-            "Paris, France": "images/paris.jpg", // Fallback (not in images1 list)
-            "Santorini, Greece": "images1/SANTORINI.jpg",
-            "Reykjavik, Iceland": "images1/ICELAND.png",
-            "New York City, USA": "images1/NEW YORK.jpg",
-            "Grand Canyon, USA": "images1/GRAND CANYON.jpg",
-            "Vancouver, Canada": "images1/VANCOUVER.jpg",
-            "Rio de Janeiro, Brazil": "images1/RIO DE JANEIRO.jpg",
-            "Machu Picchu, Peru": "images1/MACHU PICCHU.jpg",
-            "Galapagos Islands, Ecuador": "images1/ECUADOR.jpg",
-            "Cape Town, South Africa": "images1/CAPE TOWN.jpg",
-            "Serengeti, Tanzania": "images1/SERENGETI.jpg",
-            "Marrakech, Morocco": "images1/MARAKECH.jpg",
-            "Sydney, Australia": "images1/SYDNEY.jpg",
-            "Great Barrier Reef, Australia": "images1/GREAT BARRIER REEF.jpg",
-            "Queenstown, New Zealand": "images/Queenstown.jpg" // Fallback (not in images1 list)
-        };
+        // Global Theme Toggle Logic with Memory
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
 
+        // Check memory on load
+        if (localStorage.getItem('tripfit-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Handle toggle click
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('tripfit-theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    localStorage.setItem('tripfit-theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+        }
+
+        // Dynamic Profile Rendering
         document.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const destId = params.get('id');
             const contentDiv = document.getElementById('destination-content');
+            
             const destination = destinations.find(d => d.name === destId);
 
             if (destination) {
                 const nameParts = destination.name.split(',');
                 const city = nameParts[0];
                 const country = nameParts[1] ? nameParts[1].trim() : '';
-                
-                // Fetch the mapped local image, or fallback to the standard thumbnail if it's missing
-                const heroImageUrl = localHeroImages[destination.name] || destination.image;
-
                 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-                const generateTags = (arr) => arr.map(item => `<span class="attr-tag">${capitalize(item)}</span>`).join('');
+                const generateTags = (arr) => arr.map(item => `<span class="px-4 py-2 bg-mint/10 border border-mint/20 text-mint text-sm font-bold rounded-full capitalize shadow-sm">${item}</span>`).join('');
 
                 contentDiv.innerHTML = `
-                    <div class="dest-hero" style="background-image: url('${heroImageUrl}');">
-                        <div class="dest-title-container">
-                            <h1>${city}</h1>
-                            <h3>${destination.region} ${country ? `&bull; ${country}` : ''}</h3>
+                    <div class="relative h-[60vh] min-h-[400px] w-full bg-cover bg-center flex items-end" style="background-image: url('${destination.image}');">
+                        <div class="absolute inset-0 bg-gradient-to-t from-juniper via-juniper/40 to-transparent"></div>
+                        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 pb-12">
+                            <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-2">${city}</h1>
+                            <h3 class="text-xl md:text-2xl text-mint font-bold uppercase tracking-widest">${destination.region} ${country ? `• ${country}` : ''}</h3>
                         </div>
                     </div>
 
-                    <section class="dest-info-section">
-                        <div class="main-details">
-                            <h2 class="section-header">Overview</h2>
-                            <p class="dest-description">${destination.desc}. This location offers a unique blend of experiences that perfectly capture the essence of ${destination.region}. Known for its distinct character, it has become a must-visit spot for global travelers seeking authenticity.</p>
-                            
-                            <p style="color: var(--text-muted); font-size: 1.15rem; line-height: 1.8;">
-                                Our TripFit analysis shows that this destination excels at providing a <strong>${destination.trip.join(' and ')}</strong> experience. 
-                                It is particularly well-suited for <strong>${destination.companions[0]}</strong> travelers. The local <strong>${destination.climate[0]}</strong> environment 
-                                creates the perfect setting for popular activities like <strong>${destination.activities.join(', ')}</strong>.
-                            </p>
-                            
-                            <div style="margin-top: 3.5rem;">
-                                <button class="btn" onclick="alert('Mock booking portal initialized...')">Check Availability</button>
-                                <a href="javascript:history.back()" class="btn secondary" style="margin-left: 1rem;">Back to Matches</a>
-                            </div>
+                    <div class="max-w-7xl mx-auto px-6 py-16 w-full grid grid-cols-1 lg:grid-cols-3 gap-12">
+                        <div class="lg:col-span-2 space-y-12">
+                            <section>
+                                <h2 class="text-3xl font-bold text-juniper dark:text-mint mb-6">Destination Overview</h2>
+                                <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                                    ${destination.desc}. This location offers a unique blend of experiences that perfectly capture the essence of ${destination.region}. Known for its distinct character, it has become a must-visit spot for global travelers seeking authenticity.
+                                </p>
+                                <div class="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl border-l-4 border-mint">
+                                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed italic">
+                                        "Our TripFit analysis shows that this destination excels at providing a <strong>${destination.trip.join(' and ')}</strong> experience. It is highly recommended for <strong>${destination.companions[0]}</strong> travelers looking to explore a <strong>${destination.climate[0]}</strong> environment featuring <strong>${destination.activities.join(' and ')}</strong>."
+                                    </p>
+                                </div>
+                                
+                                <div class="mt-8 flex flex-wrap gap-4">
+                                    <button onclick="alert('Mock booking portal initialized...')" class="px-8 py-4 bg-juniper hover:bg-gray-800 dark:bg-mint dark:hover:bg-teal text-white dark:text-juniper font-bold text-lg rounded-xl shadow-lg transition-transform active:scale-95 flex items-center gap-2">
+                                        <i class="fas fa-calendar-check"></i> Check Availability
+                                    </button>
+                                    <button onclick="history.back()" class="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-juniper dark:hover:border-mint text-juniper dark:text-white font-bold text-lg rounded-xl shadow-sm transition-colors flex items-center gap-2">
+                                        <i class="fas fa-arrow-left"></i> Go Back
+                                    </button>
+                                </div>
+                            </section>
 
-                            <div class="itinerary-box">
-                                <h3 class="section-header">Sample 3-Day Itinerary</h3>
-                                <div class="day-card">
-                                    <h4>Day 1: Cultural Immersion & Iconic Landmarks</h4>
-                                    <ul>
-                                        <li>Morning: Visit the central historic district and major monuments.</li>
-                                        <li>Lunch: Try local street food specialties in the market.</li>
-                                        <li>Afternoon: Explore a prominent museum or art gallery.</li>
-                                        <li>Evening: Welcome dinner at a traditional restaurant.</li>
-                                    </ul>
+                            <section class="border-t border-gray-200 dark:border-gray-700 pt-12">
+                                <h2 class="text-3xl font-bold text-juniper dark:text-mint mb-8">Sample 3-Day Itinerary</h2>
+                                <div class="space-y-6">
+                                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow border-l-8 border-l-mint">
+                                        <h4 class="text-xl font-bold text-juniper dark:text-white mb-4">Day 1: Arrival & Immersion</h4>
+                                        <ul class="space-y-3 text-gray-600 dark:text-gray-400 list-disc list-inside marker:text-mint">
+                                            <li>Morning: Settle in and visit the central historic district.</li>
+                                            <li>Lunch: Try local street food specialties in the main market.</li>
+                                            <li>Afternoon: Guided walking tour of iconic landmarks.</li>
+                                            <li>Evening: Welcome dinner at a highly-rated traditional restaurant.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow border-l-8 border-l-teal">
+                                        <h4 class="text-xl font-bold text-juniper dark:text-white mb-4">Day 2: Exploration & Adventure</h4>
+                                        <ul class="space-y-3 text-gray-600 dark:text-gray-400 list-disc list-inside marker:text-teal">
+                                            <li>Morning: Excursion to top natural or historic sites.</li>
+                                            <li>Lunch: Picnic or casual dining with panoramic views.</li>
+                                            <li>Afternoon: Optional adventure activity or museum deep-dive.</li>
+                                            <li>Evening: Catch a local performance or enjoy the nightlife.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow border-l-8 border-l-juniper dark:border-l-white">
+                                        <h4 class="text-xl font-bold text-juniper dark:text-white mb-4">Day 3: Leisure & Departure</h4>
+                                        <ul class="space-y-3 text-gray-600 dark:text-gray-400 list-disc list-inside marker:text-juniper dark:marker:text-white">
+                                            <li>Morning: Relaxed morning wandering boutique shops or local artisan workshops.</li>
+                                            <li>Lunch: Café lunch in a trendy neighborhood.</li>
+                                            <li>Afternoon: Visit a hidden gem location off the main tourist path.</li>
+                                            <li>Evening: Farewell sunset drinks before departure.</li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div class="day-card">
-                                    <h4>Day 2: Nature & Adventure</h4>
-                                    <ul>
-                                        <li>Morning: Guided hike or scenic nature tour.</li>
-                                        <li>Lunch: Picnic lunch with panoramic views.</li>
-                                        <li>Afternoon: Relaxing boat trip or outdoor activity.</li>
-                                        <li>Evening: Optional local entertainment or show.</li>
-                                    </ul>
-                                </div>
-                                <div class="day-card">
-                                    <h4>Day 3: Local Vibes & Leisure</h4>
-                                    <ul>
-                                        <li>Morning: Wander through boutique shops and local artisan workshops.</li>
-                                        <li>Lunch: Relaxed café lunch in a trendy neighborhood.</li>
-                                        <li>Afternoon: Visit a hidden gem location off the main tourist path.</li>
-                                        <li>Evening: Farewell drinks at a rooftop bar with sunset views.</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="tips-box">
-                                <h3>TripFit Insider Tips</h3>
-                                <ul>
-                                    <li><strong>Best Time to Visit:</strong> The shoulder season (spring/fall) offers the best balance of weather and smaller crowds.</li>
-                                    <li><strong>Getting Around:</strong> The local transport system is efficient and cost-effective. Consider a multi-day pass.</li>
-                                    <li><strong>Pack Accordingly:</strong> Layering is key due to changing temperatures throughout the day.</li>
-                                    <li><strong>Local Etiquette:</strong> Learning a few basic phrases goes a long way. Always ask before taking photos of people.</li>
-                                </ul>
-                            </div>
+                            </section>
                         </div>
 
-                        <aside class="dest-attributes">
-                            <h3 style="color: var(--dark); margin-bottom: 1.8rem; border-bottom: 2px solid var(--border-light); padding-bottom: 1rem; font-size: 1.5rem;">Why It Fits Your Vibe</h3>
-                            <div class="attr-group"><h4>Vibe & Pace</h4><div class="attr-tags">${generateTags(destination.trip)}</div></div>
-                            <div class="attr-group"><h4>Best For</h4><div class="attr-tags">${generateTags(destination.companions)}</div></div>
-                            <div class="attr-group"><h4>Top Activities</h4><div class="attr-tags">${generateTags(destination.activities)}</div></div>
-                            <div class="attr-group"><h4>Environment</h4><div class="attr-tags">${generateTags(destination.climate)}</div></div>
-                            <div class="attr-group"><h4>Budget Level</h4><div class="attr-tags">${generateTags(destination.budget)}</div></div>
+                        <aside class="relative">
+                            <div class="sticky top-24 bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
+                                <h3 class="text-2xl font-bold text-juniper dark:text-white mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">TripFit Breakdown</h3>
+                                
+                                <div class="space-y-6">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Vibe & Pace</h4>
+                                        <div class="flex flex-wrap gap-2">${generateTags(destination.trip)}</div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Ideal For</h4>
+                                        <div class="flex flex-wrap gap-2">${generateTags(destination.companions)}</div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Top Activities</h4>
+                                        <div class="flex flex-wrap gap-2">${generateTags(destination.activities)}</div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Environment</h4>
+                                        <div class="flex flex-wrap gap-2">${generateTags(destination.climate)}</div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Budget Level</h4>
+                                        <div class="flex flex-wrap gap-2">${generateTags(destination.budget)}</div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-8 bg-juniper text-white p-6 rounded-2xl border border-teal/30">
+                                    <h4 class="text-lg font-bold text-mint mb-4 flex items-center gap-2">
+                                        <i class="fas fa-lightbulb"></i> Insider Tips
+                                    </h4>
+                                    <ul class="space-y-2 text-sm text-gray-300">
+                                        <li><strong class="text-white">Best Time:</strong> Spring/Fall for optimal weather.</li>
+                                        <li><strong class="text-white">Transport:</strong> Local transit passes save money.</li>
+                                        <li><strong class="text-white">Packing:</strong> Bring layers for changing temps.</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </aside>
-                    </section>
+
+                    </div>
                 `;
             } else {
                 contentDiv.innerHTML = `
-                    <div style="text-align: center; padding: 15rem 2rem;">
-                        <h1 style="color: var(--dark); font-size: 3.5rem; margin-bottom: 1rem;">Destination Not Found</h1>
-                        <p style="color: var(--text-muted); font-size: 1.3rem; margin-bottom: 3rem;">We couldn't locate that specific profile in our catalog.</p>
-                        <a href="all-destinations.html" class="btn">View All Destinations</a>
+                    <div class="flex-1 flex flex-col items-center justify-center py-32 px-6 text-center">
+                        <i class="fas fa-map-marked-alt text-6xl text-gray-300 dark:text-gray-600 mb-6"></i>
+                        <h1 class="text-4xl font-bold text-juniper dark:text-white mb-4">Destination Not Found</h1>
+                        <p class="text-xl text-gray-500 dark:text-gray-400 mb-8 max-w-md">We couldn't locate that specific profile in our catalog. The URL might be broken or the destination was removed.</p>
+                        <a href="all-destinations.html" class="px-8 py-4 bg-mint hover:bg-teal text-juniper font-bold rounded-full shadow-lg transition-transform hover:-translate-y-1">
+                            Browse All Destinations
+                        </a>
                     </div>
                 `;
             }
