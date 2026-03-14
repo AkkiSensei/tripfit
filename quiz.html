@@ -4,177 +4,488 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trip Quiz • TripFit</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mint: '#2dd4bf',
+                        teal: '#14b8a6',
+                        juniper: '#0f373b',
+                        pearl: '#f8f9fa',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        body { font-family: 'Inter', system-ui, sans-serif; }
+
+        /* Premium Card Styling */
+        .option-card { 
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            border-color: transparent;
+        }
+        .dark .option-card {
+            background: linear-gradient(145deg, #1f2937, #111827);
+        }
+
+        .option-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(45, 212, 191, 0.25);
+            border-color: rgba(45, 212, 191, 0.4);
+        }
+        
+        .peer:checked + .option-card {
+            border-color: #2dd4bf;
+            background: linear-gradient(145deg, #f0fdfa, #ccfbf1);
+            box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.2), 0 10px 20px -5px rgba(45, 212, 191, 0.3);
+        }
+        .dark .peer:checked + .option-card {
+            background: linear-gradient(145deg, rgba(45, 212, 191, 0.15), rgba(45, 212, 191, 0.05));
+        }
+        
+        /* Custom Sliders */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            border-radius: 50%;
+            background: #2dd4bf;
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 4px 12px rgba(45, 212, 191, 0.6);
+            transition: transform 0.2s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #e5e7eb;
+            border-radius: 4px;
+        }
+        .dark input[type=range]::-webkit-slider-runnable-track { background: #374151; }
+        
+        /* Flashy Button Animation */
+        .flashy-btn { animation: pulseGlow 2s infinite; }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(45, 212, 191, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+        }
+
+        .question { animation: fadeSlide 0.4s ease forwards; }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <div class="logo">TripFit</div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="quiz.html">Take Quiz</a>
-        </nav>
+<body class="bg-pearl dark:bg-gray-900 min-h-screen flex flex-col text-gray-800 dark:text-gray-100 transition-colors duration-300">
+    
+    <header class="bg-juniper text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="home.html" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" style="height: 60px; margin-right: 5px; object-fit: contain;">
+                <div class="text-3xl font-bold tracking-tight">TripFit</div>
+            </a>
+            <nav class="hidden md:flex items-center gap-x-6 font-medium">
+                <a href="home.html" class="hover:text-mint transition-colors">Home</a>
+                <a href="all-destinations.html" class="hover:text-mint transition-colors">Destinations</a>
+                
+                <a href="#" class="hover:text-mint transition-colors flex items-center gap-2" title="View Past Trips">
+                    <i class="fas fa-history text-lg"></i>
+                    <span>History</span>
+                </a>
+
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+
+                <a href="quiz.html" class="flashy-btn px-6 py-2.5 bg-mint hover:bg-teal text-juniper rounded-full font-bold transition-all">
+                    Restart Quiz
+                </a>
+            </nav>
+        </div>
     </header>
 
-    <section class="quiz">
-        <div class="quiz-container">
-            <div class="progress">
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
+    <section class="flex-1 py-10 px-4 flex items-center justify-center">
+        <div class="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700 h-[620px] flex flex-col relative overflow-hidden transition-colors duration-300">
+            
+            <div class="px-10 pt-8 pb-4">
+                <div class="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div id="progress-fill" class="progress-fill h-full bg-mint rounded-full w-[16%]"></div>
                 </div>
-                <p>Step 1 of 5</p>
             </div>
-            <form action="recommendation.html" method="get">
-                <div class="question">
-                    <h3>1. What climate do you prefer?</h3>
-                    <div class="options">
-                        <div class="option-item">
-                            <input type="radio" id="beach" name="climate" value="beach">
-                            <label for="beach" class="option-card">
-                                <span>Beach</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="mountains" name="climate" value="mountains">
-                            <label for="mountains" class="option-card">
-                                <span>Mountains</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="city" name="climate" value="city">
-                            <label for="city" class="option-card">
-                                <span>Urban</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="tropical" name="climate" value="tropical">
-                            <label for="tropical" class="option-card">
-                                <span>Tropical</span>
-                            </label>
+
+            <form id="quiz-form" action="recommendation.html" method="get" class="flex-1 flex flex-col px-10 pb-8">
+                
+                <div class="flex-1 flex flex-col justify-center">
+                    
+                    <div id="q1" class="question">
+                        <h3 class="text-3xl font-bold text-juniper dark:text-mint mb-6 text-center">What climate calls to your soul?</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="option-item">
+                                <input type="radio" id="beach" name="climate" value="beach" class="peer hidden">
+                                <label for="beach" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-umbrella-beach text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Beach</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm mt-1 text-center">Sun, sand and waves</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="mountains" name="climate" value="mountains" class="peer hidden">
+                                <label for="mountains" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-mountain text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Mountains</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm mt-1 text-center">Fresh air and peaks</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="city" name="climate" value="city" class="peer hidden">
+                                <label for="city" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-city text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Urban</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm mt-1 text-center">City lights and energy</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="tropical" name="climate" value="tropical" class="peer hidden">
+                                <label for="tropical" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-leaf text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Tropical</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm mt-1 text-center">Lush green paradise</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="question">
-                    <h3>2. What type of trip do you enjoy?</h3>
-                    <div class="options">
-                        <div class="option-item">
-                            <input type="radio" id="adventure" name="trip" value="adventure">
-                            <label for="adventure" class="option-card">
-                                <span>Adventure</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="relaxation" name="trip" value="relaxation">
-                            <label for="relaxation" class="option-card">
-                                <span>Relaxation</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="cultural" name="trip" value="cultural">
-                            <label for="cultural" class="option-card">
-                                <span>Cultural</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="culinary" name="trip" value="culinary">
-                            <label for="culinary" class="option-card">
-                                <span>Culinary</span>
-                            </label>
+                    <div id="q2" class="question hidden">
+                        <h3 class="text-3xl font-bold text-juniper dark:text-mint mb-6 text-center">What kind of trip do you enjoy?</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="option-item">
+                                <input type="radio" id="adventure" name="trip" value="adventure" class="peer hidden">
+                                <label for="adventure" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-hiking text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Adventure</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="relaxation" name="trip" value="relaxation" class="peer hidden">
+                                <label for="relaxation" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-spa text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Relaxation</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="cultural" name="trip" value="cultural" class="peer hidden">
+                                <label for="cultural" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-landmark text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Cultural</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="culinary" name="trip" value="culinary" class="peer hidden">
+                                <label for="culinary" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-utensils text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Culinary</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="question">
-                    <h3>3. What's your budget level?</h3>
-                    <div class="options">
-                        <div class="option-item">
-                            <input type="radio" id="budget" name="budget" value="budget">
-                            <label for="budget" class="option-card">
-                                <span>Budget-friendly</span>
-                            </label>
+                    <div id="q3" class="question hidden text-center px-8">
+                        <h3 class="text-3xl font-bold text-juniper dark:text-mint mb-4">Set your daily budget</h3>
+                        <p class="text-gray-500 mb-12">Slide to set your maximum spend per day</p>
+                        
+                        <div class="text-6xl font-extrabold text-mint mb-10 tracking-tight">
+                            $<span id="budget-display">150</span>
                         </div>
-                        <div class="option-item">
-                            <input type="radio" id="midrange" name="budget" value="midrange">
-                            <label for="midrange" class="option-card">
-                                <span>Mid-range</span>
-                            </label>
+                        
+                        <input type="range" id="budget-slider" name="budgetVal" min="50" max="1000" step="50" value="150" 
+                               oninput="document.getElementById('budget-display').innerText = this.value">
+                        
+                        <div class="flex justify-between text-sm text-gray-400 font-bold mt-6 uppercase tracking-wider">
+                            <span>Backpacker</span>
+                            <span>Mid-Range</span>
+                            <span>Luxury</span>
                         </div>
-                        <div class="option-item">
-                            <input type="radio" id="luxury" name="budget" value="luxury">
-                            <label for="luxury" class="option-card">
-                                <span>Luxury</span>
-                            </label>
+                        <input type="hidden" id="budget-category" name="budget" value="budget">
+                    </div>
+
+                    <div id="q4" class="question hidden">
+                        <h3 class="text-3xl font-bold text-juniper dark:text-mint mb-6 text-center">Who is joining your adventure?</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="option-item">
+                                <input type="radio" id="solo" name="companions" value="solo" class="peer hidden">
+                                <label for="solo" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-user text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Going Solo</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm mt-1 text-center">Just me and the world</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="couple" name="companions" value="couple" class="peer hidden">
+                                <label for="couple" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-heart text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Couple</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm mt-1 text-center">A romantic getaway</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="friends" name="companions" value="friends" class="peer hidden">
+                                <label for="friends" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-user-group text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Friends</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm mt-1 text-center">The whole squad</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="family" name="companions" value="family" class="peer hidden">
+                                <label for="family" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-home text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Family</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm mt-1 text-center">Fun for all ages</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="question">
-                    <h3>4. Who are you traveling with?</h3>
-                    <div class="options">
-                        <div class="option-item">
-                            <input type="radio" id="solo" name="companions" value="solo">
-                            <label for="solo" class="option-card">
-                                <span>Solo</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="couple" name="companions" value="couple">
-                            <label for="couple" class="option-card">
-                                <span>Couple</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="family" name="companions" value="family">
-                            <label for="family" class="option-card">
-                                <span>Family</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="friends" name="companions" value="friends">
-                            <label for="friends" class="option-card">
-                                <span>Friends</span>
-                            </label>
+                    <div id="q5" class="question hidden">
+                        <h3 class="text-3xl font-bold text-juniper dark:text-mint mb-6 text-center">What experiences light you up?</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="option-item">
+                                <input type="radio" id="nature" name="activities" value="nature" class="peer hidden">
+                                <label for="nature" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-tree text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Nature</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="history" name="activities" value="history" class="peer hidden">
+                                <label for="history" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-monument text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">History</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="food" name="activities" value="food" class="peer hidden">
+                                <label for="food" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-wine-glass text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Food & Drink</span>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="nightlife" name="activities" value="nightlife" class="peer hidden">
+                                <label for="nightlife" class="option-card flex flex-col items-center p-6 border-2 rounded-2xl cursor-pointer">
+                                    <div class="h-16 w-16 bg-mint/10 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fas fa-music text-3xl text-mint"></i>
+                                    </div>
+                                    <span class="text-lg font-bold dark:text-white">Nightlife</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="question">
-                    <h3>5. What activities excite you most?</h3>
-                    <div class="options">
-                        <div class="option-item">
-                            <input type="radio" id="nature" name="activities" value="nature">
-                            <label for="nature" class="option-card">
-                                <span>Nature</span>
-                            </label>
+                    <div id="q6" class="question hidden text-center px-8">
+                        <h3 class="text-3xl font-bold text-juniper dark:text-mint mb-4">How long is your escape?</h3>
+                        <p class="text-gray-500 mb-12">Slide to select the number of days</p>
+                        
+                        <div class="text-6xl font-extrabold text-mint mb-10 tracking-tight">
+                            <span id="days-display">7</span> Days
                         </div>
-                        <div class="option-item">
-                            <input type="radio" id="history" name="activities" value="history">
-                            <label for="history" class="option-card">
-                                <span>History</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="food" name="activities" value="food">
-                            <label for="food" class="option-card">
-                                <span>Food</span>
-                            </label>
-                        </div>
-                        <div class="option-item">
-                            <input type="radio" id="nightlife" name="activities" value="nightlife">
-                            <label for="nightlife" class="option-card">
-                                <span>Nightlife</span>
-                            </label>
+                        
+                        <input type="range" id="days-slider" name="days" min="2" max="21" step="1" value="7" 
+                               oninput="document.getElementById('days-display').innerText = this.value">
+                        
+                        <div class="flex justify-between text-sm text-gray-400 font-bold mt-6 uppercase tracking-wider">
+                            <span>Weekend</span>
+                            <span>1 Week</span>
+                            <span>3+ Weeks</span>
                         </div>
                     </div>
+
                 </div>
 
-                <button type="submit" class="btn">Reveal My Destinations</button>
+                <div class="mt-auto pt-6 border-t border-gray-100 dark:border-gray-700 relative flex items-center justify-between">
+                    <button id="prev-btn" type="button" class="flex items-center gap-x-2 px-4 py-2 text-gray-400 hover:text-juniper dark:hover:text-white font-bold transition-colors disabled:opacity-0 disabled:pointer-events-none">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    
+                    <button id="submit-btn" type="button" class="hidden absolute left-1/2 transform -translate-x-1/2 px-10 py-4 bg-juniper text-white hover:bg-gray-800 font-bold text-lg rounded-full shadow-2xl transition-transform active:scale-95 flex items-center gap-x-3 w-max border-2 border-mint">
+                        <i class="fas fa-plane-departure"></i>
+                        <span>Reveal My Destinations</span>
+                    </button>
+
+                    <button id="next-btn" type="button" class="px-8 py-3 bg-mint hover:bg-teal text-juniper font-bold text-lg rounded-full shadow-lg transition-transform active:scale-95 flex items-center gap-x-3 ml-auto">
+                        <span>Continue</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
             </form>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; Fueling wanderlust for dreamers and explorers worldwide.</p>
-    </footer>
+    <script>
+        // Global Theme Toggle Logic with Memory
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        // Check memory on load
+        if (localStorage.getItem('tripfit-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Handle toggle click
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('tripfit-theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    localStorage.setItem('tripfit-theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+        }
+
+        // Quiz Logic
+        let currentStep = 1;
+        const totalSteps = 6; 
+        const form = document.getElementById('quiz-form');
+        
+        const questions = [
+            document.getElementById('q1'),
+            document.getElementById('q2'),
+            document.getElementById('q3'),
+            document.getElementById('q4'),
+            document.getElementById('q5'),
+            document.getElementById('q6')
+        ];
+        
+        const progressFill = document.getElementById('progress-fill');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const submitBtn = document.getElementById('submit-btn');
+
+        function updateUI() {
+            questions.forEach((q, index) => {
+                q.classList.toggle('hidden', index + 1 !== currentStep);
+            });
+            
+            const progressPercent = (currentStep / totalSteps) * 100;
+            progressFill.style.width = `${progressPercent}%`;
+            
+            prevBtn.disabled = currentStep === 1;
+            
+            if (currentStep === totalSteps) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+        }
+
+        function isCurrentStepAnswered() {
+            const currentQuestion = questions[currentStep - 1];
+            const radios = currentQuestion.querySelectorAll('input[type="radio"]');
+            if (radios.length > 0) return Array.from(radios).some(radio => radio.checked);
+            return true; 
+        }
+
+        function handleNext() {
+            if (!isCurrentStepAnswered()) {
+                alert("Please make a selection to continue!");
+                return;
+            }
+            
+            if (currentStep === 3) {
+                const val = parseInt(document.getElementById('budget-slider').value);
+                const categoryInput = document.getElementById('budget-category');
+                if (val <= 150) categoryInput.value = 'budget';
+                else if (val <= 450) categoryInput.value = 'midrange';
+                else categoryInput.value = 'luxury';
+            }
+
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateUI();
+            }
+        }
+
+        function handlePrev() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        }
+
+        submitBtn.addEventListener('click', () => {
+            submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i><span>Analyzing Vibe...</span>';
+            setTimeout(() => { form.submit(); }, 800);
+        });
+
+        window.onload = () => {
+            updateUI();
+            nextBtn.addEventListener('click', handleNext);
+            prevBtn.addEventListener('click', handlePrev);
+        };
+    </script>
 </body>
 </html>
