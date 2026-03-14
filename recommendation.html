@@ -3,48 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Recommendations • TripFit</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Your Matches • TripFit</title>
+    
+    <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mint: '#2dd4bf',
+                        teal: '#14b8a6',
+                        juniper: '#0f373b',
+                        pearl: '#f8f9fa',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', system-ui, sans-serif; }
+    </style>
 </head>
-<body>
-    <header>
-        <div class="logo">TripFit</div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="quiz.html">Take Quiz</a>
-        </nav>
+<body class="bg-pearl dark:bg-gray-900 min-h-screen flex flex-col text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <header class="bg-juniper text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="home.html" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" style="height: 60px; margin-right: 5px; object-fit: contain;">
+                <div class="text-3xl font-bold tracking-tight">TripFit</div>
+            </a>
+            <nav class="hidden md:flex items-center gap-x-6 font-medium">
+                <a href="home.html" class="hover:text-mint transition-colors">Home</a>
+                <a href="all-destinations.html" class="hover:text-mint transition-colors">Destinations</a>
+                
+                <a href="#" class="hover:text-mint transition-colors flex items-center gap-2">
+                    <i class="fas fa-history text-lg"></i>
+                    <span>History</span>
+                </a>
+
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+
+                <a href="quiz.html" class="px-6 py-2.5 bg-mint hover:bg-teal text-juniper rounded-full font-bold transition-all shadow-lg">
+                    Retake Quiz
+                </a>
+            </nav>
+        </div>
     </header>
 
-    <section class="results">
-        <div class="summary">
-            <h2>Your Curated Trip Recommendations</h2>
-            <p>Drawn from your answers, these destinations span continents and capture what you crave most</p>
+    <section class="bg-white dark:bg-gray-800 py-16 px-6 text-center border-b border-gray-200 dark:border-gray-700 transition-colors">
+        <div class="max-w-3xl mx-auto">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-mint/20 text-mint rounded-full mb-6 text-3xl">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-juniper dark:text-white tracking-tight mb-4">Your Perfect Matches</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400">Based on your unique vibe, we have calculated the top three destinations for your next escape.</p>
         </div>
-
-        <div class="filter-tags">
-            <span class="tag">All Continents</span>
-            <span class="tag active">Asia</span>
-            <span class="tag active">Europe</span>
-            <span class="tag active">North America</span>
-            <span class="tag active">South America</span>
-            <span class="tag active">Africa</span>
-            <span class="tag active">Oceania</span>
-        </div>
-
-        <div class="cards" id="recommendation-results">
-            <p style="text-align: center; width: 100%; color: #666;">Calculating your perfect destinations...</p>
-        </div>
-
-     <div style="text-align: center; margin-top: 4rem;">
-    <a href="#" id="view-all-link" class="btn" style="margin: 0 10px 15px;">View All Destinations</a>
-    <a href="quiz.html" class="btn secondary" style="margin: 0 10px 15px;">Refine with New Quiz</a>
-</div>
     </section>
 
-    <footer>
-        <p>&copy; Fueling wanderlust for dreamers and explorers worldwide.</p>
+    <section class="py-16 px-6 flex-1">
+        <div class="max-w-7xl mx-auto">
+            <div id="results-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="col-span-3 text-center py-20 text-gray-500">
+                    <i class="fas fa-circle-notch fa-spin text-4xl text-mint mb-4"></i>
+                    <p class="text-xl font-bold text-juniper dark:text-white">Analyzing your travel profile...</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center">
+                <p class="text-gray-500 dark:text-gray-400 mb-6">Want to explore more options?</p>
+                <a href="all-destinations.html" class="inline-block px-8 py-4 border-2 border-juniper dark:border-mint text-juniper dark:text-mint hover:bg-juniper dark:hover:bg-mint hover:text-white dark:hover:text-juniper font-bold rounded-xl transition-all">
+                    View Entire Catalog
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-juniper text-center py-8 border-t border-teal/20 mt-auto">
+        <p class="text-gray-400 text-sm">&copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.</p>
     </footer>
 
     <script src="script.js"></script>
+    
+    <script>
+        // Global Theme Toggle Logic with Memory
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        // Check memory on load
+        if (localStorage.getItem('tripfit-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Handle toggle click
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('tripfit-theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    localStorage.setItem('tripfit-theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+        }
+
+        // Recommendation Engine Execution
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Extract the user's answers from the URL
+            const userPrefs = {
+                climate: params.get('climate'),
+                trip: params.get('trip'),
+                budget: params.get('budget'),
+                companions: params.get('companions'),
+                activities: params.get('activities')
+            };
+
+            const container = document.getElementById('results-container');
+            
+            // Check if the user bypassed the quiz directly
+            if (!userPrefs.climate || !userPrefs.trip) {
+                container.innerHTML = `
+                    <div class="col-span-3 text-center py-20">
+                        <i class="fas fa-exclamation-triangle text-5xl text-amber-500 mb-4"></i>
+                        <h2 class="text-3xl font-bold text-juniper dark:text-white mb-4">No Quiz Data Found</h2>
+                        <p class="text-gray-600 dark:text-gray-400 mb-8">Please take the travel style quiz to see your personalized recommendations.</p>
+                        <a href="quiz.html" class="px-8 py-3 bg-mint text-juniper font-bold rounded-xl hover:bg-teal transition-colors">Take the Quiz</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Small delay to simulate processing
+            setTimeout(() => {
+                const topMatches = gradeDestinations(userPrefs);
+                container.innerHTML = topMatches.map(dest => buildCardHTML(dest, true)).join('');
+            }, 600);
+        });
+    </script>
 </body>
 </html>
