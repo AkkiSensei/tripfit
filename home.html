@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripFit • Discover Your Ideal Adventure</title>
+    
+    <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mint: '#2dd4bf',
+                        teal: '#14b8a6',
+                        juniper: '#0f373b',
+                        pearl: '#f8f9fa',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        
+        .hero-bg {
+            background: linear-gradient(rgba(15, 55, 59, 0.7), rgba(15, 55, 59, 0.8)), url('images1/SWISS ALPS.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-pearl dark:bg-gray-900 min-h-screen flex flex-col text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <header class="bg-juniper text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="home.html" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" style="height: 75px; margin-right: 5px; object-fit: contain;">
+                <div class="text-3xl font-bold tracking-tight">TripFit</div>
+            </a>
+            <nav class="hidden md:flex items-center gap-x-6 font-medium">
+                <a href="home.html" class="text-mint font-bold transition-colors">Home</a>
+                <a href="all-destinations.html" class="hover:text-mint transition-colors">Destinations</a>
+                
+                <a href="#" class="hover:text-mint transition-colors flex items-center gap-2">
+                    <i class="fas fa-history text-lg"></i>
+                    <span>History</span>
+                </a>
+
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+
+                <a href="quiz.html" class="px-6 py-2.5 bg-mint hover:bg-teal text-juniper rounded-full font-bold transition-all shadow-lg">
+                    Take Quiz
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-bg text-white py-32 px-6 text-center">
+        <div class="max-w-3xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">Discover Your Ideal Adventure</h1>
+            <p class="text-xl text-gray-200 mb-10 leading-relaxed">Answer a few quick questions to unlock personalized travel recommendations from around the globe, powered by your unique vibe.</p>
+            <a href="quiz.html" class="inline-block px-10 py-4 bg-mint hover:bg-teal text-juniper font-bold text-lg rounded-full shadow-2xl transition-transform hover:-translate-y-1">
+                Start Your Journey <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 max-w-7xl mx-auto">
+        <h2 class="text-4xl font-bold text-center text-juniper dark:text-mint mb-12">Featured Destinations</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
+                <img src="images1/BALI.jpg" alt="Bali" class="w-full h-56 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-juniper dark:text-white mb-2">Bali, Indonesia</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Tropical paradise with stunning beaches and cultural temples.</p>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
+                <img src="images1/SWISS ALPS.jpg" alt="Swiss Alps" class="w-full h-56 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-juniper dark:text-white mb-2">Swiss Alps, Switzerland</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Majestic mountains, crystal lakes, and thrilling outdoor pursuits.</p>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
+                <img src="images1/TOKYO.jpg" alt="Tokyo" class="w-full h-56 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-juniper dark:text-white mb-2">Tokyo, Japan</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Dynamic urban energy, historic sites, and exquisite cuisine.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 transition-colors">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center text-juniper dark:text-mint mb-12">Why Choose TripFit?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-8">
+                    <div class="w-16 h-16 bg-mint/20 text-mint rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-juniper dark:text-white mb-3">Personalized Matches</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Our quiz tailors suggestions to your unique preferences for an unforgettable trip.</p>
+                </div>
+                <div class="p-8">
+                    <div class="w-16 h-16 bg-mint/20 text-mint rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-juniper dark:text-white mb-3">Global Coverage</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Explore 20+ handpicked destinations across every continent.</p>
+                </div>
+                <div class="p-8">
+                    <div class="w-16 h-16 bg-mint/20 text-mint rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-juniper dark:text-white mb-3">Easy Planning</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Start with insights that inspire, effortless inspiration at your fingertips.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-juniper text-center py-8 border-t border-teal/20 mt-auto">
+        <p class="text-gray-400 text-sm">&copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.</p>
+    </footer>
+
+    <script>
+        // Global Theme Toggle Logic with Memory
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        // Check memory on load
+        if (localStorage.getItem('tripfit-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Handle toggle click
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('tripfit-theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    localStorage.setItem('tripfit-theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
