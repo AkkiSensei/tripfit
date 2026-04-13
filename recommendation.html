@@ -8,6 +8,7 @@
     <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="itinerary-modal.css">
     
     <script>
         tailwind.config = {
@@ -45,6 +46,14 @@
 
     <section class="py-16 px-6 flex-1">
         <div class="max-w-7xl mx-auto">
+            <div id="recommendation-toolbar" class="hidden mb-6 flex flex-wrap items-center justify-between gap-3">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Sort recommendations</p>
+                <div class="flex items-center gap-2">
+                    <button type="button" data-sort="match" class="sort-btn px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-semibold text-juniper dark:text-gray-100 hover:border-mint hover:text-mint transition-colors">Best Match</button>
+                    <button type="button" data-sort="az" class="sort-btn px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-semibold text-juniper dark:text-gray-100 hover:border-mint hover:text-mint transition-colors">A-Z</button>
+                </div>
+            </div>
+
             <div id="results-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="col-span-3 text-center py-20 text-gray-500">
                     <i class="fas fa-circle-notch fa-spin text-4xl text-mint mb-4"></i>
@@ -65,74 +74,130 @@
         <p class="text-gray-400 text-sm">&copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.</p>
     </footer>
 
+    <script src="itinerary-modal.js"></script>
     <script src="script.js"></script>
     <script src="navbar.js"></script>
     
     <script>
-        // Global Theme Toggle Logic with Memory
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-
-        // Check memory on load
-        if (localStorage.getItem('tripfit-theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-            if (themeIcon) {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+        function safeParseJSON(value, fallback) {
+            try {
+                return value ? JSON.parse(value) : fallback;
+            } catch {
+                return fallback;
             }
         }
 
-        // Handle toggle click
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-                
-                if (document.documentElement.classList.contains('dark')) {
-                    localStorage.setItem('tripfit-theme', 'dark');
-                    themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-sun');
-                } else {
-                    localStorage.setItem('tripfit-theme', 'light');
-                    themeIcon.classList.remove('fa-sun');
-                    themeIcon.classList.add('fa-moon');
-                }
-            });
+        function safeStorageGet(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch {
+                return null;
+            }
         }
 
-
-        // Recommendation Engine Execution
-        document.addEventListener('DOMContentLoaded', () => {
+        function getUserPrefs() {
             const params = new URLSearchParams(window.location.search);
-            
-            // Extract the user's answers from the URL
-            const userPrefs = {
-                climate: params.get('climate'),
-                trip: params.get('trip'),
-                budget: params.get('budget'),
-                companions: params.get('companions'),
-                activities: params.get('activities')
-            };
+            const remembered = safeParseJSON(safeStorageGet('tripfitLastQuizPrefs'), {});
 
+            return {
+                climate: params.get('climate') || remembered.climate || '',
+                trip: params.get('trip') || remembered.trip || '',
+                budget: params.get('budget') || remembered.budget || '',
+                companions: params.get('companions') || remembered.companions || '',
+                activities: params.get('activities') || remembered.activities || ''
+            };
+        }
+
+        function renderError(container, title, message, buttonText) {
+            container.innerHTML = `
+                <div class="col-span-3 text-center py-20">
+                    <i class="fas fa-triangle-exclamation text-5xl text-amber-500 mb-4"></i>
+                    <h2 class="text-3xl font-bold text-juniper dark:text-white mb-4">${title}</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-8">${message}</p>
+                    <a href="quiz.html" class="px-8 py-3 bg-mint text-juniper font-bold rounded-xl hover:bg-teal transition-colors">${buttonText}</a>
+                </div>
+            `;
+        }
+
+        function initRecommendations() {
             const container = document.getElementById('results-container');
-            
-            // Check if the user bypassed the quiz directly
-            if (!userPrefs.climate || !userPrefs.trip) {
+            const toolbar = document.getElementById('recommendation-toolbar');
+            if (!container) return;
+
+            if (typeof gradeDestinations !== 'function' || typeof buildCardHTML !== 'function') {
+                renderError(
+                    container,
+                    'Recommendation engine unavailable',
+                    'Core scripts did not load correctly. Refresh and try again.',
+                    'Back to Quiz'
+                );
+                return;
+            }
+
+            const userPrefs = getUserPrefs();
+            const hasQuizData = Boolean(userPrefs.climate && userPrefs.trip);
+            let matches = [];
+
+            try {
+                matches = gradeDestinations(userPrefs);
+            } catch {
+                renderError(
+                    container,
+                    'Could not load recommendations',
+                    'There was a problem while generating your matches. Please retake the quiz.',
+                    'Retake Quiz'
+                );
+                return;
+            }
+
+            if (!Array.isArray(matches) || matches.length === 0) {
                 container.innerHTML = `
                     <div class="col-span-3 text-center py-20">
-                        <i class="fas fa-exclamation-triangle text-5xl text-amber-500 mb-4"></i>
-                        <h2 class="text-3xl font-bold text-juniper dark:text-white mb-4">No Quiz Data Found</h2>
-                        <p class="text-gray-600 dark:text-gray-400 mb-8">Please take the travel style quiz to see your personalized recommendations.</p>
-                        <a href="quiz.html" class="px-8 py-3 bg-mint text-juniper font-bold rounded-xl hover:bg-teal transition-colors">Take the Quiz</a>
+                        <i class="fas fa-map-location-dot text-5xl text-mint mb-4"></i>
+                        <h2 class="text-3xl font-bold text-juniper dark:text-white mb-4">No matches yet</h2>
+                        <p class="text-gray-600 dark:text-gray-400 mb-8">Try a different quiz combination and we will suggest better destinations.</p>
+                        <a href="quiz.html" class="px-8 py-3 bg-mint text-juniper font-bold rounded-xl hover:bg-teal transition-colors">Retake Quiz</a>
                     </div>
                 `;
                 return;
             }
 
-            // Small delay to simulate processing
-            setTimeout(() => {
-                const topMatches = gradeDestinations(userPrefs);
-                container.innerHTML = topMatches.map(dest => buildCardHTML(dest, true)).join('');
-            }, 600);
+            function renderMatches(sortMode) {
+                const sorted = [...matches];
+                if (sortMode === 'az') {
+                    sorted.sort((a, b) => String(a.name).localeCompare(String(b.name)));
+                } else {
+                    sorted.sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+                }
+
+                const note = hasQuizData
+                    ? ''
+                    : '<p class="col-span-3 text-center text-sm text-gray-500 dark:text-gray-400 mb-2">Showing popular picks. Take the quiz for fully personalized matches.</p>';
+
+                container.innerHTML = note + sorted.map((dest) => buildCardHTML(dest, true)).join('');
+            }
+
+            renderMatches('match');
+            if (toolbar) {
+                toolbar.classList.remove('hidden');
+                toolbar.querySelectorAll('.sort-btn').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        toolbar.querySelectorAll('.sort-btn').forEach((btn) => btn.classList.remove('border-mint', 'text-mint'));
+                        button.classList.add('border-mint', 'text-mint');
+                        renderMatches(button.getAttribute('data-sort') || 'match');
+                    });
+                });
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initRecommendations);
+        } else {
+            initRecommendations();
+        }
+
+        window.addEventListener('pageshow', () => {
+            initRecommendations();
         });
     </script>
 </body>
