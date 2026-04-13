@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account • TripFit</title>
+    <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mint: '#2dd4bf',
+                        juniper: '#0f373b',
+                        pearl: '#f8f9fa'
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-image: linear-gradient(rgba(15, 55, 59, 0.3), rgba(15, 55, 59, 0.3)), url('images1/SWISS ALPS.jpg');
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.3s ease;
+        }
+
+        body.dark {
+            background-image: linear-gradient(rgba(15, 55, 59, 0.8), rgba(15, 55, 59, 0.8)), url('images1/SWISS ALPS.jpg');
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 transition-colors duration-300">
+
+    <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl shadow-2xl p-8 md:p-10 transition-all border border-gray-100 dark:border-gray-700 relative">
+        <button id="theme-toggle" type="button" aria-label="Toggle theme" class="absolute top-6 right-6 p-2 rounded-full text-gray-400 hover:text-juniper dark:hover:text-mint transition-colors">
+            <i class="fas fa-moon text-xl" id="theme-icon"></i>
+        </button>
+
+        <div class="text-center mb-8 mt-8">
+            <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" class="h-20 mx-auto mb-4 object-contain">
+            <h1 class="text-3xl font-extrabold text-juniper dark:text-white">Join TripFit</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">Start your next adventure today</p>
+        </div>
+
+        <form onsubmit="handleSignup(event)" class="space-y-5">
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Full Name</label>
+                <input type="text" id="signup-name" placeholder="John Doe" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-mint outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Email Address</label>
+                <input type="email" id="signup-email" placeholder="name@tripfit.com" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-mint outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Create Password</label>
+                <div class="relative">
+                    <input type="password" id="signup-pass" placeholder="••••••••" required class="w-full px-4 py-3 pr-12 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-mint outline-none transition-all">
+                    <button type="button" onclick="toggleSignupPassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" aria-label="Toggle password visibility">
+                        <i id="signup-pass-icon" class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-juniper text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition-all flex items-center justify-center gap-2">
+                Create Account <i class="fas fa-user-plus"></i>
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
+            Already have an account? <a href="index.html" class="font-bold text-mint hover:underline">Login</a>
+        </p>
+    </div>
+
+    <script>
+        function applyBodyTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            document.body.classList.toggle('dark', isDark);
+        }
+
+        function toggleSignupPassword() {
+            const field = document.getElementById('signup-pass');
+            const icon = document.getElementById('signup-pass-icon');
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function safeParseJSON(value, fallback) {
+            try {
+                return value ? JSON.parse(value) : fallback;
+            } catch {
+                return fallback;
+            }
+        }
+
+        function getStoredUsers() {
+            const tripfitUsers = safeParseJSON(localStorage.getItem('tripfitUsers'), null);
+            if (Array.isArray(tripfitUsers)) {
+                return tripfitUsers;
+            }
+
+            const hiksterUsers = safeParseJSON(localStorage.getItem('hiksterUsers'), []);
+            return Array.isArray(hiksterUsers) ? hiksterUsers : [];
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const pass = document.getElementById('signup-pass').value;
+
+            if (pass.length < 8) {
+                alert('Password must be at least 8 characters.');
+                return;
+            }
+
+            const users = getStoredUsers();
+            const exists = users.some((user) => user.email === email);
+
+            if (exists) {
+                alert('Email already exists. Please login instead.');
+                return;
+            }
+
+            const newUser = { name: name, email: email, password: pass };
+            users.push(newUser);
+            localStorage.setItem('tripfitUsers', JSON.stringify(users));
+            localStorage.setItem('hiksterUsers', JSON.stringify(users));
+
+            const activeUser = { name: name, email: email };
+            localStorage.setItem('tripfitUser', JSON.stringify(activeUser));
+            localStorage.setItem('hiksterUser', JSON.stringify(activeUser));
+            window.location.href = 'home.html';
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        if (localStorage.getItem('tripfit-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            applyBodyTheme();
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                applyBodyTheme();
+
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('tripfit-theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    localStorage.setItem('tripfit-theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
