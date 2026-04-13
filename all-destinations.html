@@ -8,6 +8,7 @@
     <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="itinerary-modal.css">
 
     <script>
         tailwind.config = {
@@ -57,6 +58,28 @@
             background: #2dd4bf;
             color: #0f373b;
         }
+
+        .hero-grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        @media (min-width: 768px) {
+            .hero-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        .hero-stat {
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(12px);
+        }
+
+        html.dark .hero-stat {
+            background: rgba(15, 55, 59, 0.42);
+            border-color: rgba(45, 212, 191, 0.14);
+        }
     </style>
 
     <script src="navbar.js" defer></script>
@@ -67,11 +90,29 @@
 
     <section class="pt-28 pb-14 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="rounded-3xl overflow-hidden border border-white/60 dark:border-mint/20 shadow-2xl">
-                <div class="bg-gradient-to-r from-juniper via-teal to-juniper text-white px-8 py-12 md:px-12">
+            <div class="relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-mint/20 shadow-2xl bg-gradient-to-r from-juniper via-[#0f4b50] to-juniper text-white">
+                <div class="absolute inset-0 opacity-35" aria-hidden="true" style="background: radial-gradient(circle at 20% 20%, rgba(45,212,191,0.45), transparent 28%), radial-gradient(circle at 85% 15%, rgba(255,255,255,0.18), transparent 20%), radial-gradient(circle at 75% 85%, rgba(45,212,191,0.2), transparent 24%);"></div>
+                <div class="relative px-8 py-12 md:px-12 md:py-14">
                     <p class="uppercase tracking-[0.24em] text-xs text-mint font-bold">Global Destination Catalog</p>
-                    <h1 class="text-4xl md:text-5xl font-extrabold mt-3">Explore TripFit Destinations</h1>
-                    <p class="text-teal-100 mt-4 max-w-3xl">Discover curated destinations across continents. Filter by climate, travel vibe, or budget to quickly find your next escape.</p>
+                    <div class="mt-4 max-w-4xl">
+                        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Explore TripFit Destinations</h1>
+                        <p class="text-teal-100 mt-4 max-w-3xl text-base md:text-lg">Discover curated destinations across continents. Filter by climate, travel vibe, or budget to quickly find your next escape.</p>
+                    </div>
+
+                    <div class="hero-grid mt-8 max-w-4xl">
+                        <div class="hero-stat rounded-2xl px-5 py-4">
+                            <p class="text-2xl font-extrabold text-white">20+</p>
+                            <p class="text-sm text-teal-100 mt-1">Destinations to explore</p>
+                        </div>
+                        <div class="hero-stat rounded-2xl px-5 py-4">
+                            <p class="text-2xl font-extrabold text-white">3 styles</p>
+                            <p class="text-sm text-teal-100 mt-1">Adventure, culture, and leisure</p>
+                        </div>
+                        <div class="hero-stat rounded-2xl px-5 py-4">
+                            <p class="text-2xl font-extrabold text-white">1 tap</p>
+                            <p class="text-sm text-teal-100 mt-1">Open details or save favorites instantly</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,7 +120,7 @@
 
     <section class="pb-16 px-6 flex-1">
         <div class="max-w-7xl mx-auto">
-            <div class="bg-white/90 dark:bg-gray-800/90 p-5 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 mb-8">
+            <div class="bg-white/90 dark:bg-gray-800/90 p-5 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 mb-8 backdrop-blur-sm">
                 <div class="flex flex-col lg:flex-row lg:items-center gap-4 justify-between">
                     <div class="flex items-center gap-2 text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         <i class="fas fa-earth-asia text-mint"></i>
@@ -120,6 +161,7 @@
         &copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.
     </footer>
 
+    <script src="itinerary-modal.js"></script>
     <script src="script.js"></script>
 
     <script>
@@ -166,10 +208,11 @@
                     (dest.region || '').toLowerCase()
                 ].filter(Boolean).join(' ');
 
-                return buildCardHTML(dest, false).replace(
-                    'class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative"',
-                    `class="destination-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative" data-type="${tags}"`
-                );
+                return buildCardHTML(dest, false)
+                    .replace(
+                        'class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative"',
+                        `class="destination-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative" data-type="${tags}"`
+                    );
             }).join('');
 
             container.innerHTML = catalogHTML;
