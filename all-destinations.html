@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Destinations • TripFit</title>
-    
+
     <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -18,94 +18,181 @@
                         mint: '#2dd4bf',
                         teal: '#14b8a6',
                         juniper: '#0f373b',
-                        pearl: '#f8f9fa',
+                        pearl: '#f8f9fa'
                     }
                 }
             }
-        }
+        };
     </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', system-ui, sans-serif; }
-    </style>
-</head>
-<body class="bg-pearl dark:bg-gray-900 min-h-screen flex flex-col text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background:
+                radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.16), transparent 30%),
+                radial-gradient(circle at 88% 78%, rgba(20, 184, 166, 0.14), transparent 32%),
+                #f8f9fa;
+        }
+
+        html.dark body {
+            background:
+                radial-gradient(circle at 20% 20%, rgba(45, 212, 191, 0.08), transparent 35%),
+                radial-gradient(circle at 84% 75%, rgba(13, 95, 102, 0.2), transparent 35%),
+                #0b1117;
+        }
+
+        .filter-chip {
+            transition: all 180ms ease;
+        }
+
+        .filter-chip.active {
+            background: #0f373b;
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(15, 55, 59, 0.25);
+        }
+
+        html.dark .filter-chip.active {
+            background: #2dd4bf;
+            color: #0f373b;
+        }
+    </style>
+
+    <script src="navbar.js" defer></script>
+</head>
+
+<body class="min-h-screen flex flex-col text-gray-800 dark:text-gray-100 transition-colors duration-300">
     <header id="tripfit-navbar"></header>
 
-    <section class="bg-white dark:bg-gray-800 py-16 px-6 text-center border-b border-gray-200 dark:border-gray-700 transition-colors">
-        <div class="max-w-3xl mx-auto">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-juniper dark:text-white tracking-tight mb-4">Explore the World</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-400">Browse our complete catalog of handpicked global destinations. Filter by vibe, climate, or budget to find your next adventure.</p>
+    <section class="pt-28 pb-14 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="rounded-3xl overflow-hidden border border-white/60 dark:border-mint/20 shadow-2xl">
+                <div class="bg-gradient-to-r from-juniper via-teal to-juniper text-white px-8 py-12 md:px-12">
+                    <p class="uppercase tracking-[0.24em] text-xs text-mint font-bold">Global Destination Catalog</p>
+                    <h1 class="text-4xl md:text-5xl font-extrabold mt-3">Explore TripFit Destinations</h1>
+                    <p class="text-teal-100 mt-4 max-w-3xl">Discover curated destinations across continents. Filter by climate, travel vibe, or budget to quickly find your next escape.</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="py-16 px-6 flex-1">
+    <section class="pb-16 px-6 flex-1">
         <div class="max-w-7xl mx-auto">
-            
-            <div class="flex flex-wrap items-center justify-between gap-4 mb-10 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <div class="text-sm font-bold text-gray-500 uppercase tracking-wider pl-2">20 Destinations Found</div>
-                <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-                    <button class="px-4 py-2 bg-juniper text-white text-sm font-bold rounded-full">All</button>
-                    <button class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-mint hover:text-juniper text-sm font-bold rounded-full transition-colors">Beach</button>
-                    <button class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-mint hover:text-juniper text-sm font-bold rounded-full transition-colors">Mountains</button>
-                    <button class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-mint hover:text-juniper text-sm font-bold rounded-full transition-colors">City</button>
+            <div class="bg-white/90 dark:bg-gray-800/90 p-5 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 mb-8">
+                <div class="flex flex-col lg:flex-row lg:items-center gap-4 justify-between">
+                    <div class="flex items-center gap-2 text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <i class="fas fa-earth-asia text-mint"></i>
+                        <span id="results-count">0 Destinations</span>
+                    </div>
+
+                    <div class="w-full lg:w-80">
+                        <label for="destination-search" class="sr-only">Search destinations</label>
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input id="destination-search" type="text" placeholder="Search by destination, region, or vibe" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 focus:border-mint focus:ring-2 focus:ring-mint/40 outline-none transition">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 overflow-x-auto pb-1 mt-4">
+                    <button class="filter-btn filter-chip active px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-full whitespace-nowrap" data-filter="all">All</button>
+                    <button class="filter-btn filter-chip px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-full whitespace-nowrap" data-filter="beach">Beach</button>
+                    <button class="filter-btn filter-chip px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-full whitespace-nowrap" data-filter="mountains">Mountains</button>
+                    <button class="filter-btn filter-chip px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-full whitespace-nowrap" data-filter="city">City</button>
+                    <button class="filter-btn filter-chip px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-full whitespace-nowrap" data-filter="adventure">Adventure</button>
+                    <button class="filter-btn filter-chip px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-full whitespace-nowrap" data-filter="cultural">Cultural</button>
+                    <button class="filter-btn filter-chip px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-full whitespace-nowrap" data-filter="budget">Budget</button>
+                    <button class="filter-btn filter-chip px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-full whitespace-nowrap" data-filter="luxury">Luxury</button>
                 </div>
             </div>
 
-            <div id="catalog-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                </div>
-            
+            <div id="no-results" class="hidden text-center mb-8 p-8 rounded-2xl bg-white/90 dark:bg-gray-800/90 border border-gray-200 dark:border-gray-700 shadow-lg">
+                <h2 class="text-2xl font-bold text-juniper dark:text-white">No destinations match this filter</h2>
+                <p class="text-gray-600 dark:text-gray-300 mt-2">Try switching filters or clearing the search keyword.</p>
+            </div>
+
+            <div id="catalog-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
         </div>
     </section>
 
-    <footer class="bg-juniper text-center py-8 border-t border-teal/20 mt-auto">
-        <p class="text-gray-400 text-sm">&copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.</p>
+    <footer class="bg-juniper text-center py-8 text-gray-300 border-t border-teal/20">
+        &copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.
     </footer>
 
     <script src="script.js"></script>
-    <script src="navbar.js"></script>
-    
+
     <script>
-        // Global Theme Toggle Logic with Memory
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
+        const buttons = document.querySelectorAll('.filter-btn');
+        const searchInput = document.getElementById('destination-search');
+        const noResults = document.getElementById('no-results');
+        const resultsCount = document.getElementById('results-count');
+        const container = document.getElementById('catalog-container');
 
-        // Check memory on load
-        if (localStorage.getItem('tripfit-theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-            if (themeIcon) {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            }
+        let activeFilter = 'all';
+
+        function updateResultsCount(visible) {
+            const suffix = visible === 1 ? 'Destination' : 'Destinations';
+            resultsCount.textContent = `${visible} ${suffix}`;
         }
 
-        // Handle toggle click
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-                
-                if (document.documentElement.classList.contains('dark')) {
-                    localStorage.setItem('tripfit-theme', 'dark');
-                    themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-sun');
-                } else {
-                    localStorage.setItem('tripfit-theme', 'light');
-                    themeIcon.classList.remove('fa-sun');
-                    themeIcon.classList.add('fa-moon');
-                }
+        function applyFilters() {
+            const cards = document.querySelectorAll('.destination-card');
+            const query = (searchInput.value || '').trim().toLowerCase();
+            let visible = 0;
+
+            cards.forEach((card) => {
+                const cardData = (card.getAttribute('data-type') || '').toLowerCase();
+                const cardText = card.textContent.toLowerCase();
+
+                const filterMatch = activeFilter === 'all' || cardData.includes(activeFilter);
+                const searchMatch = query === '' || cardText.includes(query);
+                const show = filterMatch && searchMatch;
+
+                card.style.display = show ? 'flex' : 'none';
+                if (show) visible += 1;
             });
+
+            noResults.classList.toggle('hidden', visible > 0);
+            updateResultsCount(visible);
         }
 
-        // Render the Full Catalog
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('catalog-container');
-            
-            // Loop through the entire destinations array and build the HTML
-            // Pass 'false' so the "Match %" badge does not appear here
-            const catalogHTML = destinations.map(dest => buildCardHTML(dest, false)).join('');
-            
+        function renderCatalog() {
+            const catalogHTML = destinations.map((dest) => {
+                const tags = [
+                    ...(dest.climate || []),
+                    ...(dest.trip || []),
+                    ...(dest.budget || []),
+                    (dest.region || '').toLowerCase()
+                ].filter(Boolean).join(' ');
+
+                return buildCardHTML(dest, false).replace(
+                    'class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative"',
+                    `class="destination-card bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative" data-type="${tags}"`
+                );
+            }).join('');
+
             container.innerHTML = catalogHTML;
+        }
+
+        function initFilters() {
+            applyFilters();
+
+            buttons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach((b) => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeFilter = (btn.dataset.filter || 'all').toLowerCase();
+                    applyFilters();
+                });
+            });
+
+            searchInput.addEventListener('input', applyFilters);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCatalog();
+            initFilters();
         });
     </script>
 </body>
