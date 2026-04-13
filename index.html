@@ -25,38 +25,43 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        
-        body { 
-            font-family: 'Inter', system-ui, sans-serif; 
-            background-image: linear-gradient(rgba(15, 55, 59, 0.8), rgba(15, 55, 59, 0.8)), url('images1/SWISS ALPS.jpg'); 
-            background-size: cover; 
-            background-position: center; 
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-image: linear-gradient(rgba(15, 55, 59, 0.3), rgba(15, 55, 59, 0.3)), url('images1/SWISS ALPS.jpg');
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.3s ease;
+        }
+
+        body.dark {
+            background-image: linear-gradient(rgba(15, 55, 59, 0.8), rgba(15, 55, 59, 0.8)), url('images1/SWISS ALPS.jpg');
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
 
     <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-10 transform transition-all hover:scale-105 duration-500 border border-gray-100 dark:border-gray-700 relative">
-        
-        <button id="theme-toggle" class="absolute top-6 right-6 p-2 rounded-full text-gray-400 hover:text-juniper dark:hover:text-mint transition-colors">
+
+        <button id="theme-toggle" class="absolute top-6 right-6 p-2 rounded-full text-gray-400 hover:text-juniper dark:hover:text-mint transition-colors" type="button" aria-label="Toggle theme">
             <i class="fas fa-moon text-xl" id="theme-icon"></i>
         </button>
 
-        <div class="text-center mb-8 mt-4">
-            <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" class="h-20 mx-auto mb-4 object-contain">
-            <h2 class="text-3xl font-extrabold text-juniper dark:text-white tracking-tight">Welcome Back</h2>
+        <div class="text-center mb-8 mt-16 relative">
+            <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" class="h-28 object-contain absolute left-1/2 -translate-x-1/2 -top-24">
+
+            <h2 class="text-3xl font-extrabold text-juniper dark:text-white tracking-tight mt-24">Welcome Back</h2>
             <p class="text-gray-500 dark:text-gray-400 mt-2">Sign in to plan your next adventure.</p>
         </div>
 
-        <form action="home.html" method="get" class="space-y-6">
-            
+        <form onsubmit="handleLogin(event)" class="space-y-6">
             <div>
                 <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <i class="fas fa-envelope text-gray-400"></i>
                     </div>
-                    <input type="email" required class="block w-full pl-11 pr-4 py-3 bg-transparent border-2 border-gray-200 dark:border-gray-600 rounded-xl text-sm dark:text-white focus:border-mint dark:focus:border-mint focus:ring-0 outline-none transition-colors" placeholder="explorer@tripfit.com">
+                    <input id="login-email" type="email" required class="block w-full pl-11 pr-4 py-3 bg-transparent border-2 border-gray-200 dark:border-gray-600 rounded-xl text-sm dark:text-white focus:border-mint dark:focus:border-mint focus:ring-0 outline-none transition-colors" placeholder="explorer@tripfit.com">
                 </div>
             </div>
 
@@ -66,7 +71,10 @@
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <i class="fas fa-lock text-gray-400"></i>
                     </div>
-                    <input type="password" required class="block w-full pl-11 pr-4 py-3 bg-transparent border-2 border-gray-200 dark:border-gray-600 rounded-xl text-sm dark:text-white focus:border-mint dark:focus:border-mint focus:ring-0 outline-none transition-colors" placeholder="••••••••">
+                    <input id="login-pass" type="password" required class="block w-full pl-11 pr-11 py-3 bg-transparent border-2 border-gray-200 dark:border-gray-600 rounded-xl text-sm dark:text-white focus:border-mint dark:focus:border-mint focus:ring-0 outline-none transition-colors" placeholder="••••••••">
+                    <button type="button" onclick="toggleLoginPassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" aria-label="Toggle password visibility">
+                        <i id="login-pass-icon" class="fas fa-eye"></i>
+                    </button>
                 </div>
             </div>
 
@@ -84,18 +92,86 @@
         </form>
 
         <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
-            Don't have an account? <a href="#" class="font-bold text-mint hover:underline">Sign up for free</a>
+            Don't have an account? <a href="signup.html" class="font-bold text-mint hover:underline">Sign up for free</a>
         </p>
     </div>
 
     <script>
-        // Global Theme Toggle Logic with Memory
+        function applyBodyTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            document.body.classList.toggle('dark', isDark);
+        }
+
+        function toggleLoginPassword() {
+            const field = document.getElementById('login-pass');
+            const icon = document.getElementById('login-pass-icon');
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function safeParseJSON(value, fallback) {
+            try {
+                return value ? JSON.parse(value) : fallback;
+            } catch {
+                return fallback;
+            }
+        }
+
+        function getStoredUsers() {
+            const tripfitUsers = safeParseJSON(localStorage.getItem('tripfitUsers'), null);
+            if (Array.isArray(tripfitUsers)) {
+                return tripfitUsers;
+            }
+
+            const hiksterUsers = safeParseJSON(localStorage.getItem('hiksterUsers'), []);
+            return Array.isArray(hiksterUsers) ? hiksterUsers : [];
+        }
+
+        function getPostLoginRedirect() {
+            const params = new URLSearchParams(window.location.search);
+            const redirect = params.get('redirect');
+            return redirect ? decodeURIComponent(redirect) : 'home.html';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-pass').value;
+
+            const users = getStoredUsers();
+            const matchedUser = users.find((user) => user.email === email && user.password === password);
+
+            if (users.length > 0 && !matchedUser) {
+                alert('Invalid email or password.');
+                return;
+            }
+
+            const activeUser = matchedUser
+                ? { name: matchedUser.name || 'Traveler', email: matchedUser.email }
+                : { name: 'Traveler', email };
+
+            localStorage.setItem('tripfitUser', JSON.stringify(activeUser));
+            localStorage.setItem('hiksterUser', JSON.stringify(activeUser));
+            window.location.href = getPostLoginRedirect();
+        }
+
+        // Theme Toggle Logic with Memory
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
 
         // Check memory on load
         if (localStorage.getItem('tripfit-theme') === 'dark') {
             document.documentElement.classList.add('dark');
+            applyBodyTheme();
             if (themeIcon) {
                 themeIcon.classList.remove('fa-moon');
                 themeIcon.classList.add('fa-sun');
@@ -106,6 +182,7 @@
         if (themeToggle) {
             themeToggle.addEventListener('click', () => {
                 document.documentElement.classList.toggle('dark');
+                applyBodyTheme();
                 
                 if (document.documentElement.classList.contains('dark')) {
                     localStorage.setItem('tripfit-theme', 'dark');
