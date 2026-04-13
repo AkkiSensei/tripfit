@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites • TripFit</title>
+
+    <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mint: '#2dd4bf',
+                        teal: '#14b8a6',
+                        juniper: '#0f373b',
+                        pearl: '#f8f9fa'
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background:
+                radial-gradient(circle at 14% 20%, rgba(45, 212, 191, 0.18), transparent 30%),
+                radial-gradient(circle at 84% 78%, rgba(20, 184, 166, 0.15), transparent 32%),
+                #f8f9fa;
+        }
+
+        html.dark body {
+            background:
+                radial-gradient(circle at 20% 20%, rgba(45, 212, 191, 0.08), transparent 35%),
+                radial-gradient(circle at 82% 75%, rgba(13, 95, 102, 0.2), transparent 35%),
+                #0b1117;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-gray-800 dark:text-gray-100">
+    <header id="tripfit-navbar"></header>
+
+    <section class="pt-28 pb-14 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="rounded-3xl overflow-hidden border border-white/60 dark:border-mint/20 shadow-2xl">
+                <div class="bg-gradient-to-r from-juniper via-teal to-juniper text-white px-8 py-12 md:px-12">
+                    <div class="flex justify-between items-start gap-4 flex-wrap">
+                        <div>
+                            <p class="uppercase tracking-[0.25em] text-xs text-mint font-bold">Saved Collection</p>
+                            <h1 class="text-4xl md:text-5xl font-extrabold mt-3">Favorite Destinations</h1>
+                            <p class="text-teal-100 mt-4 max-w-2xl">Everything you save in one place. Revisit routes, compare options, and jump straight to details when you are ready to book.</p>
+                        </div>
+                        <button id="clear-all-btn" onclick="openClearConfirmation()" class="mt-1 px-6 py-3 bg-red-500/90 hover:bg-red-600 text-white rounded-full font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 hidden">
+                            <i class="fas fa-trash-alt mr-2"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-6 pb-16 flex-1">
+        <div class="max-w-7xl mx-auto">
+            <div id="favorites-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
+        </div>
+    </section>
+
+    <div id="confirmation-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center hidden z-50" onclick="closeClearConfirmation(event)">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all" onclick="event.stopPropagation()">
+            <div class="flex justify-center mb-4">
+                <div class="h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 flex items-center justify-center text-3xl">
+                    <i class="fas fa-exclamation"></i>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-2">Remove All Favorites?</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 mb-6">This action cannot be undone. You will lose all your saved destinations.</p>
+
+            <div class="flex gap-4 justify-center">
+                <button onclick="closeClearConfirmation()" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-full font-bold transition-colors">Cancel</button>
+                <button onclick="clearAllFavorites()" class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-full font-bold transition-colors shadow-lg hover:shadow-xl">
+                    <i class="fas fa-trash-alt mr-2"></i> Yes, Remove All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-juniper text-center py-8 border-t border-teal/20 mt-auto">
+        <p class="text-gray-400 text-sm">&copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        function safeParseJSON(value, fallback) {
+            try {
+                return value ? JSON.parse(value) : fallback;
+            } catch {
+                return fallback;
+            }
+        }
+
+        function getStoredFavorites() {
+            const tripfitFavorites = safeParseJSON(localStorage.getItem('tripfitFavorites'), null);
+            if (Array.isArray(tripfitFavorites)) {
+                return tripfitFavorites;
+            }
+
+            const hiksterFavorites = safeParseJSON(localStorage.getItem('favorites'), []);
+            return Array.isArray(hiksterFavorites) ? hiksterFavorites : [];
+        }
+
+        const favs = getStoredFavorites();
+        const container = document.getElementById('favorites-container');
+        const clearAllBtn = document.getElementById('clear-all-btn');
+
+        function updateClearButton() {
+            if (favs.length > 0) {
+                clearAllBtn.classList.remove('hidden');
+            } else {
+                clearAllBtn.classList.add('hidden');
+            }
+        }
+
+        function openClearConfirmation() {
+            document.getElementById('confirmation-modal').classList.remove('hidden');
+        }
+
+        function closeClearConfirmation(event) {
+            if (event && event.target.id !== 'confirmation-modal') return;
+            document.getElementById('confirmation-modal').classList.add('hidden');
+        }
+
+        function clearAllFavorites() {
+            localStorage.removeItem('tripfitFavorites');
+            localStorage.removeItem('favorites');
+
+            closeClearConfirmation();
+
+            container.style.transition = 'opacity 0.5s ease-out';
+            container.style.opacity = '0';
+
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+        }
+
+        if (favs.length === 0) {
+            container.innerHTML = `
+                <div class="md:col-span-2 xl:col-span-3 text-center py-16 px-8 rounded-2xl bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 shadow-lg">
+                    <div class="h-16 w-16 mx-auto rounded-full bg-mint/20 text-mint flex items-center justify-center text-2xl mb-4">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-3 text-juniper dark:text-white">No Favorites Yet</h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-7">Start exploring and save your favorite destinations for quick access.</p>
+                    <a href="all-destinations.html" class="inline-flex items-center gap-2 px-7 py-3 bg-juniper hover:bg-teal text-white rounded-full font-bold transition-colors">
+                        Explore Destinations <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            `;
+        } else {
+            const favoredDestinations = destinations.filter((destination) => favs.includes(destination.name));
+            container.innerHTML = favoredDestinations.map((destination) => `
+                <div class="relative group">
+                    ${buildCardHTML(destination, false)}
+                    <button type="button" data-remove-favorite="${destination.name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#39;')}" class="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow hover:bg-red-600 transition-colors">
+                        <i class="fas fa-times mr-1"></i> Remove
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        container.addEventListener('click', (event) => {
+            const removeButton = event.target.closest('[data-remove-favorite]');
+            if (!removeButton) return;
+
+            event.stopPropagation();
+            removeFavorite(removeButton.dataset.removeFavorite || '');
+        });
+
+        function removeFavorite(destinationName) {
+            const nextFavorites = favs.filter((item) => item !== destinationName);
+            localStorage.setItem('tripfitFavorites', JSON.stringify(nextFavorites));
+            localStorage.setItem('favorites', JSON.stringify(nextFavorites));
+            location.reload();
+        }
+
+        updateClearButton();
+    </script>
+
+</body>
+</html>
