@@ -144,36 +144,100 @@ const destinations = [
 
 // 2. Grader Function (The matching algorithm)
 function gradeDestinations(userPrefs) {
-    let scoredDestinations = destinations.map(dest => {
+    const prefs = userPrefs || {};
+
+    const pickFirst = (value) => Array.isArray(value) ? value[0] : value;
+
+    const normalizeBudget = (value) => {
+        if (!value) return value;
+        if (value === 'mid') return 'midrange';
+        if (value === 'high') return 'luxury';
+        return value;
+    };
+
+    const scoredDestinations = destinations.map((dest) => {
         let score = 0;
-        let matchedTags = [];
+        const matchedTags = [];
 
-        if (dest.climate.includes(userPrefs.climate)) { score += 2; matchedTags.push("Climate"); }
-        if (dest.trip.includes(userPrefs.trip)) { score += 2; matchedTags.push("Vibe"); }
-        if (dest.budget.includes(userPrefs.budget)) { score += 1; matchedTags.push("Budget"); }
-        if (dest.companions.includes(userPrefs.companions)) { score += 1; matchedTags.push("Party Size"); }
-        if (dest.activities.includes(userPrefs.activities)) { score += 2; matchedTags.push("Activities"); }
+        const climate = prefs.climate || prefs.terrain;
+        const trip = prefs.trip || prefs.difficulty;
+        const budget = normalizeBudget(prefs.budget);
+        const companions = prefs.companions || prefs.group;
+        const activities = prefs.activities || prefs.activity;
 
-        return { ...dest, score, matchedTags };
+        const destClimate = (dest.climate || []).map((item) => String(item).toLowerCase());
+        const destTrip = (dest.trip || []).map((item) => String(item).toLowerCase());
+        const destBudget = (dest.budget || []).map((item) => normalizeBudget(String(item).toLowerCase()));
+        const destCompanions = (dest.companions || []).map((item) => String(item).toLowerCase());
+        const destActivities = (dest.activities || []).map((item) => String(item).toLowerCase());
+
+        if (climate && destClimate.includes(String(climate).toLowerCase())) {
+            score += 2;
+            matchedTags.push('Climate');
+        }
+
+        if (trip && destTrip.includes(String(trip).toLowerCase())) {
+            score += 2;
+            matchedTags.push('Vibe');
+        }
+
+        if (budget && destBudget.includes(String(budget).toLowerCase())) {
+            score += 1;
+            matchedTags.push('Budget');
+        }
+
+        if (companions && destCompanions.includes(String(companions).toLowerCase())) {
+            score += 1;
+            matchedTags.push('Party Size');
+        }
+
+        if (activities && destActivities.includes(String(activities).toLowerCase())) {
+            score += 2;
+            matchedTags.push('Activities');
+        }
+
+        const durationPref = Number(prefs.days || prefs.duration || 0);
+        if (!Number.isNaN(durationPref) && durationPref > 0 && Number(dest.duration) > 0) {
+            const gap = Math.abs(Number(dest.duration) - durationPref);
+            if (gap <= 1) {
+                score += 1;
+                matchedTags.push('Duration');
+            }
+        }
+
+        return {
+            ...dest,
+            score,
+            matchedTags,
+            primaryClimate: pickFirst(dest.climate),
+            primaryTrip: pickFirst(dest.trip)
+        };
     });
 
-    // Sort by highest score, then slice top 3
     scoredDestinations.sort((a, b) => b.score - a.score);
     return scoredDestinations.slice(0, 3);
 }
 
 // 3. Dynamic Tailwind Card Generator
 function buildCardHTML(dest, isMatchResult = false) {
-    // Generate pill tags for the card
-    const allTags = [...dest.trip, ...dest.climate];
-    const topTags = allTags.slice(0, 2).map(tag => 
-        `<span class="px-3 py-1 bg-mint/10 text-mint text-xs font-bold rounded-full uppercase tracking-wider">${tag}</span>`
-    ).join('');
+    const tripTags = Array.isArray(dest.trip) ? dest.trip : [];
+    const climateTags = Array.isArray(dest.climate) ? dest.climate : [];
+    const budgetTags = Array.isArray(dest.budget) ? dest.budget : [];
+    const safeName = escapeHTML(dest.name);
+    const isFavorite = isFavoriteDestination(dest.name);
+    const favoriteLabel = isFavorite ? 'Remove from favorites' : 'Add to favorites';
+    const favoriteSymbol = isFavorite ? '❤️' : '🤍';
+
+    const topTags = [...tripTags, ...climateTags, ...budgetTags]
+        .slice(0, 4)
+        .map((tag) => `<span class="px-3 py-1 bg-mint/10 text-mint text-xs font-bold rounded-full uppercase tracking-wider">${escapeHTML(tag)}</span>`)
+        .join('');
 
     // Optional match score badge for the results page
     let matchBadge = '';
     if (isMatchResult) {
-        const matchPercentage = Math.round((dest.score / 8) * 100);
+        const maxScore = 9;
+        const matchPercentage = Math.max(0, Math.min(100, Math.round(((dest.score || 0) / maxScore) * 100)));
         matchBadge = `<div class="absolute top-4 right-4 bg-juniper text-mint px-3 py-1 rounded-full font-bold text-sm shadow-md border border-mint/20">
             ${matchPercentage}% Match
         </div>`;
@@ -181,22 +245,333 @@ function buildCardHTML(dest, isMatchResult = false) {
 
     // Return the injected Tailwind HTML
     return `
-        <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative" role="button" tabindex="0" data-destination-name="${safeName}">
             ${matchBadge}
-            <img src="${dest.image}" alt="${dest.name}" class="w-full h-56 object-cover">
+            <img src="${escapeHTML(dest.image)}" alt="${safeName}" class="w-full h-56 object-cover">
             
             <div class="p-6 flex-1 flex flex-col">
                 <div class="flex gap-2 mb-3">
                     ${topTags}
                 </div>
                 
-                <h3 class="text-2xl font-bold text-juniper dark:text-white mb-2 leading-tight">${dest.name}</h3>
-                <p class="text-gray-600 dark:text-gray-400 mb-6 flex-1 text-sm leading-relaxed">${dest.desc}</p>
+                <h3 class="text-2xl font-bold text-juniper dark:text-white mb-2 leading-tight">${safeName}</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6 flex-1 text-sm leading-relaxed">${escapeHTML(dest.desc)}</p>
+                <div class="mb-3">
+                    <button type="button" data-favorite-name="${safeName}" aria-label="${favoriteLabel}" aria-pressed="${isFavorite ? 'true' : 'false'}" class="favorite-btn inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${isFavorite ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-100'}">
+                        <span class="favorite-symbol">${favoriteSymbol}</span>
+                        <span class="favorite-text">${isFavorite ? 'Saved' : 'Save'}</span>
+                    </button>
+                </div>
                 
-                <a href="destination.html?id=${encodeURIComponent(dest.name)}" class="mt-auto block text-center px-6 py-3 bg-mint hover:bg-teal text-juniper font-bold rounded-xl transition-colors w-full">
-                    View Itinerary
-                </a>
+                <p class="mt-auto text-center px-4 py-3 text-sm font-semibold text-mint bg-mint/10 rounded-xl border border-mint/20">
+                    Click to view
+                </p>
             </div>
         </div>
     `;
 }
+
+function escapeHTML(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function safeParseJSON(value, fallback) {
+    try {
+        return value ? JSON.parse(value) : fallback;
+    } catch {
+        return fallback;
+    }
+}
+
+const FAVORITE_PRIMARY_KEY = 'tripfitFavorites';
+const FAVORITE_FALLBACK_KEY = 'favorites';
+const HISTORY_PRIMARY_KEY = 'tripfitHistory';
+
+function safeStorageGet(key) {
+    try {
+        return localStorage.getItem(key);
+    } catch {
+        return null;
+    }
+}
+
+function safeStorageSet(key, value) {
+    try {
+        localStorage.setItem(key, value);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function getStoredFavorites() {
+    const tripfitFavorites = safeParseJSON(safeStorageGet(FAVORITE_PRIMARY_KEY), null);
+    if (Array.isArray(tripfitFavorites)) {
+        return tripfitFavorites;
+    }
+
+    const legacyFavorites = safeParseJSON(safeStorageGet(FAVORITE_FALLBACK_KEY), []);
+    return Array.isArray(legacyFavorites) ? legacyFavorites : [];
+}
+
+function saveFavorites(favorites) {
+    const uniqueFavorites = Array.from(new Set((favorites || []).filter(Boolean)));
+    safeStorageSet(FAVORITE_PRIMARY_KEY, JSON.stringify(uniqueFavorites));
+    safeStorageSet(FAVORITE_FALLBACK_KEY, JSON.stringify(uniqueFavorites));
+    return uniqueFavorites;
+}
+
+function isFavoriteDestination(destinationName) {
+    if (!destinationName) return false;
+    const favorites = getStoredFavorites();
+    return favorites.includes(destinationName);
+}
+
+function updateFavoriteButtons() {
+    const favorites = getStoredFavorites();
+    const buttons = document.querySelectorAll('[data-favorite-name]');
+
+    buttons.forEach((button) => {
+        const destinationName = button.getAttribute('data-favorite-name') || '';
+        const isFavorite = favorites.includes(destinationName);
+
+        button.setAttribute('aria-pressed', isFavorite ? 'true' : 'false');
+        button.setAttribute('aria-label', isFavorite ? 'Remove from favorites' : 'Add to favorites');
+
+        button.classList.toggle('bg-red-100', isFavorite);
+        button.classList.toggle('text-red-600', isFavorite);
+        button.classList.toggle('bg-gray-100', !isFavorite);
+        button.classList.toggle('text-gray-700', !isFavorite);
+        button.classList.toggle('dark:bg-gray-700', !isFavorite);
+        button.classList.toggle('dark:text-gray-100', !isFavorite);
+
+        const symbolNode = button.querySelector('.favorite-symbol');
+        if (symbolNode) {
+            symbolNode.textContent = isFavorite ? '❤️' : '🤍';
+        }
+
+        const textNode = button.querySelector('.favorite-text');
+        if (textNode) {
+            textNode.textContent = isFavorite ? 'Saved' : 'Save';
+        }
+    });
+}
+
+function toggleFavoriteByName(destinationName) {
+    if (!destinationName) return false;
+
+    const favorites = getStoredFavorites();
+    const nextFavorites = favorites.includes(destinationName)
+        ? favorites.filter((name) => name !== destinationName)
+        : [...favorites, destinationName];
+
+    saveFavorites(nextFavorites);
+    updateFavoriteButtons();
+    return nextFavorites.includes(destinationName);
+}
+
+function saveFavorite(destinationName) {
+    if (!destinationName) return;
+
+    const favorites = getStoredFavorites();
+    if (favorites.includes(destinationName)) {
+        return;
+    }
+
+    saveFavorites([...favorites, destinationName]);
+    updateFavoriteButtons();
+}
+
+function removeFavorite(destinationName) {
+    if (!destinationName) return;
+
+    const favorites = getStoredFavorites();
+    const nextFavorites = favorites.filter((name) => name !== destinationName);
+    saveFavorites(nextFavorites);
+    updateFavoriteButtons();
+}
+
+function findDestinationByName(destinationName) {
+    if (!destinationName) return null;
+
+    const exact = destinations.find((dest) => dest.name === destinationName);
+    if (exact) return exact;
+
+    return destinations.find((dest) => String(dest.name).toLowerCase() === String(destinationName).toLowerCase()) || null;
+}
+
+function openDestinationDetails(destinationName, options = {}) {
+    const destination = findDestinationByName(destinationName);
+    if (!destination) return;
+
+    const preferModal = options.preferModal !== false;
+    if (preferModal && typeof window.openItineraryModal === 'function') {
+        window.openItineraryModal(destination.name);
+        return;
+    }
+
+    window.location.href = `destination.html?id=${encodeURIComponent(destination.name)}`;
+}
+
+function openTrekCardItinerary(destinationName) {
+    openDestinationDetails(destinationName, { preferModal: true });
+}
+
+function normalizePreferencesFromQuery(searchParams) {
+    const params = searchParams || new URLSearchParams(window.location.search);
+    return {
+        climate: params.get('climate') || '',
+        trip: params.get('trip') || '',
+        budget: params.get('budget') || '',
+        companions: params.get('companions') || '',
+        activities: params.get('activities') || ''
+    };
+}
+
+function saveRecommendationSnapshot(preferences, results) {
+    if (!Array.isArray(results) || results.length === 0) {
+        return;
+    }
+
+    const existingHistory = safeParseJSON(safeStorageGet(HISTORY_PRIMARY_KEY), []);
+    const history = Array.isArray(existingHistory) ? existingHistory : [];
+
+    const snapshot = {
+        date: new Date().toLocaleString('en-IN', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        }),
+        preferences: preferences || {},
+        results: results.map((dest) => ({
+            name: dest.name,
+            region: dest.region,
+            image: dest.image,
+            desc: dest.desc,
+            climate: Array.isArray(dest.climate) ? [...dest.climate] : [],
+            trip: Array.isArray(dest.trip) ? [...dest.trip] : [],
+            budget: Array.isArray(dest.budget) ? [...dest.budget] : [],
+            companions: Array.isArray(dest.companions) ? [...dest.companions] : [],
+            activities: Array.isArray(dest.activities) ? [...dest.activities] : [],
+            score: Number(dest.score || 0),
+            matchedTags: Array.isArray(dest.matchedTags) ? [...dest.matchedTags] : []
+        }))
+    };
+
+    const latest = history[0];
+    const latestSignature = latest ? JSON.stringify({
+        preferences: latest.preferences,
+        names: (latest.results || []).map((item) => item.name)
+    }) : '';
+    const nextSignature = JSON.stringify({
+        preferences: snapshot.preferences,
+        names: snapshot.results.map((item) => item.name)
+    });
+
+    if (latestSignature === nextSignature) {
+        return;
+    }
+
+    history.unshift(snapshot);
+    safeStorageSet(HISTORY_PRIMARY_KEY, JSON.stringify(history.slice(0, 20)));
+}
+
+function trySaveRecommendationSnapshot() {
+    const path = window.location.pathname.toLowerCase();
+    if (!path.includes('recommendation.html')) {
+        return;
+    }
+
+    const resultsContainer = document.getElementById('results-container');
+    if (!resultsContainer) {
+        return;
+    }
+
+    const preferences = normalizePreferencesFromQuery(new URLSearchParams(window.location.search));
+    if (!preferences.climate || !preferences.trip) {
+        return;
+    }
+
+    const topMatches = gradeDestinations(preferences);
+    saveRecommendationSnapshot(preferences, topMatches);
+}
+
+function handleCardClick(event) {
+    const favoriteButton = event.target.closest('[data-favorite-name]');
+    if (favoriteButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFavoriteByName(favoriteButton.getAttribute('data-favorite-name') || '');
+        return;
+    }
+
+    const withinLink = event.target.closest('a, button, input, select, textarea, label');
+    if (withinLink && !event.target.closest('[data-destination-name]')) {
+        return;
+    }
+
+    const card = event.target.closest('[data-destination-name]');
+    if (!card) {
+        return;
+    }
+
+    const destinationName = card.getAttribute('data-destination-name') || '';
+    openDestinationDetails(destinationName, { preferModal: true });
+}
+
+function handleCardKeydown(event) {
+    const isActivateKey = event.key === 'Enter' || event.key === ' ';
+    if (!isActivateKey) {
+        return;
+    }
+
+    const card = event.target.closest('[data-destination-name]');
+    if (!card) {
+        return;
+    }
+
+    event.preventDefault();
+    const destinationName = card.getAttribute('data-destination-name') || '';
+    openDestinationDetails(destinationName, { preferModal: true });
+}
+
+function ensureCatalogRendered() {
+    const container = document.getElementById('catalog-container');
+    if (!container) return;
+
+    const hasCards = container.querySelector('[data-destination-name]');
+    if (hasCards) return;
+
+    container.innerHTML = destinations.map((dest) => buildCardHTML(dest, false)).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    ensureCatalogRendered();
+    updateFavoriteButtons();
+    trySaveRecommendationSnapshot();
+
+    document.addEventListener('click', handleCardClick);
+    document.addEventListener('keydown', handleCardKeydown);
+
+    const resultsContainer = document.getElementById('results-container');
+    if (resultsContainer) {
+        const observer = new MutationObserver(() => {
+            updateFavoriteButtons();
+        });
+        observer.observe(resultsContainer, { childList: true, subtree: true });
+    }
+});
+
+window.safeParseJSON = safeParseJSON;
+window.saveFavorite = saveFavorite;
+window.removeFavorite = removeFavorite;
+window.getStoredFavorites = getStoredFavorites;
+window.openDestinationDetails = openDestinationDetails;
+window.openTrekCardItinerary = openTrekCardItinerary;
