@@ -357,6 +357,7 @@ footer {
         flex-direction: column;
         align-items: center;
     }
+}
 
 .card {
     background: white;
@@ -406,4 +407,144 @@ footer {
     .cards {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
+}
+
+/* ================= TRIPFIT DESTINATION EXTENSIONS ================= */
+
+.match-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--dark);
+    color: var(--primary);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.trek-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.trek-tag {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    border-radius: 10px;
+    background: rgba(45, 212, 191, 0.1);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.filter-btn {
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background: var(--primary);
+    color: var(--dark);
+    transform: translateY(-2px);
+}
+
+.filter-btn.active {
+    background: var(--dark);
+    color: var(--primary);
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.loading-spinner {
+    font-size: 3rem;
+    color: var(--primary);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+.budget-budget {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.budget-mid {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.budget-high {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#catalog-container {
+    perspective: 1000px;
+}
+
+.destination-card {
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.destination-card:hover {
+    box-shadow: 0 25px 50px -12px rgba(45, 212, 191, 0.4);
+}
+
+.destination-card img {
+    transition: transform 0.7s ease;
+}
+
+.destination-card:hover img {
+    transform: scale(1.1);
+}
+
+.destination-card h3 {
+    transition: color 0.3s ease;
+}
+
+.destination-card:hover h3 {
+    color: var(--primary);
+}
+
+.destination-card a {
+    transition: all 0.25s ease;
+}
+
+.destination-card a:hover {
+    letter-spacing: 0.5px;
+    transform: translateY(-1px);
+}
+
+.dark .destination-card {
+    background: #1f2937;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
