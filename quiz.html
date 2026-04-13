@@ -99,31 +99,7 @@
 </head>
 <body class="bg-pearl dark:bg-gray-900 min-h-screen flex flex-col text-gray-800 dark:text-gray-100 transition-colors duration-300">
     
-    <header class="bg-juniper text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="home.html" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-                <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" style="height: 60px; margin-right: 5px; object-fit: contain;">
-                <div class="text-3xl font-bold tracking-tight">TripFit</div>
-            </a>
-            <nav class="hidden md:flex items-center gap-x-6 font-medium">
-                <a href="home.html" class="hover:text-mint transition-colors">Home</a>
-                <a href="all-destinations.html" class="hover:text-mint transition-colors">Destinations</a>
-                
-                <a href="#" class="hover:text-mint transition-colors flex items-center gap-2" title="View Past Trips">
-                    <i class="fas fa-history text-lg"></i>
-                    <span>History</span>
-                </a>
-
-                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
-                </button>
-
-                <a href="quiz.html" class="flashy-btn px-6 py-2.5 bg-mint hover:bg-teal text-juniper rounded-full font-bold transition-all">
-                    Restart Quiz
-                </a>
-            </nav>
-        </div>
-    </header>
+    <header id="tripfit-navbar"></header>
 
     <section class="flex-1 py-10 px-4 flex items-center justify-center">
         <div class="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700 h-[620px] flex flex-col relative overflow-hidden transition-colors duration-300">
@@ -373,6 +349,7 @@
         </div>
     </section>
 
+    <script src="navbar.js"></script>
     <script>
         // Global Theme Toggle Logic with Memory
         const themeToggle = document.getElementById('theme-toggle');
@@ -403,6 +380,7 @@
                 }
             });
         }
+
 
         // Quiz Logic
         let currentStep = 1;
