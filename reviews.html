@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews • TripFit</title>
+
+    <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mint: '#2dd4bf',
+                        teal: '#14b8a6',
+                        juniper: '#0f373b',
+                        pearl: '#f8f9fa'
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background:
+                radial-gradient(circle at 14% 20%, rgba(45, 212, 191, 0.18), transparent 30%),
+                radial-gradient(circle at 84% 78%, rgba(20, 184, 166, 0.15), transparent 32%),
+                #f8f9fa;
+        }
+
+        html.dark body {
+            background:
+                radial-gradient(circle at 20% 20%, rgba(45, 212, 191, 0.08), transparent 35%),
+                radial-gradient(circle at 82% 75%, rgba(13, 95, 102, 0.2), transparent 35%),
+                #0b1117;
+        }
+
+        .star-rating {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .star-rating .star {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.5rem;
+        }
+
+        .star-rating .star.active {
+            color: #fbbf24;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        .star-rating .star:hover {
+            transform: scale(1.2);
+        }
+
+        .review-card {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-gray-800 dark:text-gray-100">
+    <header id="tripfit-navbar"></header>
+
+    <section class="pt-28 pb-14 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="rounded-3xl overflow-hidden border border-white/60 dark:border-mint/20 shadow-2xl">
+                <div class="bg-gradient-to-r from-juniper via-teal to-juniper text-white px-8 py-12 md:px-12">
+                    <p class="uppercase tracking-[0.25em] text-xs text-mint font-bold">Community Insights</p>
+                    <h1 class="text-4xl md:text-5xl font-extrabold mt-3">Traveler Reviews</h1>
+                    <p class="text-teal-100 mt-4 max-w-2xl">Real experiences from real travelers. Discover what makes each destination unforgettable.</p>
+
+                    <div class="mt-8 flex items-center gap-4 flex-wrap">
+                        <div class="flex items-center gap-2">
+                            <span class="text-3xl font-bold text-mint" id="avg-rating">4.8</span>
+                            <div class="flex gap-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400"></i>
+                            </div>
+                        </div>
+                        <span class="text-teal-100" id="total-reviews">Based on 450+ reviews</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-6 pb-16 flex-1">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div class="lg:col-span-1">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg sticky top-32 border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-bold text-juniper dark:text-white mb-6">Filters</h3>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Rating</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" value="5" onchange="applyReviewFilters()" class="w-4 h-4 rounded accent-mint">
+                                <span class="text-sm flex items-center gap-1"><i class="fas fa-star text-yellow-400"></i> 5 Stars</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" value="4" onchange="applyReviewFilters()" class="w-4 h-4 rounded accent-mint">
+                                <span class="text-sm flex items-center gap-1"><i class="fas fa-star text-yellow-400"></i> 4+ Stars</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" value="3" onchange="applyReviewFilters()" class="w-4 h-4 rounded accent-mint">
+                                <span class="text-sm flex items-center gap-1"><i class="fas fa-star text-yellow-400"></i> 3+ Stars</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Destination</label>
+                        <select id="destination-filter" onchange="applyReviewFilters()" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                            <option value="">All Destinations</option>
+                            <option value="Bali, Indonesia">Bali, Indonesia</option>
+                            <option value="Swiss Alps, Switzerland">Swiss Alps, Switzerland</option>
+                            <option value="Machu Picchu, Peru">Machu Picchu, Peru</option>
+                            <option value="Tokyo, Japan">Tokyo, Japan</option>
+                            <option value="Santorini, Greece">Santorini, Greece</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Sort By</label>
+                        <select id="sort-select" onchange="applyReviewFilters()" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                            <option value="recent">Most Recent</option>
+                            <option value="highest">Highest Rated</option>
+                            <option value="lowest">Lowest Rated</option>
+                            <option value="helpful">Most Helpful</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3">
+                <button onclick="openReviewModal()" class="w-full mb-8 px-6 py-4 bg-gradient-to-r from-teal to-mint text-juniper font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center gap-2">
+                    <i class="fas fa-pen-fancy"></i> Share Your Experience
+                </button>
+
+                <div id="reviews-container" class="space-y-6"></div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="loadMoreReviews()" class="px-8 py-3 border-2 border-mint text-mint hover:bg-mint hover:text-juniper font-bold rounded-full transition-colors">
+                        Load More Reviews
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="review-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center hidden z-50 p-4" onclick="closeReviewModal(event)">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-juniper dark:text-white">Write a Review</h2>
+                <button onclick="closeReviewModal()" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitReview(event)" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Which destination did you visit?</label>
+                    <select id="review-destination" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                        <option value="">Select a destination...</option>
+                        <option value="Bali, Indonesia">Bali, Indonesia</option>
+                        <option value="Swiss Alps, Switzerland">Swiss Alps, Switzerland</option>
+                        <option value="Machu Picchu, Peru">Machu Picchu, Peru</option>
+                        <option value="Tokyo, Japan">Tokyo, Japan</option>
+                        <option value="Santorini, Greece">Santorini, Greece</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Rating</label>
+                    <div class="star-rating" id="rating-stars">
+                        <span class="star active" onclick="setRating(1)"><i class="fas fa-star"></i></span>
+                        <span class="star" onclick="setRating(2)"><i class="fas fa-star"></i></span>
+                        <span class="star" onclick="setRating(3)"><i class="fas fa-star"></i></span>
+                        <span class="star" onclick="setRating(4)"><i class="fas fa-star"></i></span>
+                        <span class="star" onclick="setRating(5)"><i class="fas fa-star"></i></span>
+                    </div>
+                    <input type="hidden" id="rating-value" value="1">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Your Review</label>
+                    <textarea id="review-text" placeholder="Share your experience... What was memorable? Any tips for other travelers?" required minlength="20" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:border-mint resize-none h-32"></textarea>
+                    <p class="text-xs text-gray-500 mt-1">Minimum 20 characters</p>
+                </div>
+
+                <div class="flex gap-3 justify-end pt-4">
+                    <button type="button" onclick="closeReviewModal()" class="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold rounded-full hover:bg-gray-300 transition-colors">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-mint hover:bg-teal text-juniper font-bold rounded-full transition-all hover:shadow-lg">Post Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="success-toast" class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg hidden z-50 flex items-center gap-2">
+        <i class="fas fa-check-circle"></i>
+        <span>Review posted successfully!</span>
+    </div>
+
+    <footer class="bg-juniper text-center py-8 border-t border-teal/20 mt-auto">
+        <p class="text-gray-400 text-sm">&copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.</p>
+    </footer>
+
+    <script src="navbar.js"></script>
+    <script>
+        let displayedReviews = 5;
+        let filteredReviews = [];
+        let currentRating = 1;
+
+        const defaultReviews = [
+            { id: 1, reviewer: 'Sarah Mitchell', destination: 'Bali, Indonesia', rating: 5, text: 'TripFit matched us with exactly the kind of relaxing tropical trip we wanted. Smooth planning and awesome recommendations.', date: 'Dec 15, 2024', helpful: 18, verified: true },
+            { id: 2, reviewer: 'Jessica Chen', destination: 'Swiss Alps, Switzerland', rating: 5, text: 'Amazing alpine experience. The suggestions for budget and activities were super accurate and saved us a lot of time.', date: 'Nov 20, 2024', helpful: 14, verified: true },
+            { id: 3, reviewer: 'Liam Carter', destination: 'Machu Picchu, Peru', rating: 5, text: 'Loved the adventure itinerary. Everything felt balanced between sightseeing, hiking, and downtime.', date: 'Nov 12, 2024', helpful: 21, verified: true },
+            { id: 4, reviewer: 'Aisha Khan', destination: 'Tokyo, Japan', rating: 4, text: 'Great city recommendations and food spots. I would like even more nightlife options in future updates.', date: 'Oct 30, 2024', helpful: 9, verified: true },
+            { id: 5, reviewer: 'Marco Rossi', destination: 'Santorini, Greece', rating: 4, text: 'Beautiful destination and clear recommendations. Booking links and tips were very helpful.', date: 'Oct 14, 2024', helpful: 7, verified: true },
+            { id: 6, reviewer: 'Priya Das', destination: 'Bali, Indonesia', rating: 5, text: 'Perfect for couples. The vibe matching system worked surprisingly well.', date: 'Sep 25, 2024', helpful: 12, verified: true }
+        ];
+
+        function escapeHTML(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function safeParseJSON(value, fallback) {
+            try {
+                return value ? JSON.parse(value) : fallback;
+            } catch {
+                return fallback;
+            }
+        }
+
+        function getSelectedReviewRatings() {
+            return Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map((input) => parseInt(input.value, 10))
+                .filter((value) => Number.isFinite(value));
+        }
+
+        function getFilteredAndSortedReviews() {
+            const reviews = getReviews();
+            const destinationFilter = document.getElementById('destination-filter')?.value || '';
+            const sortMode = document.getElementById('sort-select')?.value || 'recent';
+            const selectedRatings = getSelectedReviewRatings();
+
+            const filtered = reviews.filter((review) => {
+                const ratingValue = Number(review.rating || 0);
+                const ratingMatch = selectedRatings.length === 0 || selectedRatings.some((threshold) => ratingValue >= threshold);
+                const destinationMatch = !destinationFilter || review.destination === destinationFilter;
+                return ratingMatch && destinationMatch;
+            });
+
+            const sorters = {
+                recent: (a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime(),
+                highest: (a, b) => Number(b.rating || 0) - Number(a.rating || 0),
+                lowest: (a, b) => Number(a.rating || 0) - Number(b.rating || 0),
+                helpful: (a, b) => Number(b.helpful || 0) - Number(a.helpful || 0)
+            };
+
+            filtered.sort(sorters[sortMode] || sorters.recent);
+            return filtered;
+        }
+
+        function renderReviews() {
+            const container = document.getElementById('reviews-container');
+            const reviews = getFilteredAndSortedReviews();
+
+            filteredReviews = reviews.slice(0, displayedReviews);
+
+            if (filteredReviews.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 shadow-md text-center">
+                        <p class="text-gray-600 dark:text-gray-300 font-semibold">No reviews match the selected filters.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredReviews.map(review => `
+                <div class="review-card bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-mint to-teal flex items-center justify-center text-white font-bold">
+                                    ${escapeHTML((review.reviewer || 'U').charAt(0).toUpperCase())}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white">${escapeHTML(review.reviewer)}</h4>
+                                    <p class="text-xs text-gray-500">${escapeHTML(review.date)}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-xs bg-mint/10 text-mint font-bold px-3 py-1 rounded-full">${escapeHTML(review.destination || 'Destination')}</span>
+                    </div>
+
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="flex gap-1">
+                            ${Array.from({length: 5}).map((_, i) => `
+                                <i class="fas fa-star ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}"></i>
+                            `).join('')}
+                        </div>
+                        <span class="font-bold text-gray-800 dark:text-gray-200">${escapeHTML(review.rating)}.0</span>
+                        ${review.verified ? '<span class="text-xs bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 px-2 py-1 rounded-full">✓ Verified Trip</span>' : ''}
+                    </div>
+
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">${escapeHTML(review.text)}</p>
+
+                    <div class="flex items-center gap-4 text-sm text-gray-500 border-t border-gray-200 dark:border-gray-700 pt-3">
+                        <button onclick="likeReview(${review.id})" class="hover:text-mint transition-colors flex items-center gap-1">
+                            <i class="fas fa-thumbs-up"></i> Helpful (${review.helpful})
+                        </button>
+                        <button onclick="reportReview(${review.id})" class="hover:text-red-500 transition-colors flex items-center gap-1">
+                            <i class="fas fa-flag"></i> Report
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function applyReviewFilters() {
+            displayedReviews = 5;
+            renderReviews();
+        }
+
+        function loadMoreReviews() {
+            displayedReviews += 5;
+            renderReviews();
+        }
+
+        function openReviewModal() {
+            const user = safeParseJSON(localStorage.getItem('tripfitUser'), null) || safeParseJSON(localStorage.getItem('hiksterUser'), null);
+            if (!user) {
+                alert('Please log in to write a review.');
+                window.location.href = 'index.html?redirect=reviews.html';
+                return;
+            }
+            document.getElementById('review-modal').classList.remove('hidden');
+        }
+
+        function closeReviewModal(event) {
+            if (event && event.target.id !== 'review-modal') return;
+            document.getElementById('review-modal').classList.add('hidden');
+        }
+
+        function setRating(value) {
+            currentRating = value;
+            document.getElementById('rating-value').value = value;
+            const stars = document.querySelectorAll('#rating-stars .star');
+            stars.forEach((star, index) => {
+                if (index < value) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function submitReview(e) {
+            e.preventDefault();
+
+            const user = safeParseJSON(localStorage.getItem('tripfitUser'), null) || safeParseJSON(localStorage.getItem('hiksterUser'), null);
+            const destination = document.getElementById('review-destination').value;
+            const rating = parseInt(document.getElementById('rating-value').value, 10);
+            const text = document.getElementById('review-text').value;
+
+            const newReview = {
+                id: Date.now(),
+                reviewer: user?.name || 'Anonymous',
+                destination: destination,
+                rating: rating,
+                text: text,
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                helpful: 0,
+                verified: true
+            };
+
+            const reviews = getReviews();
+            reviews.unshift(newReview);
+            localStorage.setItem('tripfitReviews', JSON.stringify(reviews));
+            localStorage.setItem('hiksterReviews', JSON.stringify(reviews));
+
+            closeReviewModal();
+            document.getElementById('review-text').value = '';
+            setRating(1);
+
+            const toast = document.getElementById('success-toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                renderReviews();
+            }, 2000);
+        }
+
+        function likeReview(reviewId) {
+            const reviews = getReviews();
+            const review = reviews.find((r) => r.id === reviewId);
+            if (review) {
+                review.helpful += 1;
+                localStorage.setItem('tripfitReviews', JSON.stringify(reviews));
+                localStorage.setItem('hiksterReviews', JSON.stringify(reviews));
+                renderReviews();
+            }
+        }
+
+        function reportReview() {
+            alert('Review reported for moderation. Thank you for keeping our community safe.');
+        }
+
+        function getReviews() {
+            const tripfitReviews = safeParseJSON(localStorage.getItem('tripfitReviews'), null);
+            const hiksterReviews = safeParseJSON(localStorage.getItem('hiksterReviews'), null);
+            const reviews = Array.isArray(tripfitReviews) ? tripfitReviews : (Array.isArray(hiksterReviews) ? hiksterReviews : defaultReviews);
+            return reviews;
+        }
+
+        renderReviews();
+    </script>
+</body>
+</html>
