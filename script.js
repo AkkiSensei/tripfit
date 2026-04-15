@@ -226,11 +226,11 @@ function buildCardHTML(dest, isMatchResult = false) {
     const safeName = escapeHTML(dest.name);
     const isFavorite = isFavoriteDestination(dest.name);
     const favoriteLabel = isFavorite ? 'Remove from favorites' : 'Add to favorites';
-    const favoriteSymbol = isFavorite ? '❤️' : '🤍';
+    const favoriteSymbol = isFavorite ? '💗' : '🤍';
 
     const topTags = [...tripTags, ...climateTags, ...budgetTags]
         .slice(0, 4)
-        .map((tag) => `<span class="px-3 py-1 bg-mint/10 text-mint text-xs font-bold rounded-full uppercase tracking-wider">${escapeHTML(tag)}</span>`)
+        .map((tag) => `<span class="px-3 py-1 bg-teal-500/10 text-teal-600 dark:bg-teal-400/15 dark:text-teal-300 text-xs font-bold rounded-lg">${escapeHTML(formatSentenceCase(tag))}</span>`)
         .join('');
 
     let matchBadge = '';
@@ -243,24 +243,21 @@ function buildCardHTML(dest, isMatchResult = false) {
     }
 
     return `
-        <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative" role="button" tabindex="0" data-destination-name="${safeName}">
+        <div class="bg-white dark:bg-slate-900 rounded-[1.65rem] overflow-hidden shadow-[0_18px_35px_rgba(15,55,59,0.12)] dark:shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-mint/40 hover:shadow-[0_0_0_1px_rgba(45,212,191,0.28),0_24px_60px_rgba(45,212,191,0.22)] border border-gray-200 dark:border-slate-800/90 flex flex-col h-full min-h-[33rem] relative" role="button" tabindex="0" data-destination-name="${safeName}">
             ${matchBadge}
-            <img src="${escapeHTML(dest.image)}" alt="${safeName}" class="w-full h-56 object-cover">
-            <div class="p-6 flex-1 flex flex-col">
-                <div class="flex gap-2 mb-3">
+            <img src="${escapeHTML(dest.image)}" alt="${safeName}" class="w-full h-60 md:h-68 object-cover">
+            <div class="p-7 md:p-8 flex-1 flex flex-col bg-gradient-to-b from-white to-[#f7fbfb] dark:from-slate-800 dark:to-slate-900">
+                <div class="flex gap-2 mb-5 flex-wrap">
                     ${topTags}
                 </div>
-                <h3 class="text-2xl font-bold text-juniper dark:text-white mb-2 leading-tight">${safeName}</h3>
-                <p class="text-gray-600 dark:text-gray-400 mb-6 flex-1 text-sm leading-relaxed">${escapeHTML(dest.desc)}</p>
-                <div class="mb-3">
-                    <button type="button" data-favorite-name="${safeName}" aria-label="${favoriteLabel}" aria-pressed="${isFavorite ? 'true' : 'false'}" class="favorite-btn inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${isFavorite ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-100'}">
+                <h3 class="text-2xl font-extrabold text-juniper dark:text-slate-100 mb-2 leading-tight">${safeName}</h3>
+                <p class="text-gray-600 dark:text-slate-300 mb-6 flex-1 text-base leading-relaxed">${escapeHTML(dest.desc)}</p>
+                <div class="mt-auto flex items-end justify-between gap-4">
+                    <p class="text-gray-400 dark:text-slate-400 text-sm">Click anywhere on this card to view trek details.</p>
+                    <button type="button" data-favorite-name="${safeName}" aria-label="${favoriteLabel}" aria-pressed="${isFavorite ? 'true' : 'false'}" class="favorite-btn shrink-0 w-12 h-10 rounded-md border border-pink-100/60 grid place-items-center text-lg transition-colors ${isFavorite ? 'bg-pink-200 text-pink-600 card-favorite-active' : 'bg-pink-50 text-pink-500'}">
                         <span class="favorite-symbol">${favoriteSymbol}</span>
-                        <span class="favorite-text">${isFavorite ? 'Saved' : 'Save'}</span>
                     </button>
                 </div>
-                <p class="mt-auto text-center px-4 py-3 text-sm font-semibold text-mint bg-mint/10 rounded-xl border border-mint/20">
-                    Click to view
-                </p>
             </div>
         </div>
     `;
@@ -273,6 +270,12 @@ function escapeHTML(value) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+}
+
+function formatSentenceCase(value) {
+    const text = String(value ?? '').trim().toLowerCase();
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 function safeParseJSON(value, fallback) {
@@ -330,15 +333,14 @@ function updateFavoriteButtons() {
         button.setAttribute('aria-pressed', isFavorite ? 'true' : 'false');
         button.setAttribute('aria-label', isFavorite ? 'Remove from favorites' : 'Add to favorites');
 
-        button.classList.toggle('bg-red-100', isFavorite);
-        button.classList.toggle('text-red-600', isFavorite);
-        button.classList.toggle('bg-gray-100', !isFavorite);
-        button.classList.toggle('text-gray-700', !isFavorite);
-        button.classList.toggle('dark:bg-gray-700', !isFavorite);
-        button.classList.toggle('dark:text-gray-100', !isFavorite);
+        button.classList.toggle('card-favorite-active', isFavorite);
+        button.classList.toggle('bg-pink-200', isFavorite);
+        button.classList.toggle('text-pink-600', isFavorite);
+        button.classList.toggle('bg-pink-50', !isFavorite);
+        button.classList.toggle('text-pink-500', !isFavorite);
 
         const symbolNode = button.querySelector('.favorite-symbol');
-        if (symbolNode) symbolNode.textContent = isFavorite ? '❤️' : '🤍';
+        if (symbolNode) symbolNode.textContent = isFavorite ? '💗' : '🤍';
 
         const textNode = button.querySelector('.favorite-text');
         if (textNode) textNode.textContent = isFavorite ? 'Saved' : 'Save';
