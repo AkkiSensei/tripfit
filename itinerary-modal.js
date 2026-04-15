@@ -49,17 +49,17 @@ function createItineraryModal() {
 
 			<div class="itinerary-tabs">
 				<button class="itinerary-tab-btn active" onclick="switchItineraryTab('overview', this)">Overview</button>
-				<button class="itinerary-tab-btn" onclick="switchItineraryTab('itinerary', this)">Day by Day</button>
-				<button class="itinerary-tab-btn" onclick="switchItineraryTab('packing', this)">Packing List</button>
-				<button class="itinerary-tab-btn" onclick="switchItineraryTab('cost', this)">Cost Breakdown</button>
-				<button class="itinerary-tab-btn" onclick="switchItineraryTab('safety', this)">Safety & Facts</button>
+				<button class="itinerary-tab-btn" onclick="switchItineraryTab('itinerary', this)">Day by day</button>
+				<button class="itinerary-tab-btn" onclick="switchItineraryTab('packing', this)">Packing list</button>
+				<button class="itinerary-tab-btn" onclick="switchItineraryTab('cost', this)">Cost breakdown</button>
+				<button class="itinerary-tab-btn" onclick="switchItineraryTab('safety', this)">Safety & facts</button>
 				<button class="itinerary-tab-btn" onclick="switchItineraryTab('faqs', this)">FAQs</button>
 			</div>
 
 			<div class="itinerary-content">
 				<div id="overviewTab" class="itinerary-tab-content active">
 					<div class="itinerary-section">
-						<h3><i class="fas fa-info-circle"></i> Trip Overview</h3>
+						<h3><i class="fas fa-info-circle"></i> Trip overview</h3>
 						<div class="overview-grid" id="overviewContent"></div>
 					</div>
 				</div>
@@ -87,7 +87,7 @@ function createItineraryModal() {
 
 			<div class="itinerary-cta">
 				<button class="btn-book-now" onclick="bookNowFromItinerary()">
-					<i class="fas fa-check-circle"></i> Book This Trip
+					<i class="fas fa-check-circle"></i> Book this trip
 				</button>
 				<button class="btn-download-pdf" onclick="downloadItineraryPDF()">
 					<i class="fas fa-download"></i> Download PDF
@@ -460,3 +460,4 @@ window.setItineraryPackage = setItineraryPackage;
 window.bookNowFromItinerary = bookNowFromItinerary;
 window.downloadItineraryPDF = downloadItineraryPDF;
 window.contactGuide = contactGuide;
+
