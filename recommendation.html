@@ -8,7 +8,6 @@
     <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="itinerary-modal.css">
     
     <script>
         tailwind.config = {
@@ -32,173 +31,107 @@
 </head>
 <body class="bg-pearl dark:bg-gray-900 min-h-screen flex flex-col text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
-    <header id="tripfit-navbar"></header>
+    <!-- Header -->
+    <header class="bg-juniper text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="home.html" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <img src="logo/TripFit_logo2-removebg-preview.png" alt="TripFit Logo" style="height: 60px; margin-right: 5px; object-fit: contain;">
+                <div class="text-3xl font-bold tracking-tight">TripFit</div>
+            </a>
+            <nav class="hidden md:flex items-center gap-x-6 font-medium">
+                <a href="home.html" class="hover:text-mint transition-colors">Home</a>
+                <a href="all-destinations.html" class="hover:text-mint transition-colors">Destinations</a>
+                <a href="history.html" class="hover:text-mint transition-colors flex items-center gap-2">
+                    <i class="fas fa-history text-lg"></i>
+                    <span>History</span>
+                </a>
 
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+
+                <a href="quiz.html" class="px-6 py-2.5 bg-mint hover:bg-teal text-juniper rounded-full font-bold transition-all shadow-lg">
+                    Retake Quiz
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
     <section class="bg-white dark:bg-gray-800 py-16 px-6 text-center border-b border-gray-200 dark:border-gray-700 transition-colors">
         <div class="max-w-3xl mx-auto">
             <div class="inline-flex items-center justify-center w-16 h-16 bg-mint/20 text-mint rounded-full mb-6 text-3xl">
                 <i class="fas fa-check-circle"></i>
             </div>
             <h1 class="text-4xl md:text-5xl font-extrabold text-juniper dark:text-white tracking-tight mb-4">Your Perfect Matches</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-400">Based on your unique vibe, we have calculated the top three destinations for your next escape.</p>
+            <p class="text-lg text-gray-600 dark:text-gray-400">Based on your unique vibe, we have calculated the top destinations for your next escape.</p>
         </div>
     </section>
 
+    <!-- Main Results Section -->
     <section class="py-16 px-6 flex-1">
         <div class="max-w-7xl mx-auto">
-            <div id="recommendation-toolbar" class="hidden mb-6 flex flex-wrap items-center justify-between gap-3">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Sort recommendations</p>
-                <div class="flex items-center gap-2">
-                    <button type="button" data-sort="match" class="sort-btn px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-semibold text-juniper dark:text-gray-100 hover:border-mint hover:text-mint transition-colors">Best Match</button>
-                    <button type="button" data-sort="az" class="sort-btn px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-semibold text-juniper dark:text-gray-100 hover:border-mint hover:text-mint transition-colors">A-Z</button>
-                </div>
+            
+            <!-- Loading State -->
+            <div id="analyzing-loading" class="text-center py-16">
+                <div class="inline-block animate-spin text-5xl text-mint mb-6">⟳</div>
+                <p class="text-2xl font-bold text-juniper">Analyzing your travel profile...</p>
+                <p class="text-gray-500 mt-2">Finding your perfect matches</p>
             </div>
 
-            <div id="results-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="col-span-3 text-center py-20 text-gray-500">
-                    <i class="fas fa-circle-notch fa-spin text-4xl text-mint mb-4"></i>
-                    <p class="text-xl font-bold text-juniper dark:text-white">Analyzing your travel profile...</p>
-                </div>
+            <!-- Results Grid (cards will be injected here) -->
+            <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+                <!-- Populated by script.js -->
             </div>
-            
+
             <div class="mt-16 text-center">
                 <p class="text-gray-500 dark:text-gray-400 mb-6">Want to explore more options?</p>
-                <a href="all-destinations.html" class="inline-block px-8 py-4 border-2 border-juniper dark:border-mint text-juniper dark:text-mint hover:bg-juniper dark:hover:bg-mint hover:text-white dark:hover:text-juniper font-bold rounded-xl transition-all">
+                <a href="all-destinations.html" 
+                   class="inline-block px-8 py-4 border-2 border-juniper dark:border-mint text-juniper dark:text-mint hover:bg-juniper dark:hover:bg-mint hover:text-white dark:hover:text-juniper font-bold rounded-xl transition-all">
                     View Entire Catalog
                 </a>
             </div>
         </div>
     </section>
 
-    <footer class="bg-juniper text-center py-8 border-t border-teal/20 mt-auto">
-        <p class="text-gray-400 text-sm">&copy; 2026 TripFit • Fueling wanderlust for dreamers and explorers worldwide.</p>
-    </footer>
-
-    <script src="itinerary-modal.js"></script>
     <script src="script.js"></script>
-    <script src="navbar.js"></script>
-    
+
     <script>
-        function safeParseJSON(value, fallback) {
-            try {
-                return value ? JSON.parse(value) : fallback;
-            } catch {
-                return fallback;
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        if (localStorage.getItem('tripfit-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
             }
         }
 
-        function safeStorageGet(key) {
-            try {
-                return localStorage.getItem(key);
-            } catch {
-                return null;
-            }
-        }
-
-        function getUserPrefs() {
-            const params = new URLSearchParams(window.location.search);
-            const remembered = safeParseJSON(safeStorageGet('tripfitLastQuizPrefs'), {});
-
-            return {
-                climate: params.get('climate') || remembered.climate || '',
-                trip: params.get('trip') || remembered.trip || '',
-                budget: params.get('budget') || remembered.budget || '',
-                companions: params.get('companions') || remembered.companions || '',
-                activities: params.get('activities') || remembered.activities || ''
-            };
-        }
-
-        function renderError(container, title, message, buttonText) {
-            container.innerHTML = `
-                <div class="col-span-3 text-center py-20">
-                    <i class="fas fa-triangle-exclamation text-5xl text-amber-500 mb-4"></i>
-                    <h2 class="text-3xl font-bold text-juniper dark:text-white mb-4">${title}</h2>
-                    <p class="text-gray-600 dark:text-gray-400 mb-8">${message}</p>
-                    <a href="quiz.html" class="px-8 py-3 bg-mint text-juniper font-bold rounded-xl hover:bg-teal transition-colors">${buttonText}</a>
-                </div>
-            `;
-        }
-
-        function initRecommendations() {
-            const container = document.getElementById('results-container');
-            const toolbar = document.getElementById('recommendation-toolbar');
-            if (!container) return;
-
-            if (typeof gradeDestinations !== 'function' || typeof buildCardHTML !== 'function') {
-                renderError(
-                    container,
-                    'Recommendation engine unavailable',
-                    'Core scripts did not load correctly. Refresh and try again.',
-                    'Back to Quiz'
-                );
-                return;
-            }
-
-            const userPrefs = getUserPrefs();
-            const hasQuizData = Boolean(userPrefs.climate && userPrefs.trip);
-            let matches = [];
-
-            try {
-                matches = gradeDestinations(userPrefs);
-            } catch {
-                renderError(
-                    container,
-                    'Could not load recommendations',
-                    'There was a problem while generating your matches. Please retake the quiz.',
-                    'Retake Quiz'
-                );
-                return;
-            }
-
-            if (!Array.isArray(matches) || matches.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-3 text-center py-20">
-                        <i class="fas fa-map-location-dot text-5xl text-mint mb-4"></i>
-                        <h2 class="text-3xl font-bold text-juniper dark:text-white mb-4">No matches yet</h2>
-                        <p class="text-gray-600 dark:text-gray-400 mb-8">Try a different quiz combination and we will suggest better destinations.</p>
-                        <a href="quiz.html" class="px-8 py-3 bg-mint text-juniper font-bold rounded-xl hover:bg-teal transition-colors">Retake Quiz</a>
-                    </div>
-                `;
-                return;
-            }
-
-            function renderMatches(sortMode) {
-                const sorted = [...matches];
-                if (sortMode === 'az') {
-                    sorted.sort((a, b) => String(a.name).localeCompare(String(b.name)));
-                } else {
-                    sorted.sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                const isDark = document.documentElement.classList.contains('dark');
+                if (themeIcon) {
+                    themeIcon.classList.toggle('fa-moon', !isDark);
+                    themeIcon.classList.toggle('fa-sun', isDark);
                 }
-
-                const note = hasQuizData
-                    ? ''
-                    : '<p class="col-span-3 text-center text-sm text-gray-500 dark:text-gray-400 mb-2">Showing popular picks. Take the quiz for fully personalized matches.</p>';
-
-                container.innerHTML = note + sorted.map((dest) => buildCardHTML(dest, true)).join('');
-            }
-
-            renderMatches('match');
-            if (toolbar) {
-                toolbar.classList.remove('hidden');
-                toolbar.querySelectorAll('.sort-btn').forEach((button) => {
-                    button.addEventListener('click', () => {
-                        toolbar.querySelectorAll('.sort-btn').forEach((btn) => btn.classList.remove('border-mint', 'text-mint'));
-                        button.classList.add('border-mint', 'text-mint');
-                        renderMatches(button.getAttribute('data-sort') || 'match');
-                    });
-                });
-            }
+                try { 
+                    localStorage.setItem('tripfit-theme', isDark ? 'dark' : 'light'); 
+                } catch(e) {}
+            });
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initRecommendations);
-        } else {
-            initRecommendations();
+        // Render recommendations immediately
+        if (typeof renderRecommendationResults === 'function') {
+            renderRecommendationResults();
         }
 
-        window.addEventListener('pageshow', () => {
-            initRecommendations();
-        });
+        // Also save to history
+        if (typeof trySaveRecommendationSnapshot === 'function') {
+            trySaveRecommendationSnapshot();
+        }
     </script>
 </body>
 </html>
