@@ -233,7 +233,6 @@ function buildCardHTML(dest, isMatchResult = false) {
         .map((tag) => `<span class="px-3 py-1 bg-mint/10 text-mint text-xs font-bold rounded-full uppercase tracking-wider">${escapeHTML(tag)}</span>`)
         .join('');
 
-    // Optional match score badge for the results page
     let matchBadge = '';
     if (isMatchResult) {
         const maxScore = 9;
@@ -243,17 +242,14 @@ function buildCardHTML(dest, isMatchResult = false) {
         </div>`;
     }
 
-    // Return the injected Tailwind HTML
     return `
         <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative" role="button" tabindex="0" data-destination-name="${safeName}">
             ${matchBadge}
             <img src="${escapeHTML(dest.image)}" alt="${safeName}" class="w-full h-56 object-cover">
-            
             <div class="p-6 flex-1 flex flex-col">
                 <div class="flex gap-2 mb-3">
                     ${topTags}
                 </div>
-                
                 <h3 class="text-2xl font-bold text-juniper dark:text-white mb-2 leading-tight">${safeName}</h3>
                 <p class="text-gray-600 dark:text-gray-400 mb-6 flex-1 text-sm leading-relaxed">${escapeHTML(dest.desc)}</p>
                 <div class="mb-3">
@@ -262,7 +258,6 @@ function buildCardHTML(dest, isMatchResult = false) {
                         <span class="favorite-text">${isFavorite ? 'Saved' : 'Save'}</span>
                     </button>
                 </div>
-                
                 <p class="mt-auto text-center px-4 py-3 text-sm font-semibold text-mint bg-mint/10 rounded-xl border border-mint/20">
                     Click to view
                 </p>
@@ -293,27 +288,19 @@ const FAVORITE_FALLBACK_KEY = 'favorites';
 const HISTORY_PRIMARY_KEY = 'tripfitHistory';
 
 function safeStorageGet(key) {
-    try {
-        return localStorage.getItem(key);
-    } catch {
-        return null;
-    }
+    try { return localStorage.getItem(key); } catch { return null; }
 }
 
 function safeStorageSet(key, value) {
     try {
         localStorage.setItem(key, value);
         return true;
-    } catch {
-        return false;
-    }
+    } catch { return false; }
 }
 
 function getStoredFavorites() {
     const tripfitFavorites = safeParseJSON(safeStorageGet(FAVORITE_PRIMARY_KEY), null);
-    if (Array.isArray(tripfitFavorites)) {
-        return tripfitFavorites;
-    }
+    if (Array.isArray(tripfitFavorites)) return tripfitFavorites;
 
     const legacyFavorites = safeParseJSON(safeStorageGet(FAVORITE_FALLBACK_KEY), []);
     return Array.isArray(legacyFavorites) ? legacyFavorites : [];
@@ -351,14 +338,10 @@ function updateFavoriteButtons() {
         button.classList.toggle('dark:text-gray-100', !isFavorite);
 
         const symbolNode = button.querySelector('.favorite-symbol');
-        if (symbolNode) {
-            symbolNode.textContent = isFavorite ? '❤️' : '🤍';
-        }
+        if (symbolNode) symbolNode.textContent = isFavorite ? '❤️' : '🤍';
 
         const textNode = button.querySelector('.favorite-text');
-        if (textNode) {
-            textNode.textContent = isFavorite ? 'Saved' : 'Save';
-        }
+        if (textNode) textNode.textContent = isFavorite ? 'Saved' : 'Save';
     });
 }
 
@@ -379,9 +362,7 @@ function saveFavorite(destinationName) {
     if (!destinationName) return;
 
     const favorites = getStoredFavorites();
-    if (favorites.includes(destinationName)) {
-        return;
-    }
+    if (favorites.includes(destinationName)) return;
 
     saveFavorites([...favorites, destinationName]);
     updateFavoriteButtons();
@@ -434,27 +415,16 @@ function normalizePreferencesFromQuery(searchParams) {
 }
 
 function saveRecommendationSnapshot(preferences, results) {
-    if (!Array.isArray(results) || results.length === 0) {
-        return;
-    }
+    if (!Array.isArray(results) || results.length === 0) return;
 
     const existingHistory = safeParseJSON(safeStorageGet(HISTORY_PRIMARY_KEY), []);
     const history = Array.isArray(existingHistory) ? existingHistory : [];
 
     const snapshot = {
-        date: new Date().toLocaleString('en-IN', {
-            year: 'numeric',
-            month: 'short',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        }),
+        date: new Date().toLocaleString('en-IN', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
         preferences: preferences || {},
         results: results.map((dest) => ({
-            name: dest.name,
-            region: dest.region,
-            image: dest.image,
-            desc: dest.desc,
+            name: dest.name, region: dest.region, image: dest.image, desc: dest.desc,
             climate: Array.isArray(dest.climate) ? [...dest.climate] : [],
             trip: Array.isArray(dest.trip) ? [...dest.trip] : [],
             budget: Array.isArray(dest.budget) ? [...dest.budget] : [],
@@ -466,18 +436,10 @@ function saveRecommendationSnapshot(preferences, results) {
     };
 
     const latest = history[0];
-    const latestSignature = latest ? JSON.stringify({
-        preferences: latest.preferences,
-        names: (latest.results || []).map((item) => item.name)
-    }) : '';
-    const nextSignature = JSON.stringify({
-        preferences: snapshot.preferences,
-        names: snapshot.results.map((item) => item.name)
-    });
+    const latestSignature = latest ? JSON.stringify({ preferences: latest.preferences, names: (latest.results || []).map(i => i.name) }) : '';
+    const nextSignature = JSON.stringify({ preferences: snapshot.preferences, names: snapshot.results.map(i => i.name) });
 
-    if (latestSignature === nextSignature) {
-        return;
-    }
+    if (latestSignature === nextSignature) return;
 
     history.unshift(snapshot);
     safeStorageSet(HISTORY_PRIMARY_KEY, JSON.stringify(history.slice(0, 20)));
@@ -485,22 +447,50 @@ function saveRecommendationSnapshot(preferences, results) {
 
 function trySaveRecommendationSnapshot() {
     const path = window.location.pathname.toLowerCase();
-    if (!path.includes('recommendation.html')) {
-        return;
-    }
+    if (!path.includes('recommendation.html')) return;
 
     const resultsContainer = document.getElementById('results-container');
-    if (!resultsContainer) {
-        return;
-    }
+    if (!resultsContainer) return;
 
     const preferences = normalizePreferencesFromQuery(new URLSearchParams(window.location.search));
-    if (!preferences.climate || !preferences.trip) {
-        return;
-    }
+    if (!preferences.climate || !preferences.trip) return;
 
     const topMatches = gradeDestinations(preferences);
     saveRecommendationSnapshot(preferences, topMatches);
+}
+
+// ================= RECOMMENDATION PAGE RENDERER (NEW) =================
+function renderRecommendationResults() {
+    const path = window.location.pathname.toLowerCase();
+    if (!path.includes('recommendation.html')) return;
+
+    const loadingEl = document.getElementById('analyzing-loading');
+    const resultsGrid = document.getElementById('results-grid');
+
+    if (!resultsGrid) {
+        console.error('❌ Missing #results-grid in recommendation.html');
+        return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const preferences = normalizePreferencesFromQuery(params);
+
+    if (!preferences.climate || !preferences.trip) {
+        if (loadingEl) {
+            loadingEl.innerHTML = `<p class="text-red-600 text-center py-12 text-lg">Invalid quiz data.<br><a href="quiz.html" class="underline hover:text-red-700">← Retake the Quiz</a></p>`;
+        }
+        return;
+    }
+
+    if (loadingEl) loadingEl.style.display = 'none';
+
+    const topMatches = gradeDestinations(preferences);
+
+    resultsGrid.innerHTML = topMatches.map(dest => buildCardHTML(dest, true)).join('');
+
+    updateFavoriteButtons();
+
+    console.log('✅ TripFit recommendations rendered successfully:', topMatches);
 }
 
 function handleCardClick(event) {
@@ -513,14 +503,10 @@ function handleCardClick(event) {
     }
 
     const withinLink = event.target.closest('a, button, input, select, textarea, label');
-    if (withinLink && !event.target.closest('[data-destination-name]')) {
-        return;
-    }
+    if (withinLink && !event.target.closest('[data-destination-name]')) return;
 
     const card = event.target.closest('[data-destination-name]');
-    if (!card) {
-        return;
-    }
+    if (!card) return;
 
     const destinationName = card.getAttribute('data-destination-name') || '';
     openDestinationDetails(destinationName, { preferModal: true });
@@ -528,14 +514,10 @@ function handleCardClick(event) {
 
 function handleCardKeydown(event) {
     const isActivateKey = event.key === 'Enter' || event.key === ' ';
-    if (!isActivateKey) {
-        return;
-    }
+    if (!isActivateKey) return;
 
     const card = event.target.closest('[data-destination-name]');
-    if (!card) {
-        return;
-    }
+    if (!card) return;
 
     event.preventDefault();
     const destinationName = card.getAttribute('data-destination-name') || '';
@@ -556,15 +538,14 @@ document.addEventListener('DOMContentLoaded', () => {
     ensureCatalogRendered();
     updateFavoriteButtons();
     trySaveRecommendationSnapshot();
+    renderRecommendationResults();                    // ← This is the key line
 
     document.addEventListener('click', handleCardClick);
     document.addEventListener('keydown', handleCardKeydown);
 
     const resultsContainer = document.getElementById('results-container');
     if (resultsContainer) {
-        const observer = new MutationObserver(() => {
-            updateFavoriteButtons();
-        });
+        const observer = new MutationObserver(() => updateFavoriteButtons());
         observer.observe(resultsContainer, { childList: true, subtree: true });
     }
 });
