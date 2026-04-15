@@ -59,6 +59,24 @@
             color: #0f373b;
         }
 
+        .hero-mid-glow {
+            isolation: isolate;
+        }
+
+        .hero-mid-glow::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            background: radial-gradient(circle at 50% 58%, rgba(45, 212, 191, 0.34) 0%, rgba(45, 212, 191, 0.12) 26%, transparent 58%);
+            z-index: 0;
+        }
+
+        html.dark .hero-mid-glow::before {
+            background: radial-gradient(circle at 50% 58%, rgba(45, 212, 191, 0.24) 0%, rgba(45, 212, 191, 0.08) 24%, transparent 56%);
+        }
+
     </style>
 
     <script src="navbar.js" defer></script>
@@ -69,13 +87,17 @@
 
     <section class="pt-28 pb-14 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-mint/20 shadow-2xl bg-gradient-to-r from-juniper via-[#0f4b50] to-juniper text-white">
+            <div class="hero-mid-glow relative overflow-hidden rounded-[2rem] border border-white/60 dark:border-mint/20 shadow-2xl bg-gradient-to-r from-juniper via-[#0f4b50] to-juniper text-white">
                 <div class="absolute inset-0 opacity-35" aria-hidden="true" style="background: radial-gradient(circle at 20% 20%, rgba(45,212,191,0.45), transparent 28%), radial-gradient(circle at 85% 15%, rgba(255,255,255,0.18), transparent 20%), radial-gradient(circle at 75% 85%, rgba(45,212,191,0.2), transparent 24%);"></div>
                 <div class="relative px-8 py-12 md:px-12 md:py-14">
-                    <p class="tracking-[0.24em] text-xs text-mint font-bold">Global destination catalog</p>
+                    <p class="tracking-[0.24em] text-xs text-mint font-bold">Global travel booking</p>
                     <div class="mt-4 max-w-4xl">
-                        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">Explore trekking destinations</h1>
-                        <p class="text-teal-100 mt-4 max-w-3xl text-sm md:text-lg">Discover curated routes across India and the world. Filter by difficulty, terrain, and altitude to quickly find your next adventure.</p>
+                        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">Book your next perfect trip</h1>
+                        <p class="text-teal-100 mt-4 max-w-3xl text-sm md:text-lg">Compare destinations, check travel styles, and book your ideal getaway with confidence. Discover handpicked options across beaches, cities, mountains, and adventure routes.</p>
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            <a href="book.html" class="inline-flex items-center px-5 py-2.5 rounded-full bg-mint text-juniper font-bold hover:bg-teal transition-colors shadow-lg">Book now</a>
+                            <a href="reviews.html" class="inline-flex items-center px-5 py-2.5 rounded-full border border-white/40 text-white font-semibold hover:bg-white/10 transition-colors">See traveler reviews</a>
+                        </div>
                     </div>
                 </div>
             </div>
