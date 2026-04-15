@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TripFit · Profile</title>
+    <title>TripFit Â· Profile</title>
     <link rel="icon" href="logo/TripFit_logo2-removebg-preview.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -102,7 +102,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <a href="favorites.html" class="px-4 py-3 rounded-xl bg-juniper text-white font-semibold text-center hover:bg-sea transition-colors">View Favorites</a>
                 <a href="history.html" class="px-4 py-3 rounded-xl bg-mint text-juniper font-semibold text-center hover:bg-teal transition-colors">Open History</a>
-                <a href="quiz.html" class="px-4 py-3 rounded-xl bg-white/90 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 font-semibold text-center hover:border-mint transition-colors">Retake Quiz</a>
+                <a href="quiz.html" class="px-4 py-3 rounded-xl bg-white/90 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 font-semibold text-center hover:border-mint transition-colors">Retake quiz</a>
                 <a href="all-destinations.html" class="px-4 py-3 rounded-xl bg-white/90 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 font-semibold text-center hover:border-mint transition-colors">Explore Destinations</a>
             </div>
         </article>
@@ -202,11 +202,11 @@ if (bookings.length > 0) {
         <div class="p-3 rounded-xl bg-gray-100/90 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <div>
                 <p class="font-semibold text-juniper dark:text-mint">${escapeHTML(title)}</p>
-                <p class="text-gray-600 dark:text-gray-300">${travellers} traveller${travellers === 1 ? '' : 's'} · ${escapeHTML(method)}</p>
+                <p class="text-gray-600 dark:text-gray-300">${travellers} traveller${travellers === 1 ? '' : 's'} Â· ${escapeHTML(method)}</p>
             </div>
             <div class="text-left md:text-right">
                 <p class="font-bold">INR ${amount.toLocaleString('en-IN')}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">${escapeHTML(reference)} · ${escapeHTML(date)}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">${escapeHTML(reference)} Â· ${escapeHTML(date)}</p>
             </div>
         </div>`;
     }).join('');
@@ -221,3 +221,4 @@ function logout() {
 
 </body>
 </html>
+
