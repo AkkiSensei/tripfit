@@ -22,21 +22,21 @@ const destinations = [
         activities: ["food", "history", "nightlife"]
     },
     {
-        name: "Taj Mahal, India", region: "Asia", image: "images1/TAJ MAHAL.jpg",
+        name: "Taj Mahal, India", region: "Asia", image: "images1/TAJ%20MAHAL.jpg",
         desc: "Iconic marble mausoleum and rich Mughal history",
         climate: ["city"], trip: ["cultural"],
         budget: ["budget", "midrange"], companions: ["solo", "couple", "family"],
         activities: ["history"]
     },
     {
-        name: "Swiss Alps, Switzerland", region: "Europe", image: "images1/SWISS ALPS.jpg",
+        name: "Swiss Alps, Switzerland", region: "Europe", image: "images1/SWISS%20ALPS.jpg",
         desc: "Snow-capped peaks, chocolate, and alpine hiking trails",
         climate: ["mountains"], trip: ["adventure", "relaxation"],
         budget: ["luxury"], companions: ["couple", "family", "friends"],
         activities: ["nature"]
     },
     {
-        name: "Paris, France", region: "Europe", image: "images/paris.jpg", 
+        name: "Paris, France", region: "Europe", image: "images1/PARIS.jpg", 
         desc: "Romantic streets, art museums, and fresh croissants",
         climate: ["city"], trip: ["cultural", "culinary", "relaxation"],
         budget: ["midrange", "luxury"], companions: ["solo", "couple", "friends"],
@@ -57,14 +57,14 @@ const destinations = [
         activities: ["nature"]
     },
     {
-        name: "New York City, USA", region: "North America", image: "images1/NEW YORK.jpg",
+        name: "New York City, USA", region: "North America", image: "images1/NEW%20YORK.jpg",
         desc: "Skyscrapers, Broadway shows, and diverse neighborhoods",
         climate: ["city"], trip: ["cultural", "culinary"],
         budget: ["luxury"], companions: ["solo", "couple", "friends"],
         activities: ["history", "food", "nightlife"]
     },
     {
-        name: "Grand Canyon, USA", region: "North America", image: "images1/GRAND CANYON.jpg",
+        name: "Grand Canyon, USA", region: "North America", image: "images1/GRAND%20CANYON.jpg",
         desc: "Majestic red rock formations and thrilling rafting",
         climate: ["mountains"], trip: ["adventure"],
         budget: ["budget", "midrange"], companions: ["solo", "family", "friends"],
@@ -78,14 +78,14 @@ const destinations = [
         activities: ["nature", "food"]
     },
     {
-        name: "Rio de Janeiro, Brazil", region: "South America", image: "images1/RIO DE JANEIRO.jpg",
+        name: "Rio de Janeiro, Brazil", region: "South America", image: "images1/RIO%20DE%20JANEIRO.jpg",
         desc: "Iconic beaches, samba rhythms, and Christ the Redeemer",
         climate: ["beach", "tropical"], trip: ["adventure", "cultural"],
         budget: ["midrange"], companions: ["solo", "couple", "friends"],
         activities: ["nature", "nightlife"]
     },
     {
-        name: "Machu Picchu, Peru", region: "South America", image: "images1/MACHU PICCHU.jpg",
+        name: "Machu Picchu, Peru", region: "South America", image: "images1/MACHU%20PICCHU.jpg",
         desc: "Ancient Incan citadel high in the Andes",
         climate: ["mountains"], trip: ["adventure", "cultural"],
         budget: ["midrange"], companions: ["solo", "couple", "friends"],
@@ -99,7 +99,7 @@ const destinations = [
         activities: ["nature"]
     },
     {
-        name: "Cape Town, South Africa", region: "Africa", image: "images1/CAPE TOWN.jpg",
+        name: "Cape Town, South Africa", region: "Africa", image: "images1/CAPE%20TOWN.jpg",
         desc: "Dramatic coastlines, wine regions, and penguin beaches",
         climate: ["beach", "mountains"], trip: ["adventure", "culinary"],
         budget: ["midrange"], companions: ["couple", "family", "friends"],
@@ -127,14 +127,14 @@ const destinations = [
         activities: ["nature", "nightlife"]
     },
     {
-        name: "Great Barrier Reef, Australia", region: "Oceania", image: "images1/GREAT BARRIER REEF.jpg",
+        name: "Great Barrier Reef, Australia", region: "Oceania", image: "images1/GREAT%20BARRIER%20REEF.jpg",
         desc: "World's largest coral reef system and marine life",
         climate: ["beach", "tropical"], trip: ["adventure", "relaxation"],
         budget: ["luxury"], companions: ["solo", "couple", "family"],
         activities: ["nature"]
     },
     {
-        name: "Queenstown, New Zealand", region: "Oceania", image: "images/Queenstown.jpg",
+        name: "Queenstown, New Zealand", region: "Oceania", image: "images1/QUEENSTOWN.jpg",
         desc: "Adventure capital, fjords, and extreme sports",
         climate: ["mountains"], trip: ["adventure"],
         budget: ["midrange", "luxury"], companions: ["solo", "friends"],
