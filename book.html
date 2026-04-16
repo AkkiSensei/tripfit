@@ -177,10 +177,19 @@
         .trip-location { font-size: 0.87rem; color: rgba(255,255,255,0.75); margin-bottom: 0.8rem; }
 
         .badges { display: flex; flex-wrap: wrap; gap: 6px; }
-        .badge { padding: 3px 11px; border-radius: 20px; font-size: 0.73rem; font-weight: 600; }
-        .b-teal  { background: rgba(45,212,191,0.22); color: #9ff3ea; border: 1px solid rgba(45,212,191,0.38); }
-        .b-amber { background: rgba(251,191,36,0.18); color: #fde68a; border: 1px solid rgba(251,191,36,0.32); }
-        .b-blue  { background: rgba(96,165,250,0.18); color: #bfdbfe; border: 1px solid rgba(96,165,250,0.3); }
+        .badge {
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            line-height: 1;
+            border: 1px solid transparent;
+            box-shadow: 0 6px 16px rgba(15,55,59,0.12);
+        }
+        .b-teal  { background: rgba(45,212,191,0.22); color: #dffcf8; border-color: rgba(45,212,191,0.38); }
+        .b-amber { background: rgba(251,191,36,0.18); color: #fff1c0; border-color: rgba(251,191,36,0.32); }
+        .b-blue  { background: rgba(96,165,250,0.18); color: #deecff; border-color: rgba(96,165,250,0.3); }
 
         .divider-h { height: 1px; background: rgba(255,255,255,0.15); margin: 1.1rem 0; }
 
@@ -378,31 +387,361 @@
         }
 
         html:not(.dark) .pay-card {
-            background: rgba(20,184,166,0.06);
-            border-color: rgba(20,184,166,0.2);
-            color: #273836;
+            background: rgba(255,255,255,0.96);
+            border-color: rgba(15,55,59,0.14);
+            color: #0f373b;
+            box-shadow: 0 8px 20px rgba(15,55,59,0.08);
         }
 
         html:not(.dark) .pay-card.selected {
-            background: rgba(20,184,166,0.14);
+            background: rgba(20,184,166,0.18);
             border-color: #14b8a6;
+            color: #0f373b;
+            box-shadow: 0 10px 24px rgba(20,184,166,0.18);
         }
 
         html:not(.dark) .pay-form {
-            background: rgba(15,55,59,0.05);
+            background: rgba(255,255,255,0.94);
             border-color: rgba(15,55,59,0.12);
+            box-shadow: 0 8px 20px rgba(15,55,59,0.06);
+        }
+
+        html:not(.dark) .pay-form-title {
+            color: rgba(15,55,59,0.78);
+        }
+
+        html:not(.dark) .pay-card > div:first-child {
+            color: #0f373b;
+        }
+
+        html:not(.dark) .pay-card > div:last-child {
+            color: rgba(15,55,59,0.62) !important;
+        }
+
+        html:not(.dark) .pay-grid {
+            gap: 0.9rem;
+        }
+
+        html:not(.dark) #page4 .card {
+            background: rgba(255,255,255,0.95);
+            color: #0f373b;
+        }
+
+        html:not(.dark) #page4 .card .est-row,
+        html:not(.dark) #page4 .card .est-total,
+        html:not(.dark) #page4 .card .pay-form,
+        html:not(.dark) #page4 .card .pay-form-title,
+        html:not(.dark) #page4 .card .pay-grid button,
+        html:not(.dark) #page4 .card #payHint {
+            color: #0f373b;
+        }
+
+        html:not(.dark) #page4 .card .est-row span:first-child {
+            color: rgba(15,55,59,0.76);
+        }
+
+        html:not(.dark) #page4 .card .est-row span:last-child {
+            color: #0f373b;
+        }
+
+        html:not(.dark) #page4 .card .btn-main {
+            color: #ffffff;
+        }
+
+        html:not(.dark) .badge {
+            background: #ffffff;
+            color: #0f373b;
+            border-color: rgba(15,55,59,0.14);
+            box-shadow: 0 6px 18px rgba(15,55,59,0.08);
+        }
+
+        html:not(.dark) .b-teal {
+            background: rgba(45,212,191,0.22);
+            color: #0f373b;
+            border-color: rgba(45,212,191,0.45);
+        }
+
+        html:not(.dark) .b-amber {
+            background: rgba(251,191,36,0.24);
+            color: #6b4b00;
+            border-color: rgba(251,191,36,0.42);
+        }
+
+        html:not(.dark) .b-blue {
+            background: rgba(96,165,250,0.20);
+            color: #153457;
+            border-color: rgba(96,165,250,0.36);
+        }
+
+        html:not(.dark) .card {
+            color: #273836;
+        }
+
+        html:not(.dark) .card label {
+            color: rgba(15,55,59,0.72) !important;
         }
 
         html:not(.dark) #trip-summary {
-            background: rgba(20,184,166,0.09) !important;
+            background: rgba(255,255,255,0.82) !important;
             border-left-color: #14b8a6 !important;
-            color: #273836 !important;
+            color: #0f373b !important;
+            box-shadow: 0 8px 24px rgba(15,55,59,0.08);
         }
 
         html:not(.dark) #trip-summary h4,
         html:not(.dark) #trip-price,
         html:not(.dark) .est-amount,
         html:not(.dark) .ref-num { color: #0f9f91 !important; }
+
+        html:not(.dark) #trip-summary #trip-quick-facts {
+            border-top-color: rgba(15,55,59,0.08) !important;
+        }
+
+        html:not(.dark) #trip-summary #trip-quick-facts span,
+        html:not(.dark) #trip-summary .package-tier-hint,
+        html:not(.dark) #trip-summary > div:nth-of-type(2) {
+            color: rgba(15,55,59,0.72) !important;
+        }
+
+        html:not(.dark) #trip-summary #trip-quick-facts strong {
+            color: #0f373b !important;
+        }
+
+        html:not(.dark) #trip-summary > div:last-of-type {
+            border-top-color: rgba(15,55,59,0.08) !important;
+        }
+
+        html:not(.dark) #trip-summary > div:last-of-type > div > button {
+            color: #0f373b !important;
+            background: rgba(15,55,59,0.06) !important;
+            border-color: rgba(15,55,59,0.18) !important;
+        }
+
+        html:not(.dark) #trip-summary > div:last-of-type > div > button[data-package-tier="standard"] {
+            background: rgba(20,184,166,0.16) !important;
+            border-color: #14b8a6 !important;
+            color: #0f373b !important;
+        }
+
+        html:not(.dark) #trip-summary > div:last-of-type > p {
+            color: rgba(15,55,59,0.68) !important;
+        }
+
+        html:not(.dark) .trip-hero h2,
+        html:not(.dark) .trip-hero .trip-location,
+        html:not(.dark) .trip-meta .val,
+        html:not(.dark) .est-row,
+        html:not(.dark) .ref-box,
+        html:not(.dark) .success-wrap p {
+            color: #0f373b;
+        }
+
+        html:not(.dark) .trip-location,
+        html:not(.dark) .step-label,
+        html:not(.dark) .pg-label,
+        html:not(.dark) .meta-v .lbl,
+        html:not(.dark) #payHint,
+        html:not(.dark) .success-wrap > p,
+        html:not(.dark) .ref-box > div:first-child {
+            color: rgba(15,55,59,0.68) !important;
+        }
+
+        html:not(.dark) .trip-hero h2 {
+            color: #0f373b !important;
+        }
+
+        html:not(.dark) .trip-thumb {
+            background: linear-gradient(135deg, #e7fffb 0%, #d2f5ef 100%);
+            border-color: rgba(20,184,166,0.18);
+            color: #0f373b;
+        }
+
+        html:not(.dark) .trip-summary-controls button,
+        html:not(.dark) .package-tier-btn {
+            min-height: 2.6rem;
+            padding: 0.72rem 0.9rem !important;
+            border-radius: 999px !important;
+            border-width: 1px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.01em;
+            box-shadow: 0 6px 16px rgba(15,55,59,0.08);
+        }
+
+        .package-tier-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 0.55rem;
+        }
+
+        html:not(.dark) .package-tier-label {
+            color: rgba(15,55,59,0.68);
+        }
+
+        html.dark .package-tier-label {
+            color: rgba(238,253,251,0.76);
+        }
+
+        html:not(.dark) .package-tier-btn {
+            background: rgba(255,255,255,0.92) !important;
+            border-color: rgba(15,55,59,0.14) !important;
+            color: #0f373b !important;
+        }
+
+        html.dark .package-tier-btn {
+            background: rgba(255,255,255,0.08) !important;
+            border-color: rgba(255,255,255,0.18) !important;
+            color: #eefdfb !important;
+        }
+
+        html:not(.dark) .package-tier-btn.is-active {
+            background: rgba(20,184,166,0.18) !important;
+            border-color: #14b8a6 !important;
+            color: #0f373b !important;
+        }
+
+        html.dark .package-tier-btn.is-active {
+            background: rgba(45,212,191,0.22) !important;
+            border-color: #2dd4bf !important;
+            color: #eafffd !important;
+        }
+
+        html:not(.dark) .package-tier-hint {
+            color: rgba(15,55,59,0.65) !important;
+        }
+
+        html.dark .package-tier-hint {
+            color: rgba(238,253,251,0.76) !important;
+        }
+
+        html:not(.dark) .package-tier-btn.is-active,
+        html:not(.dark) .package-tier-btn[data-package-tier="standard"] {
+            background: rgba(20,184,166,0.18) !important;
+            border-color: #14b8a6 !important;
+            color: #0f373b !important;
+        }
+
+        html:not(.dark) .package-tier-btn:not(.is-active) {
+            background: rgba(255,255,255,0.9) !important;
+            border-color: rgba(15,55,59,0.14) !important;
+            color: #0f373b !important;
+        }
+
+        html:not(.dark) .est-row span:first-child {
+            color: rgba(15,55,59,0.82);
+        }
+
+        html:not(.dark) .est-row span:last-child {
+            color: #0f373b;
+            font-weight: 700;
+        }
+
+        html:not(.dark) .counter {
+            background: rgba(15,55,59,0.04);
+        }
+
+        html:not(.dark) .c-btn {
+            background: rgba(20,184,166,0.12);
+            color: #0f373b;
+        }
+
+        html:not(.dark) .c-num {
+            color: #0f373b;
+        }
+
+        html.dark #trip-summary {
+            background: rgba(10, 20, 26, 0.7) !important;
+            border-left-color: #2dd4bf !important;
+            color: #eefdfb !important;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+        }
+
+        html.dark #trip-summary h4,
+        html.dark #trip-summary #trip-price,
+        html.dark #trip-summary #trip-region,
+        html.dark #trip-summary #trip-season,
+        html.dark #trip-summary #trip-style,
+        html.dark #trip-summary #trip-quick-facts strong {
+            color: #eefdfb !important;
+        }
+
+        html.dark #trip-summary #trip-quick-facts,
+        html.dark #trip-summary > div:last-of-type {
+            border-top-color: rgba(255,255,255,0.12) !important;
+        }
+
+        html.dark #trip-summary #trip-quick-facts span,
+        html.dark #trip-summary .package-tier-hint,
+        html.dark #trip-summary > div:last-of-type > p {
+            color: rgba(238,253,251,0.76) !important;
+        }
+
+        html.dark #trip-summary > div:last-of-type > div > button {
+            color: #eefdfb !important;
+            background: rgba(255,255,255,0.08) !important;
+            border-color: rgba(255,255,255,0.18) !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        html.dark #trip-summary > div:last-of-type > div > button[data-package-tier="standard"] {
+            background: rgba(45,212,191,0.22) !important;
+            border-color: #2dd4bf !important;
+            color: #eafffd !important;
+        }
+
+        html.dark .package-tier-btn {
+            background: rgba(255,255,255,0.08) !important;
+            border-color: rgba(255,255,255,0.18) !important;
+            color: #eefdfb !important;
+        }
+
+        html.dark .package-tier-btn.is-active,
+        html.dark .package-tier-btn[data-package-tier="standard"] {
+            background: rgba(45,212,191,0.22) !important;
+            border-color: #2dd4bf !important;
+            color: #eafffd !important;
+        }
+
+        html.dark .trip-thumb {
+            background: linear-gradient(135deg, #0d1e20 0%, #0f373b 68%, #12726e 100%);
+            border-color: rgba(45,212,191,0.24);
+        }
+
+        html.dark #page4 .card {
+            background: rgba(10, 20, 26, 0.72);
+            color: #eefdfb;
+            border-color: rgba(255,255,255,0.12);
+            box-shadow: 0 16px 30px rgba(0,0,0,0.2);
+        }
+
+        html.dark .pay-card {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.16);
+            color: #eefdfb;
+        }
+
+        html.dark .pay-card.selected {
+            background: rgba(45,212,191,0.20);
+            border-color: #2dd4bf;
+            color: #eafffd;
+        }
+
+        html.dark .pay-form {
+            background: rgba(0,0,0,0.16);
+            border-color: rgba(255,255,255,0.14);
+        }
+
+        html.dark .pay-form-title,
+        html.dark #page4 .card .est-row,
+        html.dark #page4 .card #payHint {
+            color: rgba(238,253,251,0.76);
+        }
+
+        html.dark #page4 .card .est-row span:last-child,
+        html.dark #page4 .card .est-total,
+        html.dark #page4 .card .est-amount {
+            color: #eefdfb;
+        }
     </style>
     <script src="navbar.js" defer></script>
 </head>
@@ -428,7 +767,7 @@
 
             <div class="card">
                 <div style="display:grid; gap:10px; margin-bottom:12px;">
-                    <label for="trip-select" style="font-size:0.8rem; color:rgba(255,255,255,0.78);">Destination</label>
+                    <label for="trip-select" style="font-size:0.8rem; color:rgba(15,55,59,0.72);">Destination</label>
                     <select id="trip-select" class="f-input">
                         <option value="">Select Destination</option>
                     </select>
@@ -447,26 +786,26 @@
                     </div>
                 </div>
 
-                <div id="trip-summary" style="display:none; margin-top:1.5rem; padding:1.2rem; background:rgba(45,212,191,0.1); border-left:4px solid #2dd4bf; border-radius:12px;">
+                <div id="trip-summary" style="display:none; margin-top:1.5rem; padding:1.2rem; background:rgba(255,255,255,0.86); border-left:4px solid #2dd4bf; border-radius:12px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                        <h4 style="margin:0; color:#2dd4bf; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px;">Trip Highlights</h4>
+                        <h4 style="margin:0; color:#0f9f91; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px;">Trip Highlights</h4>
                     </div>
                     <div id="trip-highlights-list" style="display:grid; grid-template-columns:repeat(2,1fr); gap:0.8rem; font-size:0.9rem;"></div>
-                    <div id="trip-quick-facts" style="display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);">
-                        <div><span style="color:rgba(255,255,255,0.64);">Region:</span> <strong id="trip-region">--</strong></div>
-                        <div><span style="color:rgba(255,255,255,0.64);">Best Season:</span> <strong id="trip-season">--</strong></div>
-                        <div><span style="color:rgba(255,255,255,0.64);">Travel Style:</span> <strong id="trip-style">--</strong></div>
-                        <div><span style="color:rgba(255,255,255,0.64);">Price:</span> <strong style="color:#2dd4bf;" id="trip-price">--</strong></div>
+                    <div id="trip-quick-facts" style="display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(15,55,59,0.08);">
+                        <div><span style="color:rgba(15,55,59,0.64);">Region:</span> <strong id="trip-region">--</strong></div>
+                        <div><span style="color:rgba(15,55,59,0.64);">Best Season:</span> <strong id="trip-season">--</strong></div>
+                        <div><span style="color:rgba(15,55,59,0.64);">Travel Style:</span> <strong id="trip-style">--</strong></div>
+                        <div><span style="color:rgba(15,55,59,0.64);">Price:</span> <strong style="color:#0f9f91;" id="trip-price">--</strong></div>
                     </div>
 
-                    <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);">
-                        <div style="font-size:0.78rem; color:rgba(255,255,255,0.72); margin-bottom:0.55rem; text-transform:uppercase; letter-spacing:1.2px;">Choose Package</div>
+                    <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(15,55,59,0.08);">
+                        <div class="package-tier-label">Choose Package</div>
                         <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0.55rem;">
-                            <button type="button" data-package-tier="budget" onclick="setPackageTier('budget')" style="padding:0.6rem 0.65rem; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff; cursor:pointer; font-size:0.82rem; font-weight:700;">Budget</button>
-                            <button type="button" data-package-tier="standard" onclick="setPackageTier('standard')" style="padding:0.6rem 0.65rem; border-radius:10px; border:1px solid rgba(45,212,191,0.8); background:rgba(45,212,191,0.2); color:#9ff3ea; cursor:pointer; font-size:0.82rem; font-weight:700;">Standard</button>
-                            <button type="button" data-package-tier="premium" onclick="setPackageTier('premium')" style="padding:0.6rem 0.65rem; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff; cursor:pointer; font-size:0.82rem; font-weight:700;">Premium</button>
+                               <button type="button" class="package-tier-btn" data-package-tier="budget" onclick="setPackageTier('budget')">Budget</button>
+                               <button type="button" class="package-tier-btn is-active" data-package-tier="standard" onclick="setPackageTier('standard')">Standard</button>
+                               <button type="button" class="package-tier-btn" data-package-tier="premium" onclick="setPackageTier('premium')">Premium</button>
                         </div>
-                        <p class="package-tier-hint" style="display:none; margin-top:0.55rem; font-size:0.78rem; color:rgba(255,255,255,0.65);">Select a destination first to choose package tier.</p>
+                            <p class="package-tier-hint" style="display:none; margin-top:0.55rem;">Select a destination first to choose package tier.</p>
                     </div>
                 </div>
 
@@ -532,13 +871,13 @@
                 </div>
 
                 <div style="margin-top:1rem;">
-                    <div style="font-size:0.78rem; color:rgba(255,255,255,0.72); margin-bottom:0.55rem; text-transform:uppercase; letter-spacing:1.2px;">Change Package In Real Time</div>
+                    <div class="package-tier-label">Change Package In Real Time</div>
                     <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0.55rem;">
-                        <button type="button" data-package-tier="budget" onclick="setPackageTier('budget')" style="padding:0.6rem 0.65rem; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff; cursor:pointer; font-size:0.82rem; font-weight:700;">Budget</button>
-                        <button type="button" data-package-tier="standard" onclick="setPackageTier('standard')" style="padding:0.6rem 0.65rem; border-radius:10px; border:1px solid rgba(45,212,191,0.8); background:rgba(45,212,191,0.2); color:#9ff3ea; cursor:pointer; font-size:0.82rem; font-weight:700;">Standard</button>
-                        <button type="button" data-package-tier="premium" onclick="setPackageTier('premium')" style="padding:0.6rem 0.65rem; border-radius:10px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff; cursor:pointer; font-size:0.82rem; font-weight:700;">Premium</button>
+                                     <button type="button" class="package-tier-btn" data-package-tier="budget" onclick="setPackageTier('budget')">Budget</button>
+                                     <button type="button" class="package-tier-btn is-active" data-package-tier="standard" onclick="setPackageTier('standard')">Standard</button>
+                                     <button type="button" class="package-tier-btn" data-package-tier="premium" onclick="setPackageTier('premium')">Premium</button>
                     </div>
-                    <p class="package-tier-hint" style="display:none; margin-top:0.55rem; font-size:0.78rem; color:rgba(255,255,255,0.65);">Select a destination first to choose package tier.</p>
+                          <p class="package-tier-hint" style="display:none; margin-top:0.55rem;">Select a destination first to choose package tier.</p>
                 </div>
 
                 <div class="divider-h"></div>
@@ -943,18 +1282,10 @@
         }
 
         function updatePackageButtons() {
-            const isLightMode = !document.documentElement.classList.contains('dark');
             document.querySelectorAll('[data-package-tier]').forEach((button) => {
                 const isActive = button.getAttribute('data-package-tier') === selectedPackageTier;
-                if (isLightMode) {
-                    button.style.borderColor = isActive ? 'rgba(20,184,166,0.9)' : 'rgba(15,55,59,0.24)';
-                    button.style.background = isActive ? 'rgba(20,184,166,0.14)' : 'rgba(15,55,59,0.05)';
-                    button.style.color = isActive ? '#0f9f91' : '#1f3b39';
-                } else {
-                    button.style.borderColor = isActive ? 'rgba(45,212,191,0.8)' : 'rgba(255,255,255,0.25)';
-                    button.style.background = isActive ? 'rgba(45,212,191,0.2)' : 'rgba(255,255,255,0.08)';
-                    button.style.color = isActive ? '#9ff3ea' : '#fff';
-                }
+                button.classList.toggle('is-active', isActive);
+                button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
             });
         }
 
