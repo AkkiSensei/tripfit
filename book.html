@@ -543,6 +543,20 @@
 
                 <div class="divider-h"></div>
 
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+                    <div>
+                        <h3 style="font-size:1rem; margin-bottom:4px;">Trip days</h3>
+                        <p style="font-size:0.8rem; color:rgba(255,255,255,0.65);">Adjust duration and see instant price updates</p>
+                    </div>
+                    <div class="counter">
+                        <button class="c-btn" id="durationMinusBtn" onclick="changeDuration(-1)" disabled>-</button>
+                        <span class="c-num" id="durationCount">--</span>
+                        <button class="c-btn" id="durationPlusBtn" onclick="changeDuration(1)" disabled>+</button>
+                    </div>
+                </div>
+
+                <div class="divider-h"></div>
+
                 <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0.6rem; margin-bottom:0.8rem;">
                     <div style="padding:0.65rem; border-radius:10px; border:1px solid rgba(255,255,255,0.16); background:rgba(255,255,255,0.06); text-align:center;">
                         <div style="font-size:0.72rem; color:rgba(255,255,255,0.68);">Budget</div>
@@ -561,7 +575,7 @@
                 <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
                     <div>
                         <h3 style="font-size:1rem; margin-bottom:4px;">Travellers</h3>
-                        <p style="font-size:0.8rem; color:rgba(255,255,255,0.65);">Min 1 - Max 12</p>
+                        <p id="travellerRangeHint" style="font-size:0.8rem; color:rgba(255,255,255,0.65);">Min 1 - Max 12</p>
                     </div>
                     <div class="counter">
                         <button class="c-btn" id="minusBtn" onclick="changePersons(-1)" disabled>-</button>
@@ -727,8 +741,14 @@
         let selectedMethod = null;
         let selectedDestination = null;
         let basePrice = 0;
+        let baseTierPrices = { budget: 0, standard: 0, premium: 0 };
         let selectedTierPrices = { budget: 0, standard: 0, premium: 0 };
         let selectedPackageTier = 'standard';
+        let baseDurationDays = 0;
+        let selectedDurationDays = 0;
+
+        const MIN_TRIP_DAYS = 2;
+        const MAX_TRIP_DAYS = 21;
 
         const packageConfig = {
             budget: {
@@ -766,6 +786,18 @@
         const params = new URLSearchParams(window.location.search);
         const destinationParam = params.get('destination') || params.get('id');
         const tierParam = params.get('tier');
+        const daysParam = params.get('days') || params.get('duration');
+        const companionsParam = (params.get('companions') || '').toLowerCase();
+
+        function getDefaultPersonsFromCompanions(companions) {
+            if (companions === 'couple') return 2;
+            if (companions === 'family') return 3;
+            return 1;
+        }
+
+        const defaultPersons = getDefaultPersonsFromCompanions(companionsParam);
+        const minPersons = defaultPersons;
+        persons = defaultPersons;
 
         const select = document.getElementById('trip-select');
         const toPlanBtn = document.getElementById('toPlanBtn');
@@ -827,6 +859,76 @@
             return 'INR ' + value.toLocaleString('en-IN');
         }
 
+        function syncPersonsUI() {
+            document.getElementById('personCount').textContent = String(persons);
+            document.getElementById('minusBtn').disabled = persons <= minPersons;
+            document.getElementById('plusBtn').disabled = persons >= 12;
+
+            const hint = document.getElementById('travellerRangeHint');
+            if (hint) {
+                hint.textContent = `Min ${minPersons} - Max 12`;
+            }
+        }
+
+        function normalizeDurationDays(value, fallback) {
+            const parsed = Number(value);
+            if (Number.isNaN(parsed)) return fallback;
+            return Math.max(MIN_TRIP_DAYS, Math.min(MAX_TRIP_DAYS, Math.round(parsed)));
+        }
+
+        function getDurationMultiplier() {
+            if (!baseDurationDays || !selectedDurationDays) return 1;
+            return selectedDurationDays / baseDurationDays;
+        }
+
+        function updateDurationUI() {
+            const durationCount = document.getElementById('durationCount');
+            const minusBtn = document.getElementById('durationMinusBtn');
+            const plusBtn = document.getElementById('durationPlusBtn');
+
+            if (selectedDestination && selectedDurationDays > 0) {
+                document.getElementById('badge-duration').textContent = `${selectedDurationDays} days`;
+                document.getElementById('meta-duration').textContent = `${selectedDurationDays} days`;
+                if (durationCount) durationCount.textContent = String(selectedDurationDays);
+            } else {
+                document.getElementById('badge-duration').textContent = '-- days';
+                document.getElementById('meta-duration').textContent = '--';
+                if (durationCount) durationCount.textContent = '--';
+            }
+
+            if (minusBtn) minusBtn.disabled = !selectedDestination || selectedDurationDays <= MIN_TRIP_DAYS;
+            if (plusBtn) plusBtn.disabled = !selectedDestination || selectedDurationDays >= MAX_TRIP_DAYS;
+        }
+
+        function recalculateDurationPricing() {
+            if (!selectedDestination || !baseTierPrices.standard) return;
+
+            const multiplier = getDurationMultiplier();
+            selectedTierPrices = {
+                budget: Math.round(baseTierPrices.budget * multiplier),
+                standard: Math.round(baseTierPrices.standard * multiplier),
+                premium: Math.round(baseTierPrices.premium * multiplier)
+            };
+
+            basePrice = selectedTierPrices[selectedPackageTier];
+            document.getElementById('meta-price').textContent = `${formatInr(basePrice)} (${packageConfig[selectedPackageTier].label})`;
+
+            updateEstimateTierRows();
+            updateEstimate();
+            showTripSummary(selectedDestination);
+
+            if (document.getElementById('page2').classList.contains('active')) {
+                buildPlan(selectedDestination);
+            }
+        }
+
+        function changeDuration(delta) {
+            if (!selectedDestination) return;
+            selectedDurationDays = normalizeDurationDays(selectedDurationDays + delta, selectedDurationDays || baseDurationDays || 5);
+            updateDurationUI();
+            recalculateDurationPricing();
+        }
+
         function updateEstimateTierRows() {
             if (!selectedTierPrices.standard) {
                 document.getElementById('est-tier-budget').textContent = 'INR --';
@@ -871,8 +973,11 @@
         function clearSelectedState() {
             selectedDestination = null;
             basePrice = 0;
+            baseTierPrices = { budget: 0, standard: 0, premium: 0 };
             selectedTierPrices = { budget: 0, standard: 0, premium: 0 };
             selectedPackageTier = 'standard';
+            baseDurationDays = 0;
+            selectedDurationDays = 0;
 
             toPlanBtn.disabled = true;
             document.getElementById('trip-summary').style.display = 'none';
@@ -880,12 +985,12 @@
             document.getElementById('trip-name').textContent = 'Select a destination to begin';
             document.getElementById('trip-location').textContent = 'Region details will appear here';
             document.getElementById('badge-style').textContent = '--';
-            document.getElementById('badge-duration').textContent = '-- days';
             document.getElementById('badge-climate').textContent = '--';
             document.getElementById('meta-difficulty').textContent = '--';
-            document.getElementById('meta-duration').textContent = '--';
             document.getElementById('meta-price').textContent = 'INR --';
+            syncPersonsUI();
 
+            updateDurationUI();
             updatePackageButtons();
             togglePackageTierAvailability(false);
             updateEstimateTierRows();
@@ -916,11 +1021,13 @@
 
         function renderTripDetails(dest) {
             selectedDestination = dest;
-            selectedTierPrices = getTierPrices(dest);
+            baseTierPrices = getTierPrices(dest);
+            selectedTierPrices = { ...baseTierPrices };
             selectedPackageTier = 'standard';
             basePrice = selectedTierPrices.standard;
 
-            const duration = deriveDuration(dest);
+            baseDurationDays = deriveDuration(dest);
+            selectedDurationDays = normalizeDurationDays(daysParam, baseDurationDays);
             const style = titleCase(dest.trip[0] || 'explorer');
             const climate = titleCase(dest.climate[0] || 'city');
 
@@ -928,18 +1035,17 @@
             document.getElementById('trip-name').textContent = dest.name;
             document.getElementById('trip-location').textContent = dest.region;
             document.getElementById('badge-style').textContent = style;
-            document.getElementById('badge-duration').textContent = `${duration} days`;
             document.getElementById('badge-climate').textContent = climate;
             document.getElementById('meta-difficulty').textContent = deriveDifficulty(dest);
-            document.getElementById('meta-duration').textContent = `${duration} days`;
             document.getElementById('meta-price').textContent = `${formatInr(basePrice)} (${packageConfig[selectedPackageTier].label})`;
 
             toPlanBtn.disabled = false;
+            syncPersonsUI();
+            updateDurationUI();
             togglePackageTierAvailability(true);
             updatePackageButtons();
             showTripSummary(dest);
-            updateEstimateTierRows();
-            updateEstimate();
+            recalculateDurationPricing();
         }
 
         function showTripSummary(dest) {
@@ -964,7 +1070,7 @@
 
         function buildPlan(dest) {
             const packageDetails = packageConfig[selectedPackageTier] || packageConfig.standard;
-            const duration = deriveDuration(dest);
+            const duration = selectedDurationDays || deriveDuration(dest);
             const terrain = deriveTerrain(dest);
             const climate = titleCase(dest.climate[0] || 'city');
             const activities = (dest.activities || []).map(titleCase).join(', ');
@@ -995,10 +1101,8 @@
         }
 
         function changePersons(delta) {
-            persons = Math.max(1, Math.min(12, persons + delta));
-            document.getElementById('personCount').textContent = persons;
-            document.getElementById('minusBtn').disabled = persons <= 1;
-            document.getElementById('plusBtn').disabled = persons >= 12;
+            persons = Math.max(minPersons, Math.min(12, persons + delta));
+            syncPersonsUI();
             updateEstimateTierRows();
             updateEstimate();
         }
@@ -1014,7 +1118,7 @@
             const tax = Math.round(base * TAX_RATE);
             const total = base + tax + INSURANCE;
 
-            document.getElementById('estDesc').textContent = `${formatInr(basePrice)} (${packageConfig[selectedPackageTier].label}) x ${persons}${persons === 1 ? ' person' : ' persons'}`;
+            document.getElementById('estDesc').textContent = `${formatInr(basePrice)} (${packageConfig[selectedPackageTier].label}, ${selectedDurationDays || '--'} days) x ${persons}${persons === 1 ? ' person' : ' persons'}`;
             document.getElementById('estBase').textContent = formatInr(base);
             document.getElementById('estTax').textContent = formatInr(tax);
             document.getElementById('estInsurance').textContent = formatInr(INSURANCE);
@@ -1023,7 +1127,7 @@
 
         function goToPayment() {
             if (!selectedDestination) return;
-            document.getElementById('p4summary').textContent = `${selectedDestination.name} · ${packageConfig[selectedPackageTier].label} · ${persons}${persons === 1 ? ' person' : ' persons'}`;
+            document.getElementById('p4summary').textContent = `${selectedDestination.name} · ${selectedDurationDays || '--'} days · ${packageConfig[selectedPackageTier].label} · ${persons}${persons === 1 ? ' person' : ' persons'}`;
             document.getElementById('p4total').textContent = formatInr(getTotal());
             showPage('page4');
         }
@@ -1172,11 +1276,9 @@
         }
 
         function resetAll() {
-            persons = 1;
+            persons = defaultPersons;
             selectedMethod = null;
-            document.getElementById('personCount').textContent = '1';
-            document.getElementById('minusBtn').disabled = true;
-            document.getElementById('plusBtn').disabled = false;
+            syncPersonsUI();
             document.getElementById('payNowBtn').disabled = true;
             document.getElementById('payHint').textContent = 'Select a payment method to continue.';
             document.querySelectorAll('.pay-card').forEach((card) => card.classList.remove('selected'));
