@@ -1,140 +1,140 @@
-// 1. The Destination Database (Linked to local images1 folder)
+// 1. The Destination Database (Linked to the local images folder)
 const destinations = [
     {
-        name: "Bali, Indonesia", region: "Asia", image: "images1/BALI.jpg",
+        name: "Bali, Indonesia", region: "Asia", image: "images/bali.png",
         desc: "Tropical beaches, ancient temples, and serene yoga retreats",
         climate: ["beach", "tropical"], trip: ["relaxation", "cultural"],
         budget: ["budget", "midrange"], companions: ["solo", "couple", "friends"],
         activities: ["nature"]
     },
     {
-        name: "Tokyo, Japan", region: "Asia", image: "images1/TOKYO.jpg",
+        name: "Tokyo, Japan", region: "Asia", image: "images/tokyo.jpg",
         desc: "Vibrant city life, cherry blossoms, and world-class cuisine",
         climate: ["city"], trip: ["cultural", "culinary"],
         budget: ["midrange", "luxury"], companions: ["solo", "couple", "friends"],
         activities: ["food", "nightlife"]
     },
     {
-        name: "Bangkok, Thailand", region: "Asia", image: "images1/BANGKOK.jpg",
+        name: "Bangkok, Thailand", region: "Asia", image: "images/bangkok.jpg",
         desc: "Bustling markets, golden temples, and street food adventures",
         climate: ["city", "tropical"], trip: ["cultural", "culinary"],
         budget: ["budget", "midrange"], companions: ["solo", "couple", "friends"],
         activities: ["food", "history", "nightlife"]
     },
     {
-        name: "Taj Mahal, India", region: "Asia", image: "images1/TAJ%20MAHAL.jpg",
+        name: "Taj Mahal, India", region: "Asia", image: "images/Taj_Mahal_(Edited).jpeg",
         desc: "Iconic marble mausoleum and rich Mughal history",
         climate: ["city"], trip: ["cultural"],
         budget: ["budget", "midrange"], companions: ["solo", "couple", "family"],
         activities: ["history"]
     },
     {
-        name: "Swiss Alps, Switzerland", region: "Europe", image: "images1/SWISS%20ALPS.jpg",
+        name: "Swiss Alps, Switzerland", region: "Europe", image: "images/swiss.png",
         desc: "Snow-capped peaks, chocolate, and alpine hiking trails",
         climate: ["mountains"], trip: ["adventure", "relaxation"],
         budget: ["luxury"], companions: ["couple", "family", "friends"],
         activities: ["nature"]
     },
     {
-        name: "Paris, France", region: "Europe", image: "images1/PARIS.jpg", 
+        name: "Paris, France", region: "Europe", image: "images/paris.jpg", 
         desc: "Romantic streets, art museums, and fresh croissants",
         climate: ["city"], trip: ["cultural", "culinary", "relaxation"],
         budget: ["midrange", "luxury"], companions: ["solo", "couple", "friends"],
         activities: ["history", "food"]
     },
     {
-        name: "Santorini, Greece", region: "Europe", image: "images1/SANTORINI.jpg",
+        name: "Santorini, Greece", region: "Europe", image: "images/santorini.jpg",
         desc: "Cliffside villages, azure waters, and volcanic sunsets",
         climate: ["beach"], trip: ["relaxation"],
         budget: ["luxury"], companions: ["couple"],
         activities: ["nature", "food"]
     },
     {
-        name: "Reykjavik, Iceland", region: "Europe", image: "images1/ICELAND.png",
+        name: "Reykjavik, Iceland", region: "Europe", image: "images/reykjavik.jpg",
         desc: "Northern lights, hot springs, and rugged landscapes",
         climate: ["mountains"], trip: ["adventure"],
         budget: ["luxury"], companions: ["solo", "couple", "friends"],
         activities: ["nature"]
     },
     {
-        name: "New York City, USA", region: "North America", image: "images1/NEW%20YORK.jpg",
+        name: "New York City, USA", region: "North America", image: "images/new york.jpg",
         desc: "Skyscrapers, Broadway shows, and diverse neighborhoods",
         climate: ["city"], trip: ["cultural", "culinary"],
         budget: ["luxury"], companions: ["solo", "couple", "friends"],
         activities: ["history", "food", "nightlife"]
     },
     {
-        name: "Grand Canyon, USA", region: "North America", image: "images1/GRAND%20CANYON.jpg",
+        name: "Grand Canyon, USA", region: "North America", image: "images/grand canyon.jpg",
         desc: "Majestic red rock formations and thrilling rafting",
         climate: ["mountains"], trip: ["adventure"],
         budget: ["budget", "midrange"], companions: ["solo", "family", "friends"],
         activities: ["nature"]
     },
     {
-        name: "Vancouver, Canada", region: "North America", image: "images1/VANCOUVER.jpg",
+        name: "Vancouver, Canada", region: "North America", image: "images/vancouver.jpg",
         desc: "Coastal beauty, fresh seafood, and urban parks",
         climate: ["city", "mountains"], trip: ["adventure", "culinary"],
         budget: ["midrange"], companions: ["solo", "couple", "family"],
         activities: ["nature", "food"]
     },
     {
-        name: "Rio de Janeiro, Brazil", region: "South America", image: "images1/RIO%20DE%20JANEIRO.jpg",
+        name: "Rio de Janeiro, Brazil", region: "South America", image: "images/rio de janeiro.jpg",
         desc: "Iconic beaches, samba rhythms, and Christ the Redeemer",
         climate: ["beach", "tropical"], trip: ["adventure", "cultural"],
         budget: ["midrange"], companions: ["solo", "couple", "friends"],
         activities: ["nature", "nightlife"]
     },
     {
-        name: "Machu Picchu, Peru", region: "South America", image: "images1/MACHU%20PICCHU.jpg",
+        name: "Machu Picchu, Peru", region: "South America", image: "images/machu picchu.jpg",
         desc: "Ancient Incan citadel high in the Andes",
         climate: ["mountains"], trip: ["adventure", "cultural"],
         budget: ["midrange"], companions: ["solo", "couple", "friends"],
         activities: ["history", "nature"]
     },
     {
-        name: "Galapagos Islands, Ecuador", region: "South America", image: "images1/ECUADOR.jpg",
+        name: "Galapagos Islands, Ecuador", region: "South America", image: "images/galapagos.jpg",
         desc: "Unique wildlife, volcanic islands, and Darwin's legacy",
         climate: ["beach", "tropical"], trip: ["adventure"],
         budget: ["luxury"], companions: ["couple", "family"],
         activities: ["nature"]
     },
     {
-        name: "Cape Town, South Africa", region: "Africa", image: "images1/CAPE%20TOWN.jpg",
+        name: "Cape Town, South Africa", region: "Africa", image: "images/cape town.jpg",
         desc: "Dramatic coastlines, wine regions, and penguin beaches",
         climate: ["beach", "mountains"], trip: ["adventure", "culinary"],
         budget: ["midrange"], companions: ["couple", "family", "friends"],
         activities: ["nature", "food"]
     },
     {
-        name: "Serengeti, Tanzania", region: "Africa", image: "images1/SERENGETI.jpg",
+        name: "Serengeti, Tanzania", region: "Africa", image: "images/serengeti.jpg",
         desc: "Great Migration, big game safaris, and endless plains",
         climate: ["tropical"], trip: ["adventure"],
         budget: ["luxury"], companions: ["couple", "family"],
         activities: ["nature"]
     },
     {
-        name: "Marrakech, Morocco", region: "Africa", image: "images1/MARAKECH.jpg",
+        name: "Marrakech, Morocco", region: "Africa", image: "images/marrakech.jpg",
         desc: "Colorful souks, riads, and Sahara desert gateways",
         climate: ["city"], trip: ["cultural"],
         budget: ["budget", "midrange"], companions: ["solo", "couple", "friends"],
         activities: ["history", "food"]
     },
     {
-        name: "Sydney, Australia", region: "Oceania", image: "images1/SYDNEY.jpg",
+        name: "Sydney, Australia", region: "Oceania", image: "images/sydney.jpg",
         desc: "Iconic harbor, surf beaches, and vibrant arts scene",
         climate: ["city", "beach"], trip: ["adventure", "cultural"],
         budget: ["midrange", "luxury"], companions: ["solo", "couple", "family"],
         activities: ["nature", "nightlife"]
     },
     {
-        name: "Great Barrier Reef, Australia", region: "Oceania", image: "images1/GREAT%20BARRIER%20REEF.jpg",
+        name: "Great Barrier Reef, Australia", region: "Oceania", image: "images/great barrier reef.jpg",
         desc: "World's largest coral reef system and marine life",
         climate: ["beach", "tropical"], trip: ["adventure", "relaxation"],
         budget: ["luxury"], companions: ["solo", "couple", "family"],
         activities: ["nature"]
     },
     {
-        name: "Queenstown, New Zealand", region: "Oceania", image: "images1/QUEENSTOWN.jpg",
+        name: "Queenstown, New Zealand", region: "Oceania", image: "images/Queenstown.jpg",
         desc: "Adventure capital, fjords, and extreme sports",
         climate: ["mountains"], trip: ["adventure"],
         budget: ["midrange", "luxury"], companions: ["solo", "friends"],
