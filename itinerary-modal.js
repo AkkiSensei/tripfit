@@ -102,14 +102,88 @@ function createItineraryModal() {
 	document.body.appendChild(modal);
 }
 
+function cloneItineraryData(itinerary) {
+	try {
+		return JSON.parse(JSON.stringify(itinerary));
+	} catch {
+		return itinerary;
+	}
+}
+
+function getRequestedTripDays() {
+	const params = new URLSearchParams(window.location.search);
+	const fromQuery = Number(params.get('days') || params.get('duration') || 0);
+
+	if (!Number.isNaN(fromQuery) && fromQuery >= 2) {
+		return Math.round(fromQuery);
+	}
+
+	return null;
+}
+
+function adaptItineraryToRequestedDays(itinerary, requestedDays) {
+	if (!itinerary || !requestedDays) return itinerary;
+
+	const dayPlan = Array.isArray(itinerary.dayByDay) ? itinerary.dayByDay : [];
+	const baseDays = Number(itinerary.overview && itinerary.overview.duration) || dayPlan.length || requestedDays;
+	const targetDays = Math.max(2, Math.round(requestedDays));
+
+	let adaptedPlan = dayPlan.map((day) => ({ ...day }));
+
+	if (adaptedPlan.length > targetDays) {
+		adaptedPlan = adaptedPlan.slice(0, targetDays);
+	}
+
+	if (adaptedPlan.length < targetDays) {
+		const template = adaptedPlan[adaptedPlan.length - 1] || {
+			title: 'Exploration day',
+			distance: 'Flexible route',
+			altitude: 'As per destination',
+			duration: 'Full day',
+			activities: 'Guided sightseeing and local experiences.',
+			meals: 'Breakfast and dinner',
+			accommodation: 'Hotel / stay option'
+		};
+
+		for (let dayNumber = adaptedPlan.length + 1; dayNumber <= targetDays; dayNumber += 1) {
+			const isLastDay = dayNumber === targetDays;
+			adaptedPlan.push({
+				...template,
+				title: isLastDay ? 'Departure and wrap-up' : `Exploration day ${dayNumber}`,
+				distance: isLastDay ? 'Departure transfer' : template.distance,
+				duration: isLastDay ? 'Half day' : template.duration,
+				activities: isLastDay
+					? 'Checkout, transfer, and return journey.'
+					: 'Extended exploration, optional activities, and local experiences.'
+			});
+		}
+	}
+
+	adaptedPlan = adaptedPlan.map((day, index) => ({ ...day, day: index + 1 }));
+
+	itinerary.dayByDay = adaptedPlan;
+	itinerary.overview.duration = targetDays;
+	itinerary.meta = {
+		...(itinerary.meta || {}),
+		baseDays,
+		requestedDays: targetDays,
+		durationMultiplier: baseDays > 0 ? targetDays / baseDays : 1
+	};
+
+	return itinerary;
+}
+
 function openItineraryModal(trekName) {
 	createItineraryModal();
 
-	const itinerary = getTripItineraryCompat(trekName);
-	if (!itinerary) {
+	const rawItinerary = getTripItineraryCompat(trekName);
+	if (!rawItinerary) {
 		alert('Trip details not found');
 		return;
 	}
+
+	const requestedDays = getRequestedTripDays();
+	const itinerary = adaptItineraryToRequestedDays(cloneItineraryData(rawItinerary), requestedDays);
 
 	const trek = getDestinationsCatalog().find((d) => d.name === trekName) || null;
 
@@ -215,32 +289,41 @@ function populatePackingTab(itinerary) {
 function populateCostTab(itinerary, trek) {
 	const tierConfig = getItineraryTierConfig(currentItineraryTier);
 	const costBreak = itinerary.costBreakdown || {};
+	const itineraryMeta = itinerary.meta || {};
+
+	const baseDays = Number(itineraryMeta.baseDays || itinerary.overview.duration || (itinerary.dayByDay || []).length || 5);
+	const requestedDays = Number(itineraryMeta.requestedDays || itinerary.overview.duration || baseDays);
+	const durationMultiplier = baseDays > 0 ? requestedDays / baseDays : 1;
 
 	const estimate = typeof window.getTrekPriceEstimate === 'function' ? window.getTrekPriceEstimate(trek) : null;
 	const fallbackBase = Number(costBreak.basePrice || 8500);
-	const basePrice = estimate ? Number(estimate[currentItineraryTier] || estimate.standard || fallbackBase) : fallbackBase;
+	const tierBase = estimate ? Number(estimate[currentItineraryTier] || estimate.standard || fallbackBase) : fallbackBase;
+	const basePrice = Math.round(tierBase * durationMultiplier);
 	const gstAmount = Math.round(basePrice * 0.05);
-	const insurance = Number(costBreak.insurance || 299);
+	const insuranceBase = Number(costBreak.insurance || 299);
+	const insurance = Math.round(insuranceBase * Math.max(durationMultiplier, 1));
 	const total = basePrice + gstAmount + insurance;
 
 	const standardReference = estimate ? Number(estimate.standard || fallbackBase) : fallbackBase;
-	const budgetPrice = estimate ? Number(estimate.budget || standardReference) : Math.round(standardReference * 0.85);
-	const standardPrice = standardReference;
-	const premiumPrice = estimate ? Number(estimate.premium || standardReference) : Math.round(standardReference * 1.35);
+	const budgetReference = estimate ? Number(estimate.budget || standardReference) : Math.round(standardReference * 0.85);
+	const premiumReference = estimate ? Number(estimate.premium || standardReference) : Math.round(standardReference * 1.35);
+	const budgetPrice = Math.round(budgetReference * durationMultiplier);
+	const standardPrice = Math.round(standardReference * durationMultiplier);
+	const premiumPrice = Math.round(premiumReference * durationMultiplier);
 
 	const mergedInclusions = [...(costBreak.inclusions || []), ...tierConfig.inclusions];
 	const mergedExclusions = [...(costBreak.exclusions || []), ...tierConfig.exclusions];
 
 	const html = `
 		<div class="cost-breakdown">
-			<div class="cost-row"><span>Budget Package</span><strong>INR ${budgetPrice.toLocaleString('en-IN')}</strong></div>
-			<div class="cost-row"><span>Standard Package</span><strong>INR ${standardPrice.toLocaleString('en-IN')}</strong></div>
-			<div class="cost-row"><span>Premium Package</span><strong>INR ${premiumPrice.toLocaleString('en-IN')}</strong></div>
-			<div class="cost-row"><span>${tierConfig.label} Base Price (per person)</span><strong>INR ${basePrice.toLocaleString('en-IN')}</strong></div>
+			<div class="cost-row"><span>Budget package (${requestedDays} days)</span><strong>INR ${budgetPrice.toLocaleString('en-IN')}</strong></div>
+			<div class="cost-row"><span>Standard package (${requestedDays} days)</span><strong>INR ${standardPrice.toLocaleString('en-IN')}</strong></div>
+			<div class="cost-row"><span>Premium package (${requestedDays} days)</span><strong>INR ${premiumPrice.toLocaleString('en-IN')}</strong></div>
+			<div class="cost-row"><span>${tierConfig.label} base price (per person, ${requestedDays} days)</span><strong>INR ${basePrice.toLocaleString('en-IN')}</strong></div>
 			<div class="cost-row"><span>GST (5%)</span><strong>INR ${gstAmount.toLocaleString('en-IN')}</strong></div>
 			<div class="cost-row"><span>Travel Insurance</span><strong>INR ${insurance.toLocaleString('en-IN')}</strong></div>
-			<div class="cost-row total"><span>Total per Person (${tierConfig.label})</span><strong>INR ${total.toLocaleString('en-IN')}</strong></div>
-			<div class="cost-note">Note: Prices are indicative. Seasonal availability can affect final rates.</div>
+			<div class="cost-row total"><span>Total per person (${tierConfig.label})</span><strong>INR ${total.toLocaleString('en-IN')}</strong></div>
+			<div class="cost-note">Note: Prices are indicative. Trip duration and seasonal availability can affect final rates.</div>
 		</div>
 		<div class="cost-inclusions">
 			<h4><i class="fas fa-check-circle"></i> Inclusions (${tierConfig.label})</h4>
@@ -352,7 +435,10 @@ function bookNowFromItinerary() {
 	closeItineraryModal();
 	const tripName = encodeURIComponent(currentSelectedTrek.name || currentSelectedTrek.id || '');
 	const tierKey = encodeURIComponent(currentItineraryTier);
-	window.location.href = `book.html?destination=${tripName}&tier=${tierKey}`;
+	const params = new URLSearchParams(window.location.search);
+	const companions = encodeURIComponent(params.get('companions') || '');
+	const days = encodeURIComponent(params.get('days') || params.get('duration') || '');
+	window.location.href = `book.html?destination=${tripName}&tier=${tierKey}&companions=${companions}&days=${days}`;
 }
 
 function formatINR(value) {
