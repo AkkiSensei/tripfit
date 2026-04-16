@@ -22,6 +22,13 @@ const destinations = [
         activities: ["food", "history", "nightlife"]
     },
     {
+        name: "Lyari Town, Pakistan", region: "Asia", image: "images/lyari-town.jpg",
+        desc: "Street football culture, vibrant food spots, and rich local heritage",
+        climate: ["city"], trip: ["cultural", "culinary"],
+        budget: ["budget", "midrange"], companions: ["solo", "couple", "friends", "family"],
+        activities: ["food", "history", "nightlife"]
+    },
+    {
         name: "Taj Mahal, India", region: "Asia", image: "images/Taj_Mahal_(Edited).jpeg",
         desc: "Iconic marble mausoleum and rich Mughal history",
         climate: ["city"], trip: ["cultural"],
