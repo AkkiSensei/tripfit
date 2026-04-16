@@ -243,7 +243,7 @@ function buildCardHTML(dest, isMatchResult = false) {
     }
 
     return `
-        <div class="bg-white dark:bg-slate-900 rounded-[1.65rem] overflow-hidden shadow-[0_18px_35px_rgba(15,55,59,0.12)] dark:shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-mint/40 hover:shadow-[0_0_0_1px_rgba(45,212,191,0.28),0_24px_60px_rgba(45,212,191,0.22)] border border-gray-200 dark:border-slate-800/90 flex flex-col h-full min-h-[33rem] relative" role="button" tabindex="0" data-destination-name="${safeName}">
+        <div class="tripfit-card bg-white dark:bg-slate-900 rounded-[1.65rem] overflow-hidden shadow-[0_18px_35px_rgba(15,55,59,0.12)] dark:shadow-xl transition-all duration-300 hover:-translate-y-1.5 border border-gray-200 dark:border-slate-800/90 flex flex-col h-full min-h-[33rem] relative" role="button" tabindex="0" data-destination-name="${safeName}">
             ${matchBadge}
             <img src="${escapeHTML(dest.image)}" alt="${safeName}" class="w-full h-60 md:h-68 object-cover">
             <div class="p-7 md:p-8 flex-1 flex flex-col bg-gradient-to-b from-white to-[#f7fbfb] dark:from-slate-800 dark:to-slate-900">
@@ -276,6 +276,36 @@ function formatSentenceCase(value) {
     const text = String(value ?? '').trim().toLowerCase();
     if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function ensureTripfitCardEffectsStyles() {
+    if (document.getElementById('tripfit-card-effects')) return;
+
+    const style = document.createElement('style');
+    style.id = 'tripfit-card-effects';
+    style.textContent = `
+        .tripfit-card {
+            transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease;
+        }
+
+        .tripfit-card:hover {
+            border-color: rgba(45, 212, 191, 0.45) !important;
+            box-shadow:
+                0 0 0 1px rgba(45, 212, 191, 0.28),
+                0 24px 60px rgba(45, 212, 191, 0.22),
+                0 0 26px rgba(45, 212, 191, 0.20) !important;
+        }
+
+        html.dark .tripfit-card:hover {
+            border-color: rgba(45, 212, 191, 0.42) !important;
+            box-shadow:
+                0 0 0 1px rgba(45, 212, 191, 0.26),
+                0 24px 62px rgba(45, 212, 191, 0.24),
+                0 0 30px rgba(45, 212, 191, 0.22) !important;
+        }
+    `;
+
+    document.head.appendChild(style);
 }
 
 function safeParseJSON(value, fallback) {
@@ -412,7 +442,8 @@ function normalizePreferencesFromQuery(searchParams) {
         trip: params.get('trip') || '',
         budget: params.get('budget') || '',
         companions: params.get('companions') || '',
-        activities: params.get('activities') || ''
+        activities: params.get('activities') || '',
+        days: params.get('days') || params.get('duration') || ''
     };
 }
 
@@ -537,6 +568,7 @@ function ensureCatalogRendered() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    ensureTripfitCardEffectsStyles();
     ensureCatalogRendered();
     updateFavoriteButtons();
     trySaveRecommendationSnapshot();
