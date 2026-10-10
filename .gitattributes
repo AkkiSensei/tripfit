@@ -1,0 +1,19 @@
+# Enforce consistent line endings (CRLF on Windows checkout, LF in repo)
+* text=auto
+
+# Force LF for web assets to prevent encoding corruption on CI/CD Linux runners
+*.html text eol=lf
+*.css  text eol=lf
+*.js   text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+
+# Binary files - no diff, no line-ending conversion
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
