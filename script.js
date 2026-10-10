@@ -29,7 +29,7 @@ const destinations = [
         activities: ["food", "history", "nightlife"]
     },
     {
-        name: "Taj Mahal, India", region: "Asia", image: "images/Taj_Mahal_(Edited).jpeg",
+        name: "Taj Mahal, India", region: "Asia", image: "images/taj-mahal.jpg",
         desc: "Iconic marble mausoleum and rich Mughal history",
         climate: ["city"], trip: ["cultural"],
         budget: ["budget", "midrange"], companions: ["solo", "couple", "family"],
@@ -64,14 +64,14 @@ const destinations = [
         activities: ["nature"]
     },
     {
-        name: "New York City, USA", region: "North America", image: "images/new york.jpg",
+        name: "New York City, USA", region: "North America", image: "images/new-york.jpg",
         desc: "Skyscrapers, Broadway shows, and diverse neighborhoods",
         climate: ["city"], trip: ["cultural", "culinary"],
         budget: ["luxury"], companions: ["solo", "couple", "friends"],
         activities: ["history", "food", "nightlife"]
     },
     {
-        name: "Grand Canyon, USA", region: "North America", image: "images/grand canyon.jpg",
+        name: "Grand Canyon, USA", region: "North America", image: "images/grand-canyon.jpg",
         desc: "Majestic red rock formations and thrilling rafting",
         climate: ["mountains"], trip: ["adventure"],
         budget: ["budget", "midrange"], companions: ["solo", "family", "friends"],
@@ -85,14 +85,14 @@ const destinations = [
         activities: ["nature", "food"]
     },
     {
-        name: "Rio de Janeiro, Brazil", region: "South America", image: "images/rio de janeiro.jpg",
+        name: "Rio de Janeiro, Brazil", region: "South America", image: "images/rio-de-janeiro.jpg",
         desc: "Iconic beaches, samba rhythms, and Christ the Redeemer",
         climate: ["beach", "tropical"], trip: ["adventure", "cultural"],
         budget: ["midrange"], companions: ["solo", "couple", "friends"],
         activities: ["nature", "nightlife"]
     },
     {
-        name: "Machu Picchu, Peru", region: "South America", image: "images/machu picchu.jpg",
+        name: "Machu Picchu, Peru", region: "South America", image: "images/machu-picchu.jpg",
         desc: "Ancient Incan citadel high in the Andes",
         climate: ["mountains"], trip: ["adventure", "cultural"],
         budget: ["midrange"], companions: ["solo", "couple", "friends"],
@@ -106,7 +106,7 @@ const destinations = [
         activities: ["nature"]
     },
     {
-        name: "Cape Town, South Africa", region: "Africa", image: "images/cape town.jpg",
+        name: "Cape Town, South Africa", region: "Africa", image: "images/cape-town.jpg",
         desc: "Dramatic coastlines, wine regions, and penguin beaches",
         climate: ["beach", "mountains"], trip: ["adventure", "culinary"],
         budget: ["midrange"], companions: ["couple", "family", "friends"],
@@ -134,14 +134,14 @@ const destinations = [
         activities: ["nature", "nightlife"]
     },
     {
-        name: "Great Barrier Reef, Australia", region: "Oceania", image: "images/great barrier reef.jpg",
+        name: "Great Barrier Reef, Australia", region: "Oceania", image: "images/great-barrier-reef.jpg",
         desc: "World's largest coral reef system and marine life",
         climate: ["beach", "tropical"], trip: ["adventure", "relaxation"],
         budget: ["luxury"], companions: ["solo", "couple", "family"],
         activities: ["nature"]
     },
     {
-        name: "Queenstown, New Zealand", region: "Oceania", image: "images/Queenstown.jpg",
+        name: "Queenstown, New Zealand", region: "Oceania", image: "images/queenstown.jpg",
         desc: "Adventure capital, fjords, and extreme sports",
         climate: ["mountains"], trip: ["adventure"],
         budget: ["midrange", "luxury"], companions: ["solo", "friends"],
