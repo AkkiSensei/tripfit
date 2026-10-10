@@ -202,11 +202,11 @@ if (bookings.length > 0) {
         <div class="p-3 rounded-xl bg-gray-100/90 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <div>
                 <p class="font-semibold text-juniper dark:text-mint">${escapeHTML(title)}</p>
-                <p class="text-gray-600 dark:text-gray-300">${travellers} traveller${travellers === 1 ? '' : 's'} Â· ${escapeHTML(method)}</p>
+                <p class="text-gray-600 dark:text-gray-300">${travellers} traveller${travellers === 1 ? '' : 's'} &middot; ${escapeHTML(method)}</p>
             </div>
             <div class="text-left md:text-right">
                 <p class="font-bold">INR ${amount.toLocaleString('en-IN')}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">${escapeHTML(reference)} Â· ${escapeHTML(date)}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">${escapeHTML(reference)} &middot; ${escapeHTML(date)}</p>
             </div>
         </div>`;
     }).join('');
