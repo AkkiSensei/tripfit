@@ -203,9 +203,8 @@
         }
 
         async function sendOtpEmail(email, code) {
-            console.log('Frontend-only mode: OTP generated locally.');
-            console.log('Target Email:', email);
-            console.log('OTP Code:', code);
+            // Demo mode: OTP is displayed on screen (no email provider connected).
+            // In production, integrate an email API (e.g., Resend, SendGrid) here.
             return true;
         }
 

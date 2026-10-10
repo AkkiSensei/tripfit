@@ -213,7 +213,7 @@
                 </div>
 
                 <div class="flex gap-3 justify-end pt-4">
-                    <button type="button" onclick="closeReviewModal()" class="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold rounded-full hover:bg-gray-300 transition-colors">Cancel</button>
+                    <button type="button" onclick="closeModal()" class="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold rounded-full hover:bg-gray-300 transition-colors">Cancel</button>
                     <button type="submit" class="px-6 py-2 bg-mint hover:bg-teal text-juniper font-bold rounded-full transition-all hover:shadow-lg">Post Review</button>
                 </div>
             </form>
@@ -367,9 +367,13 @@
             document.getElementById('review-modal').classList.remove('hidden');
         }
 
+        function closeModal() {
+            document.getElementById('review-modal').classList.add('hidden');
+        }
+
         function closeReviewModal(event) {
             if (event && event.target.id !== 'review-modal') return;
-            document.getElementById('review-modal').classList.add('hidden');
+            closeModal();
         }
 
         function setRating(value) {
@@ -438,9 +442,14 @@
 
         function getReviews() {
             const tripfitReviews = safeParseJSON(localStorage.getItem('tripfitReviews'), null);
+            if (Array.isArray(tripfitReviews) && tripfitReviews.length > 0) return tripfitReviews;
+            // First visit or cleared storage — seed with defaults and persist so
+            // subsequent submits append rather than replace the seed data.
             const hiksterReviews = safeParseJSON(localStorage.getItem('hiksterReviews'), null);
-            const reviews = Array.isArray(tripfitReviews) ? tripfitReviews : (Array.isArray(hiksterReviews) ? hiksterReviews : defaultReviews);
-            return reviews;
+            if (Array.isArray(hiksterReviews) && hiksterReviews.length > 0) return hiksterReviews;
+            localStorage.setItem('tripfitReviews', JSON.stringify(defaultReviews));
+            localStorage.setItem('hiksterReviews', JSON.stringify(defaultReviews));
+            return defaultReviews;
         }
 
         renderReviews();

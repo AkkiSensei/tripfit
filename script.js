@@ -489,7 +489,7 @@ function trySaveRecommendationSnapshot() {
     const path = window.location.pathname.toLowerCase();
     if (!path.includes('recommendation.html')) return;
 
-    const resultsContainer = document.getElementById('results-container');
+    const resultsContainer = document.getElementById('results-grid') || document.getElementById('results-container');
     if (!resultsContainer) return;
 
     const preferences = normalizePreferencesFromQuery(new URLSearchParams(window.location.search));
@@ -517,7 +517,15 @@ function renderRecommendationResults() {
 
     if (!preferences.climate || !preferences.trip) {
         if (loadingEl) {
-            loadingEl.innerHTML = `<p class="text-red-600 text-center py-12 text-lg">Invalid quiz data.<br><a href="quiz.html" class="underline hover:text-red-700">← Retake the Quiz</a></p>`;
+            loadingEl.innerHTML = `
+                <div class="text-center py-16 px-6">
+                    <div class="text-6xl mb-6">🧭</div>
+                    <p class="text-2xl font-bold text-juniper dark:text-white mb-3">No quiz results found</p>
+                    <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">Complete the travel quiz first to get your personalised destination matches.</p>
+                    <a href="quiz.html" class="inline-block px-10 py-4 bg-juniper dark:bg-mint text-white dark:text-juniper font-bold text-lg rounded-full shadow-xl transition-transform hover:-translate-y-1">
+                        Take the Quiz &rarr;
+                    </a>
+                </div>`;
         }
         return;
     }
@@ -530,7 +538,7 @@ function renderRecommendationResults() {
 
     updateFavoriteButtons();
 
-    console.log('✅ TripFit recommendations rendered successfully:', topMatches);
+
 }
 
 function handleCardClick(event) {
