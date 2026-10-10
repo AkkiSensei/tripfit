@@ -96,8 +96,12 @@
                 .replace(/'/g, '&#39;');
         }
 
-        const history = parseStoredList('tripfitHistory');
-        const bookings = parseStoredList('tripfitBookings');
+        let history = parseStoredList('tripfitHistory');
+        if (history.length === 0) history = parseStoredList('hiksterHistory');
+
+        let bookings = parseStoredList('tripfitBookings');
+        if (bookings.length === 0) bookings = parseStoredList('hiksterBookings');
+
         const container = document.getElementById('history-container');
         const actions = document.getElementById('history-actions');
 
@@ -156,6 +160,14 @@
                 const results = Array.isArray(item.results) ? item.results : [];
                 const cards = results.map(dest => buildCardHTML(dest, false)).join('');
                 const prefs = item.preferences || {};
+                const retakeQuery = new URLSearchParams({
+                    climate: prefs.climate || '',
+                    trip: prefs.trip || '',
+                    budget: prefs.budget || '',
+                    companions: prefs.companions || '',
+                    activities: prefs.activities || '',
+                    days: prefs.days || ''
+                }).toString();
 
                 container.innerHTML += `
                     <article class="bg-white/90 dark:bg-gray-800/90 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl p-6 md:p-7">
@@ -164,11 +176,16 @@
                             <span class="text-xs uppercase tracking-wider font-semibold text-mint bg-mint/10 px-3 py-1 rounded-full">Recommendation Snapshot</span>
                         </div>
 
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">${escapeHTML(prefs.climate || prefs.terrain || 'Any climate')}</span>
-                            <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">${escapeHTML(prefs.trip || prefs.difficulty || 'Any trip style')}</span>
-                            <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">${escapeHTML(prefs.budget || 'Any budget')}</span>
-                            <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">${escapeHTML(prefs.activities || prefs.altitude || 'Any activity')}</span>
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">${escapeHTML(prefs.climate || prefs.terrain || 'Any climate')}</span>
+                                <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">${escapeHTML(prefs.trip || prefs.difficulty || 'Any trip style')}</span>
+                                <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">${escapeHTML(prefs.budget || 'Any budget')}</span>
+                                <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">${escapeHTML(prefs.activities || prefs.altitude || 'Any activity')}</span>
+                            </div>
+                            <a href="quiz.html?${retakeQuery}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-teal text-teal hover:bg-teal hover:text-white transition-colors">
+                                <i class="fas fa-redo text-[10px]"></i> Retake with these preferences
+                            </a>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

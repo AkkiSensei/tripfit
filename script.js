@@ -444,7 +444,7 @@ function openTrekCardItinerary(destinationName) {
 
 function normalizePreferencesFromQuery(searchParams) {
     const params = searchParams || new URLSearchParams(window.location.search);
-    return {
+    const fromQuery = {
         climate: params.get('climate') || '',
         trip: params.get('trip') || '',
         budget: params.get('budget') || '',
@@ -452,6 +452,24 @@ function normalizePreferencesFromQuery(searchParams) {
         activities: params.get('activities') || '',
         days: params.get('days') || params.get('duration') || ''
     };
+
+    if (fromQuery.climate && fromQuery.trip) {
+        return fromQuery;
+    }
+
+    const saved = safeParseJSON(safeStorageGet('tripfitLastQuizPrefs'), null);
+    if (saved && (saved.climate || saved.trip)) {
+        return {
+            climate: fromQuery.climate || saved.climate || '',
+            trip: fromQuery.trip || saved.trip || '',
+            budget: fromQuery.budget || saved.budget || '',
+            companions: fromQuery.companions || saved.companions || '',
+            activities: fromQuery.activities || saved.activities || '',
+            days: fromQuery.days || saved.days || ''
+        };
+    }
+
+    return fromQuery;
 }
 
 function saveRecommendationSnapshot(preferences, results) {

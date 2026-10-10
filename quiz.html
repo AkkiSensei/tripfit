@@ -408,6 +408,54 @@
             }
         });
 
+        function prefillQuizOptions() {
+            let prefs = null;
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const hasUrlParams = urlParams.has('climate') || urlParams.has('trip');
+                if (hasUrlParams) {
+                    prefs = {
+                        climate: urlParams.get('climate') || '',
+                        trip: urlParams.get('trip') || '',
+                        budget: urlParams.get('budget') || '',
+                        budgetVal: urlParams.get('budgetVal') || '',
+                        companions: urlParams.get('companions') || '',
+                        activities: urlParams.get('activities') || '',
+                        days: urlParams.get('days') || ''
+                    };
+                } else {
+                    const raw = localStorage.getItem('tripfitLastQuizPrefs');
+                    if (raw) prefs = JSON.parse(raw);
+                }
+            } catch {
+                prefs = null;
+            }
+
+            if (!prefs) return;
+
+            ['climate', 'trip', 'companions', 'activities'].forEach((name) => {
+                const val = prefs[name];
+                if (!val) return;
+                const radio = form.querySelector(`input[name="${name}"][value="${val}"]`);
+                if (radio) radio.checked = true;
+            });
+
+            if (prefs.budgetVal) {
+                budgetSlider.value = prefs.budgetVal;
+            } else if (prefs.budget === 'budget') {
+                budgetSlider.value = 6000;
+            } else if (prefs.budget === 'midrange') {
+                budgetSlider.value = 20000;
+            } else if (prefs.budget === 'luxury') {
+                budgetSlider.value = 45000;
+            }
+
+            if (prefs.days) {
+                daysSlider.value = prefs.days;
+            }
+        }
+
+        prefillQuizOptions();
         syncBudgetUI();
         syncDaysUI();
         updateStepUI();

@@ -70,8 +70,7 @@ tripfit/
 ├── images1/                Additional destination images
 ├── logo/                   TripFit brand assets
 │
-├── vercel.json             Vercel deployment configuration
-├── netlify.toml            Netlify deployment configuration (alternative)
+├── netlify.toml            Netlify deployment configuration (optional)
 └── .gitattributes          Line-ending normalization for cross-platform commits
 ```
 
@@ -84,7 +83,7 @@ TripFit is a pure static site — no build step, no server required.
 **Option 1: Direct open**
 ```bash
 # Clone the repository
-git clone https://github.com/sylbornfurtado19/TripFit.git
+git clone https://github.com/AkkiSensei/tripfit.git
 cd TripFit
 
 # Open index.html in your browser
@@ -116,7 +115,7 @@ npx serve .
 
 1. Push your repository to GitHub
 2. Go to [vercel.com](https://vercel.com) → **New Project**
-3. Import your GitHub repository
+3. Import your GitHub repository (`TripFit`)
 4. Configure the project:
    - **Framework Preset:** `Other`
    - **Root Directory:** `./` (leave blank)
@@ -124,7 +123,7 @@ npx serve .
    - **Output Directory:** `./` (or leave blank)
 5. Click **Deploy**
 
-Vercel will detect the `vercel.json` configuration and deploy all pages correctly.
+Vercel will automatically serve all static HTML pages, CSS, JavaScript, and assets directly from the repository root.
 
 ### Method 2: Vercel CLI
 
@@ -148,12 +147,9 @@ vercel
 vercel --prod
 ```
 
-### Vercel Configuration Notes
+### Multipage Static Architecture Notes
 
-The included `vercel.json` sets:
-- **Security headers** on all routes (X-Frame-Options, X-Content-Type-Options)
-- **Asset caching** for `/images/` and `/logo/` directories (24h)
-- No rewrites needed — TripFit is a multi-page app, not a SPA
+TripFit is a multi-page static site. Individual pages (`index.html`, `quiz.html`, `recommendation.html`, `book.html`, etc.) and asset directories (`images/`, `images1/`, `logo/`) are served directly as standard static files with no serverless functions, builds, or SPA rewrites required.
 
 ---
 
